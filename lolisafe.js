@@ -56,7 +56,7 @@ for (let page of config.pages) {
 if (config.serveFilesWithNode && config.useAlternateViewing) {
 	safe.get('/thumbs/:id', (req, res, next) => {
 		const id = req.params.id;
-		const _path = path.join(__dirname, config.uploads.folder) + 'thumbs';
+		const _path = path.join(__dirname, config.uploads.folder) + '/thumbs';
 		const file = `${_path}/${id}`;
 		console.log(file);
 		const ex = fs.existsSync(file);
