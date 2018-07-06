@@ -56,9 +56,7 @@ for (let page of config.pages) {
 if (config.serveFilesWithNode && config.useAlternateViewing) {
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
-		if(id === '_check') return res.send('yes');
 		const _path = path.join(__dirname, config.uploads.folder);
-		console.log(_path);
 		const ex = fs.existsSync(`${_path}/${id}`);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
 		
