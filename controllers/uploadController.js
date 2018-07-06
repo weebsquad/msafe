@@ -92,7 +92,6 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 		const files = [];
 		const existingFiles = [];
 		let iteration = 1;
-
 		req.files.forEach(async file => {
 			// Check if the file exists by checking hash and size
 			let hash = crypto.createHash('md5');
@@ -114,10 +113,9 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 						size: file.size
 					})
 					.first();
-
+				let encodeString = '';
+				if(encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion);
 				if (!dbFile) {
-					const encodeString = '';
-					if(encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion);
 					files.push({
 						name: file.filename,
 						original: file.originalname,
@@ -129,7 +127,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 						userid: userid !== undefined ? userid.id : null,
 						timestamp: Math.floor(Date.now() / 1000),
 						encodeVersion: encodeVersion,
-						encodeString: encodeString,
+						encodedString: encodeString,
 					});
 				} else {
 					uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err));
@@ -137,7 +135,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 				}
 
 				if (iteration === req.files.length) {
-					return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid);
+					return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString);
 				}
 				iteration++;
 			});
