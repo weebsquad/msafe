@@ -457,7 +457,7 @@ panel.getAlbumsSidebar = function(){
 			li = document.createElement('li');
 			a = document.createElement('a');
 			a.id = album.id;
-			a.innerHTML = album.name;
+			a.innerHTML = album.id + ' | ' + album.name;
 
 			a.addEventListener('click', function(){
 				panel.getAlbum(this);

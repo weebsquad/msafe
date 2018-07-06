@@ -68,7 +68,6 @@ uploadsController.upload = async (req, res, next) => {
 
 	if (albumid && user) {
 		let test = await db.table('albums');
-		console.log(test);
 		const album = await db.table('albums').where({ id: albumid, userid: user.id }).first();
 		if (!album) {
 			return res.json({
