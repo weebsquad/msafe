@@ -82,7 +82,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		})
 		for(let key in dbFiles) {
 			let obj = dbFiles[key];
-			if(id === obj['encodedString']) console.log(obj['name']);
+			if(id === obj['encodedString']) id = obj['name'];
 		}
 		const file = `${_path}/${id}`;
 		const ex = fs.existsSync(file);
