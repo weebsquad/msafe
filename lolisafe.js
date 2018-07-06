@@ -33,11 +33,7 @@ safe.use(bodyParser.urlencoded({ extended: true }));
 safe.use(bodyParser.json());
 
 /*if (config.serveFilesWithNode) {
-	
 	//safe.use('/', express.static(config.uploads.folder));
-	safe.get('/:id', (req, res, next) => {
-		res.send(req.params.id);
-	});
 }*/
 
 safe.use('/', express.static('./public'));
@@ -57,8 +53,6 @@ for (let page of config.pages) {
 }
 
 if (config.serveFilesWithNode) {
-	
-	//safe.use('/', express.static(config.uploads.folder));
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
 		const ex = fs.existsSync('./' + config.uploads.folder + '/' + id);
