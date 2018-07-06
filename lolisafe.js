@@ -9,6 +9,7 @@ const db = require('knex')(config.database);
 const fs = require('fs');
 const exphbs = require('express-handlebars');
 const safe = express();
+const path = require('path');
 
 require('./database/db.js')(db);
 
@@ -55,11 +56,12 @@ for (let page of config.pages) {
 if (config.serveFilesWithNode) {
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
-		const path = './' + config.uploads.folder + '/' + id;
-		const ex = fs.existsSync(path);
+		const _path = path.join(__dirname, config.uploads.folder);
+		console.log(_path);
+		const ex = fs.existsSync(_path);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
-		console.log(path);
-		return res.sendFile(path);
+		
+		res.sendFile(_path);
 	});
 }
 
