@@ -72,4 +72,4 @@ safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pag
 
 
 
-safe.listen(config.port, () => console.log(`lolisafe started on port ${config.port}`));
+safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`));
