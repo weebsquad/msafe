@@ -78,7 +78,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		// Encoding
 		const dbFiles = await db.table('files')
 		.where(function () {
-			this.where('encodeVersion', '>', 0)
+			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '')
 		})
 		console.log(dbFiles);
 		const file = `${_path}/${id}`;
