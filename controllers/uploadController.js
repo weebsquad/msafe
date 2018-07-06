@@ -116,6 +116,8 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 					.first();
 
 				if (!dbFile) {
+					const encodeString = '';
+					if(encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion);
 					files.push({
 						name: file.filename,
 						original: file.originalname,
@@ -126,7 +128,8 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 						albumid: albumid,
 						userid: userid !== undefined ? userid.id : null,
 						timestamp: Math.floor(Date.now() / 1000),
-						encodeVersion: encodeVersion
+						encodeVersion: encodeVersion,
+						encodeString: encodeString,
 					});
 				} else {
 					uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err));

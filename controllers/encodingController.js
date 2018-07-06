@@ -8,12 +8,12 @@ const encodingController = {};
 
 encodingController.decode = function(string, version) {
 	
-	
+	return '';
 };
 
 encodingController.encode = function(string, version) {
 	
-	
+	return '';
 };
 
 

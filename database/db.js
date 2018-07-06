@@ -24,6 +24,7 @@ let init = function(db){
 		table.integer('albumid');
 		table.integer('timestamp');
 		table.integer('encodeVersion');
+		table.string('encodedString');
 	}).then(() => {});
 
 	db.schema.createTableIfNotExists('users', function (table) {

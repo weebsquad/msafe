@@ -58,7 +58,6 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder) + '/thumbs';
 		const file = `${_path}/${id}`;
-		console.log(file);
 		const ex = fs.existsSync(file);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
 		
@@ -68,8 +67,13 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder);
+		// Encoding
+		const dbFiles = await db.table('files')
+		.where(function() {
+			if (encodeVersion !== 0) return true;
+		})
+		console.log(dbFiles);
 		const file = `${_path}/${id}`;
-		console.log(file);
 		const ex = fs.existsSync(file);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
 		
