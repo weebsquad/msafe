@@ -12,3 +12,4 @@ migrate.js
 yarn.lock
 package-lock.json
 .vscode/
+charmap.js
