@@ -112,6 +112,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 					.first();
 				let encodeString = '';
 				if(encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion);
+				console.log(encodeString);
 				if (!dbFile) {
 					files.push({
 						name: file.filename,
