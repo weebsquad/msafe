@@ -26,6 +26,7 @@ module.exports = {
 	*/
 	serveFilesWithNode: false,
 	useAlternateViewing: true, // idk
+	allowEncoding: true, // Allow clients to use encoding
 	domain: 'https://lolisafe.moe',
 
 	// Port on which to run the server

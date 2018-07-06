@@ -52,10 +52,11 @@ uploadsController.upload = async (req, res, next) => {
 	}
 	const encodeVersion = req.headers.encodeVersion || 0;
 	if(typeof(encodeVersion) !== 'number') encodeVersion = parseInt(encodeVersion);
-	if(encodeVersion % 1 !== 0) return res.json({
+	if(encodeVersion % 1 !== 0 && config.useAlternativeViewing && config.allowEncoding) return res.json({
 		success: false,
 		description: 'encodeVersion must be an integer'
 	});
+	if(!config.useAlternativeViewing || !config.allowEncoding) encodeVersion = 0;
 	
 	const token = req.headers.token || '';
 	const user = await db.table('users').where('token', token).first();
@@ -123,7 +124,8 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 						ip: req.ip,
 						albumid: albumid,
 						userid: userid !== undefined ? userid.id : null,
-						timestamp: Math.floor(Date.now() / 1000)
+						timestamp: Math.floor(Date.now() / 1000),
+						encodeVersion: encodeVersion
 					});
 				} else {
 					uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err));
@@ -148,7 +150,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 				return {
 					name: file.name,
 					size: file.size,
-					url: `${basedomain}/${file.name}`
+					url: `${basedomain}/${file.name}`,
+					meme: 'test',
 				};
 			})
 		});
