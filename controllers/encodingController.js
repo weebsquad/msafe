@@ -1,4 +1,5 @@
-const charmap = require('../charmap.js');
+const requireUncached = require('require-uncached');
+const charmap = requireUncached('../charmap.js');
 
 const encodingController = {};
 
