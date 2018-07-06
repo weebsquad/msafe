@@ -167,7 +167,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 		let ext = path.extname(file.name).toLowerCase();
 		if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
 			file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`;
-			//utils.generateThumbs(file);
+			utils.generateThumbs(file);
 		}
 	}
 
@@ -241,7 +241,7 @@ uploadsController.deleteFile = function(file) {
 				file = file.substr(0, file.lastIndexOf('.')) + '.png';
 				fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
 					if (err) {
-						console.log(err);
+						//console.log(err);
 						return resolve();
 					}
 					fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {
