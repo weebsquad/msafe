@@ -54,8 +54,8 @@ uploadsController.upload = async (req, res, next) => {
 	if(!utils.isNumeric(encodeVersion)) encodeVersion = 0;
 	if(!config.useAlternateViewing || !config.allowEncoding) encodeVersion = 0;
 	encodeVersion = parseInt(encodeVersion);
-	console.log(encodeVersion);
 	
+	console.log(encoding.decode('/--:/--!/-:,/!!:/-:!/-,:/-$$', 1));
 	const token = req.headers.token || '';
 	const user = await db.table('users').where('token', token).first();
 	if (user && (user.enabled === false || user.enabled === 0)) return res.json({
