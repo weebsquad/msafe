@@ -51,8 +51,8 @@ for (let page of config.pages) {
 		safe.get('/', (req, res, next) => { 
 			const host = req.get('host');
 			console.log(host);
-			res.sendFile(`${page}.html`, { root: root })); 
-		}
+			res.sendFile(`${page}.html`, { root: root }); 
+		});
 	} else {
 		safe.get(`/${page}`, (req, res, next) => res.sendFile(`${page}.html`, { root: root }));
 	}
