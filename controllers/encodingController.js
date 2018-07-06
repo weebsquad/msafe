@@ -3,9 +3,6 @@ const charmap = require('../charmap.js');
 const encodingController = {};
 
 
-console.log(charmap);
-
-
 
 
 
