@@ -50,7 +50,7 @@ uploadsController.upload = async (req, res, next) => {
 	if (config.private === true) {
 		await utils.authorize(req, res);
 	}
-	const encodeVersion = req.headers.encodeVersion || 0;
+	let encodeVersion = req.headers.encodeVersion || 0;
 	if(typeof(encodeVersion) !== 'number') encodeVersion = parseInt(encodeVersion);
 	if(encodeVersion % 1 !== 0 && config.useAlternativeViewing && config.allowEncoding) return res.json({
 		success: false,
@@ -151,7 +151,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 					name: file.name,
 					size: file.size,
 					url: `${basedomain}/${file.name}`,
-					//meme: 'test'
+					meme: 'test'
 				};
 			})
 		});
