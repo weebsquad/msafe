@@ -58,10 +58,10 @@ if (config.serveFilesWithNode) {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder);
 		console.log(_path);
-		const ex = fs.existsSync(_path);
+		const ex = fs.existsSync(`${_path}/${id}`);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
 		
-		res.sendFile(_path);
+		res.sendFile(id, { root: _path });
 	});
 }
 
