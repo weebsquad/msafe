@@ -62,7 +62,7 @@ if (config.serveFilesWithNode) {
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
 		const ex = fs.existsSync('./' + config.uploads.folder + '/' + id);
-		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' }));
+		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
 		return res.sendFile('./' + config.uploads.folder + '/' + id);
 	});
 }
