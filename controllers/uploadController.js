@@ -192,6 +192,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 				name: file.name,
 				size: file.size,
 				url: `${basedomain}/${file.name}`
+				encodeVersion: encodeVersion,
+				encodeString: encodeString,
 			};
 		})
 	});
