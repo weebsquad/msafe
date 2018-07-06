@@ -60,10 +60,16 @@ if (config.serveFilesWithNode) {
 	
 	//safe.use('/', express.static(config.uploads.folder));
 	safe.get('/:id', (req, res, next) => {
-		res.send(req.params.id);
+		const id = req.params.id;
+		const ex = fs.existsSync('./' + config.uploads.folder + '/' + id);
+		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' }));
+		return res.sendFile('./' + config.uploads.folder + '/' + id);
 	});
 }
+
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }));
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }));
+
+
 
 safe.listen(config.port, () => console.log(`lolisafe started on port ${config.port}`));
