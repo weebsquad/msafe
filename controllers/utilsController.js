@@ -66,7 +66,7 @@ utilsController.generateThumbs = function(file, basedomain) {
 
 
 utilsController.isNumeric = function(n) {
-  return (typeof n == "number" && !isNaN(n));
+  return !isNaN(n)
 };
 
 module.exports = utilsController;
