@@ -30,8 +30,15 @@ authController.verify = async (req, res, next) => {
 	});
 };
 
+
+
+
 authController.register = async (req, res, next) => {
-	if (config.enableUserAccounts === false) {
+	let bypassEnable = false;
+	const token = req.headers.token || '';
+	const user = await db.table('users').where('token', token).first();
+	if(user && user.username === 'root') bypassEnable = true;
+	if (config.enableUserAccounts === false && !bypassEnable) {
 		return res.json({ success: false, description: 'Register is disabled at the moment' });
 	}
 

@@ -606,6 +606,31 @@ panel.sendNewPassword = function(pass){
 
 };
 
+panel.registerNewUser = function(username, pass){
+
+	axios.post('/api/register', {username:username, password: pass})
+	.then(function (response) {
+
+		if(response.data.success === false){
+			return swal("An error ocurred", response.data.description, "error");		
+		}
+
+		swal({
+			title: "Woohoo!", 
+			text: 'User account added!', 
+			type: "success"
+		}, function(){
+			location.reload();
+		});
+
+	})
+	.catch(function (error) {
+		return swal("An error ocurred", 'There was an error with the request, please check the console for more information.', "error");
+		console.log(error);
+	});
+
+};
+
 panel.setActiveMenu = function(item){
 	var menu = document.getElementById('menu');
 	var items = menu.getElementsByTagName('a');
