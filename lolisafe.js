@@ -49,7 +49,9 @@ for (let page of config.pages) {
 	function checkHost(req, res, next) {
 		const host = req.get('host');
 		const dom = config.domain.split('https://').join('').split('http://').join('');
-		if(host !== dom) return res.redirect(config.domain);
+		let pagered = '';
+		if (page !== 'home') pagered = page;
+		if(host !== dom) return res.redirect(config.domain + '/' + pagered);
 		res.sendFile(`${page}.html`, { root: root });
 	}
 	if (page === 'home') {
