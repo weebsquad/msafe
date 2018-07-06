@@ -54,7 +54,7 @@ uploadsController.upload = async (req, res, next) => {
 	if(!utils.isNumeric(encodeVersion)) encodeVersion = 0;
 	if(!config.useAlternateViewing || !config.allowEncoding) encodeVersion = 0;
 	encodeVersion = parseInt(encodeVersion);
-	let str = '/--:/--!/-:,/!!:/-:!/-,:/-$$';
+	let str = '--:/--!/-:,/!!:/-:!/-,:/-$$';
 	let dec = encoding.decode(str, 1);
 	let ec = encoding.encode(dec, 1);
 	console.log(ec);
