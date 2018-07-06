@@ -69,8 +69,8 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		const _path = path.join(__dirname, config.uploads.folder);
 		// Encoding
 		const dbFiles = await db.table('files')
-		.where(function() {
-			if (encodeVersion !== 0) return true;
+		.where(function () {
+			this.where('encodeVersion', '>', 0)
 		})
 		console.log(dbFiles);
 		const file = `${_path}/${id}`;
