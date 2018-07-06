@@ -75,7 +75,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 	safe.get('/:id', async (req, res, next) => {
 		let id = req.params.id;
 		// Check blacklisted files first
-		const filemap = { 'sharex.txt': 'public/sharex.txt', 'encoding.txt': 'public/encoding.txt' };
+		const filemap = { 'sharex.txt': 'public/sharex.txt' };
 		for(var key in filemap) { 
 			let obj = filemap[key];
 			if(id === key) return res.sendFile(path.join(__dirname, obj));
