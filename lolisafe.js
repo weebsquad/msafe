@@ -73,7 +73,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 	});
 	
 	safe.get('/:id', async (req, res, next) => {
-		const id = req.params.id;
+		let id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder);
 		// Encoding
 		const dbFiles = await db.table('files')
