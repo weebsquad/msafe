@@ -37,8 +37,8 @@ const encodingController = {};
 encodingController.decode = function(string, version) {
 	let decoded = '';
 	const vchar = charmap[version];
-	const prefix = vchar['prefix'];
-	const suffix = vchar['suffix'];
+	let prefix = vchar['prefix'];
+	let suffix = vchar['suffix'];
 	const sepp = vchar['sepperator'];
 	if(typeof(prefix) !== 'string') prefix = '';
 	if(typeof(suffix) !== 'string') suffix = '';
