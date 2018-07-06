@@ -1,4 +1,4 @@
-const charmap = JSON.parse(require('../charmap.js'));
+const charmap = require('../charmap.js');
 
 const encodingController = {};
 
