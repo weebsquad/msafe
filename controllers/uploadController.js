@@ -51,6 +51,7 @@ uploadsController.upload = async (req, res, next) => {
 		await utils.authorize(req, res);
 	}
 	const encodeVersion = req.headers.encodeVersion || 0;
+	console.log(encodeVersion);
 	if(typeof(encodeVersion) !== 'number') encodeVersion = parseInt(encodeVersion);
 	if(!isNaN(encodeVersion)) return res.json({
 		success: false,
