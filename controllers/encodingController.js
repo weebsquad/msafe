@@ -6,28 +6,6 @@ const encodingController = {};
 
 	
 
-	function map_encode($string, $version, $charmapFile) {
-		$sepperator = '';
-		
-		$charmap = json_decode(file_get_contents($charmapFile), true);
-		$charmap = $charmap[$version];
-		$sepp = $charmap["sepperator"];
-		$prefix = $charmap['prefix'];
-		$suffix = $charmp['suffix'];
-		if(!isset($prefix)) $prefix = '';
-		if(!isset($suffix)) $suffix = '';
-
-		$encoded = '';
-		$splitq = str_split($string);
-		foreach ($splitq as $char) {
-			$encoded = $encoded . $sepperator . $charmap[$char];
-			$sepperator = $sepp; // Restore the sepperator just so its not used in the first iteration
-		}
-		
-		$encoded = $prefix . $encoded . $suffix;
-		return $encoded;
-	}
-	
 
 
 */
@@ -65,8 +43,24 @@ encodingController.decode = function(string, version) {
 
 
 encodingController.encode = function(string, version) {
+	let encoded = '';
+	let sepperator = '';
+	let vchar = charmap[version];
+	const sepp = vchar['sepperator'];
+	let prefix = vchar['prefix'];
+	let suffix = vchar['suffix'];
+	if(typeof(prefix) !== 'string') prefix = '';
+	if(typeof(suffix) !== 'string') suffix = '';
 	
-	return '';
+
+	let splitq = string.split('');
+	splitq.forEach(function(char) {
+		encoded = encoded + sepperator + vchar[char];
+		sepperator = sepp;
+	});
+
+	encoded = prefix + encoded + suffix;
+	return encoded;
 };
 
 
