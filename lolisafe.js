@@ -46,15 +46,16 @@ for (let page of config.pages) {
 	if (fs.existsSync(`./pages/custom/${page}.html`)) {
 		root = './pages/custom/';
 	}
-
+	function checkHost(req, res, next) {
+		const host = req.get('host');
+		const dom = config.domain.split('https://').join('').split('http://').join('');
+		if(host !== dom) return res.redirect(config.domain);
+		res.sendFile(`${page}.html`, { root: root });
+	}
 	if (page === 'home') {
-		safe.get('/', (req, res, next) => { 
-			const host = req.get('host');
-			console.log(host);
-			res.sendFile(`${page}.html`, { root: root }); 
-		});
+		safe.get('/', (req, res, next) => checkHost(req,res,next));
 	} else {
-		safe.get(`/${page}`, (req, res, next) => res.sendFile(`${page}.html`, { root: root }));
+		safe.get(`/${page}`, (req, res, next) => checkHost(req,res,next));
 	}
 }
 
