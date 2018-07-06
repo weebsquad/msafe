@@ -189,7 +189,7 @@ upload.prepareShareX = function(){
     \"token\": \"" + upload.token + "\"\r\n\
   },\r\n\
   \"ResponseType\": \"Text\",\r\n\
-  \"URL\": \"$json:files[0].url$\",\r\n\
+  \"URL\": \"http://" + location.hostname + "/$json:files[0].name$\",\r\n\
   \"ThumbnailURL\": \"$json:files[0].url$\"\r\n\
 }";
 		var sharex_blob = new Blob([sharex_file], {type: "application/octet-binary"});
