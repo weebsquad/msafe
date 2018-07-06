@@ -145,7 +145,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 	});
 };
 
-uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid) => {
+uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid, encodeVersion = 0, encodeString = '') => {
 	let basedomain = config.domain;
 	if (files.length === 0) {
 		return res.json({
@@ -155,7 +155,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 					name: file.name,
 					size: file.size,
 					url: `${basedomain}/${file.name}`,
-					meme: 'test'
+					encodeVersion: encodeVersion,
+					encodeString: encodeString,
 				};
 			})
 		});
