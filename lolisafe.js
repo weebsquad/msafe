@@ -33,9 +33,9 @@ safe.use('/api/register/', limiter);
 safe.use(bodyParser.urlencoded({ extended: true }));
 safe.use(bodyParser.json());
 
-/*if (config.serveFilesWithNode) {
-	//safe.use('/', express.static(config.uploads.folder));
-}*/
+if (config.serveFilesWithNode && !config.useAlternateViewing) {
+	safe.use('/', express.static(config.uploads.folder));
+}
 
 safe.use('/', express.static('./public'));
 safe.use('/', album);
@@ -53,7 +53,7 @@ for (let page of config.pages) {
 	}
 }
 
-if (config.serveFilesWithNode) {
+if (config.serveFilesWithNode && config.useAlternateViewing) {
 	safe.get('/:id', (req, res, next) => {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder);
