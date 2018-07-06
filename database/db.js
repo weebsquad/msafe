@@ -23,6 +23,7 @@ let init = function(db){
 		table.string('ip');
 		table.integer('albumid');
 		table.integer('timestamp');
+		table.integer('encodeVersion');
 	}).then(() => {});
 
 	db.schema.createTableIfNotExists('users', function (table) {

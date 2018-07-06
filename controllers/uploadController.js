@@ -6,6 +6,7 @@ const db = require('knex')(config.database);
 const crypto = require('crypto');
 const fs = require('fs');
 const utils = require('./utilsController.js');
+const encoding = require('./encodingController');
 
 const uploadsController = {};
 
@@ -49,7 +50,13 @@ uploadsController.upload = async (req, res, next) => {
 	if (config.private === true) {
 		await utils.authorize(req, res);
 	}
-
+	const encodeVersion = req.headers.encodeVersion || 0;
+	if(typeof(encodeVersion) !== 'number') encodeVersion = parseInt(encodeVersion);
+	if(!isNaN(encodeVersion)) return res.json({
+		success: false,
+		description: 'encodeVersion must be an integer'
+	});
+	
 	const token = req.headers.token || '';
 	const user = await db.table('users').where('token', token).first();
 	if (user && (user.enabled === false || user.enabled === 0)) return res.json({
@@ -66,12 +73,12 @@ uploadsController.upload = async (req, res, next) => {
 				description: 'Album doesn\'t exist or it doesn\'t belong to the user'
 			});
 		}
-		return uploadsController.actuallyUpload(req, res, user, albumid);
+		return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion);
 	}
-	return uploadsController.actuallyUpload(req, res, user, albumid);
+	return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion);
 };
 
-uploadsController.actuallyUpload = async (req, res, userid, albumid) => {
+uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersion) => {
 	upload(req, res, async err => {
 		if (err) {
 			console.error(err);
