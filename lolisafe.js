@@ -46,10 +46,13 @@ for (let page of config.pages) {
 	if (fs.existsSync(`./pages/custom/${page}.html`)) {
 		root = './pages/custom/';
 	}
-	const host = req.get('host');
-	console.log(host);
+
 	if (page === 'home') {
-		safe.get('/', (req, res, next) => res.sendFile(`${page}.html`, { root: root }));
+		safe.get('/', (req, res, next) => { 
+			const host = req.get('host');
+			console.log(host);
+			res.sendFile(`${page}.html`, { root: root })); 
+		}
 	} else {
 		safe.get(`/${page}`, (req, res, next) => res.sendFile(`${page}.html`, { root: root }));
 	}
