@@ -74,8 +74,15 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 	
 	safe.get('/:id', async (req, res, next) => {
 		let id = req.params.id;
+		// Check blacklisted files first
+		const filemap = { 'sharex.txt': 'public/sharex.txt', 'encoding.txt': 'public/encoding.txt' };
+		for(var key in filemap) { 
+			let obj = filemap[key];
+			if(id === key) return res.sendFile(path.join(__dirname, obj));
+		}
+			
 		const _path = path.join(__dirname, config.uploads.folder);
-		// Encoding
+		// Check encoding 
 		const dbFiles = await db.table('files')
 		.where(function () {
 			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '')
@@ -84,6 +91,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 			let obj = dbFiles[key];
 			if(id === obj['encodedString']) id = obj['name'];
 		}
+		// Finally handle the actual ID
 		const file = `${_path}/${id}`;
 		const ex = fs.existsSync(file);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });

@@ -1,0 +1,15 @@
+Download this, remove this text, edit the token argument, rename extension to .sxcu, then import
+
+{
+  "Name": "https://nodeuploader.metalruller.com",
+  "DestinationType": "ImageUploader, FileUploader",
+  "RequestType": "POST",
+  "RequestURL": "https://nodeuploader.metalruller.com/api/upload",
+  "FileFormName": "files[]",
+  "Headers": {
+    "token": "<grab this from the dashboard>"
+  },
+  "ResponseType": "Text",
+  "URL": "$json:files[0].url$",
+  "ThumbnailURL": "$json:files[0].url$"
+}
