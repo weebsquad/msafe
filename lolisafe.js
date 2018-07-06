@@ -32,12 +32,13 @@ safe.use('/api/register/', limiter);
 safe.use(bodyParser.urlencoded({ extended: true }));
 safe.use(bodyParser.json());
 
-if (config.serveFilesWithNode) {
+/*if (config.serveFilesWithNode) {
+	
 	//safe.use('/', express.static(config.uploads.folder));
 	safe.get('/:id', (req, res, next) => {
 		res.send(req.params.id);
 	});
-}
+}*/
 
 safe.use('/', express.static('./public'));
 safe.use('/', album);
@@ -55,6 +56,13 @@ for (let page of config.pages) {
 	}
 }
 
+if (config.serveFilesWithNode) {
+	
+	//safe.use('/', express.static(config.uploads.folder));
+	safe.get('/:id', (req, res, next) => {
+		res.send(req.params.id);
+	});
+}
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }));
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }));
 
