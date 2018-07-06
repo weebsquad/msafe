@@ -64,4 +64,9 @@ utilsController.generateThumbs = function(file, basedomain) {
 	});
 };
 
+
+utilsController.isNumeric = function(n) {
+  return (typeof n == "number" && !isNaN(n));
+};
+
 module.exports = utilsController;
