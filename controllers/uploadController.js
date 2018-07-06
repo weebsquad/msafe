@@ -191,7 +191,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 			return {
 				name: file.name,
 				size: file.size,
-				url: `${basedomain}/${file.name}`
+				url: `${basedomain}/${file.name}`,
 				encodeVersion: encodeVersion,
 				encodeString: encodeString,
 			};
