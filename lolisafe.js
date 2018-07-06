@@ -26,7 +26,7 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-let limiter = new RateLimit({ windowMs: 5000, max: 2 });
+let limiter = new RateLimit({ windowMs: 10000, max: 2 });
 safe.use('/api/login/', limiter);
 safe.use('/api/register/', limiter);
 
