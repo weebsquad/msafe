@@ -52,7 +52,7 @@ uploadsController.upload = async (req, res, next) => {
 	}
 	let encodeVersion = req.headers.encodeversion || 0;
 	encodeVersion = parseInt(encodeVersion);
-	//if(!isNaN(encodeVersion)) encodeVersion = 0;
+	if(!isNaN(encodeVersion)) encodeVersion = 0;
 	//if(!config.useAlternativeViewing || !config.allowEncoding) encodeVersion = 0;
 	console.log(encodeVersion);
 	
