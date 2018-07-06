@@ -54,7 +54,7 @@ for (let page of config.pages) {
 }
 
 if (config.serveFilesWithNode && config.useAlternateViewing) {
-	safe.get('/thumbs/:id', (req, res, next) => {
+	safe.get('/thumbs/:id', async (req, res, next) => {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder) + '/thumbs';
 		const file = `${_path}/${id}`;
@@ -64,7 +64,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		res.sendFile(id, { root: _path });
 	});
 	
-	safe.get('/:id', (req, res, next) => {
+	safe.get('/:id', async (req, res, next) => {
 		const id = req.params.id;
 		const _path = path.join(__dirname, config.uploads.folder);
 		// Encoding
