@@ -80,7 +80,10 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		.where(function () {
 			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '')
 		})
-		console.log(dbFiles);
+		for(let key in dbFiles) {
+			let obj = dbFiles[key];
+			if(id === obj['encodedString']) console.log(obj['name']);
+		}
 		const file = `${_path}/${id}`;
 		const ex = fs.existsSync(file);
 		if(!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' });
