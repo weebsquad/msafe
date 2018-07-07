@@ -8,6 +8,8 @@ const uploadController = require('./uploadController.js')
 let authController = {}
 
 authController.listAdmins = async (req, res, next) => {
+  const user = await utils.authorize(req, res)
+  if (!user.id) return
   return res.json({ success: true, admins: config.admins })
 }
 
