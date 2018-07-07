@@ -3,13 +3,6 @@ const charmap = requireUncached('../charmap.js');
 
 const encodingController = {};
 
-/*
-
-	
-
-
-
-*/
 
 
 
@@ -44,7 +37,6 @@ encodingController.decode = function(string, version) {
 
 
 encodingController.encode = function(string, version) {
-	//console.log(`Encoding ${string} with version ${version}`);
 	let encoded = '';
 	let sepperator = '';
 	let vchar = charmap[version];
