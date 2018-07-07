@@ -693,11 +693,11 @@ panel.updateAdminPage = function (pw = '') {
   
   
   const _waitmaps = {
-	  'passwordRoot': function(rootpw) {
+	  'passwordRoot': function(key, rootpw) {
 		   if (pw !== '' && rootpw) { rootpw.value = pw }
 	  },
-	  'sendNewAccount': function(obj) {
-		  obj.addEventListener('click', function () {
+	  'sendNewAccount': function(key, obj) {
+		  document.getElementById(key).addEventListener('click', function () {
 			panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
 		  })
 		  console.log('added event!');
@@ -710,7 +710,7 @@ panel.updateAdminPage = function (pw = '') {
 		  if(_test) {
 			  console.log('found object ' + key);
 			  clearInterval(_int);
-			  setTimeout(function() { obj(_test); }, 200);
+			  setTimeout(function() { obj(key, _test); }, 150);
 		  }
 	  }, 75);
   }
@@ -784,7 +784,8 @@ panel.registerNewUser = function (username, pass) {
         type: 'success'
       }, async function () {
 		  const _adm = await panel.isAdmin(panel.username);
-          if (!_adm) location.reload()
+          if (!_adm) return location.reload()
+		  if(panel.onAdminP) panel.adminTab()
       })
     })
     .catch(function (error) {
