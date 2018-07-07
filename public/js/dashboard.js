@@ -69,7 +69,6 @@ panel.prepareDashboard = async function () {
   document.getElementById('auth').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
   const _adm = await panel.isAdmin(panel.username);
-  console.log(_adm);
   if (_adm) { // adminstuff
     document.getElementById('itemAdmin').style.display = 'block'
   }
@@ -583,7 +582,7 @@ panel.updateAdminPage = function (pw = '') {
   var container = document.createElement('div')
   container.className = 'container'
   container.innerHTML = `
-		<h2 class="subtitle">New account</h2>
+		<h2 class="subtitle">Create new account</h2>
 
 		<label class="label">Username</label>
 		<p class="control has-addons">
@@ -625,7 +624,6 @@ panel.updateAdminPage = function (pw = '') {
 				<tbody id="table">
 				</tbody>
 			</table>
-			<hr>
 		`
 
     var table = document.getElementById('table')
