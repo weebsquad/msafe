@@ -41,8 +41,10 @@ authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
-  users.forEach(function (vl) {
+  users.forEach(async function (vl) {
 	  vl.admin = utils.isAdmin(vl.username)
+	  let _userfiles = db.table('files').where('userid', vl.id).select('id')
+	  vl.filecount = _userfiles.length;
   })
   return res.json({ success: true, users })
 }
@@ -140,10 +142,10 @@ authController.deleteAccount = async (req, res, next) => {
       }
     }
     await db.table('files').where('userid', targ.id).del()
-    if(!filesOnly) { 
-		await db.table('users').where('id', targ.id).del()
+    if (!filesOnly) {
+      await db.table('users').where('id', targ.id).del()
 	    await db.table('albums').where('userid', targ.id).del()
-	}
+    }
 
     return res.json({success: true })
   })

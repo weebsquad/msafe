@@ -634,6 +634,7 @@ panel.updateAdminPage = function (pw = '') {
 						  <th>ID</th>
 						  <th>Admin</th>
 						  <th>Name</th>
+						  <th>File Count</th>
 						  <th>Disabled</th>
 							 <th></th>
 					</tr>
@@ -656,6 +657,7 @@ panel.updateAdminPage = function (pw = '') {
 					<th>${item.id}</th>
 					<th>${item.admin}</th>
 					<th>${item.username}</th>
+					<th>${item.filecount}</th>
 					<td>${!item.enabled}</td>
 					<td>
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
@@ -700,7 +702,6 @@ panel.updateAdminPage = function (pw = '') {
 		  document.getElementById(key).addEventListener('click', function () {
 			panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
 		  })
-		  console.log('added event!');
 	  },
   };
   for(let key in _waitmaps) {
@@ -708,7 +709,6 @@ panel.updateAdminPage = function (pw = '') {
 	  const _int = setInterval(function() {
 		  const _test = document.getElementById(key);
 		  if(_test) {
-			  console.log('found object ' + key);
 			  clearInterval(_int);
 			  setTimeout(function() { obj(key, _test); }, 150);
 		  }
