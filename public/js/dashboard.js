@@ -4,6 +4,7 @@ panel.page
 panel.username
 panel.token = localStorage.token
 panel.filesView = localStorage.filesView
+panel.onAdminP = false;
 
 panel.admins = new Array();
 panel.isAdmin = async function(name) {
@@ -100,6 +101,7 @@ panel.logout = function () {
 }
 
 panel.getUploads = function (album = undefined, page = undefined) {
+  panel.onAdminP = false;
   if (page === undefined) page = 0
 
   let url = '/api/uploads/' + page
@@ -458,11 +460,13 @@ panel.getAlbumsSidebar = function () {
 }
 
 panel.getAlbum = function (item) {
+  panel.onAdminP = false;
   panel.setActiveMenu(item)
   panel.getUploads(item.id)
 }
 
 panel.changeToken = function () {
+  panel.onAdminP = false;
   axios.get('/api/tokens')
     .then(function (response) {
       if (response.data.success === false) {
@@ -519,6 +523,7 @@ panel.getNewToken = function () {
 }
 
 panel.changePassword = function () {
+  panel.onAdminP = false;
   panel.page.innerHTML = ''
   var container = document.createElement('div')
   container.className = 'container'
@@ -570,7 +575,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       }, async function () {
 		const _adm = await panel.isAdmin(panel.username);
         if(!_adm) return location.reload()
-		panel.adminTab();
+		if(panel.onAdminP) panel.adminTab()
       })
     })
     .catch(function (error) {
@@ -703,6 +708,7 @@ panel.adminTab = function () {
   const rootpw = document.getElementById('passwordRoot')
   if (rootpw) return panel.updateAdminPage(rootpw.value)
   panel.updateAdminPage()
+  panel.onAdminP = true;
 }
 
 panel._sendAdminAction = function (func, txt, username, state = '') {
@@ -762,7 +768,7 @@ panel.registerNewUser = function (username, pass) {
 
       swal({
         title: 'Yay',
-        text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${password}`,
+        text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${pass}`,
         type: 'success'
       }, async function () {
 		  const _adm = await panel.isAdmin(panel.username);
@@ -813,10 +819,11 @@ panel.disableAccount = function (password, username = panel.username, state) {
       if (response.data.success === false) {
         return swal('An error ocurred', response.data.description, 'error')
       }
-
+	  let _st = 'disabled';
+	  if(state) _st = 'enabled';
       swal({
         title: 'Done',
-        text: 'Account disabled',
+        text: `Account ${_st}`,
         type: 'success'
       }, async function () {
         if (username === panel.username && !filesOnly) {
@@ -825,7 +832,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
         } else {
 		  const _adm = await panel.isAdmin(panel.username);
           if (!_adm) return location.reload()
-          panel.adminTab()
+          if(panel.onAdminP) panel.adminTab()
         }
       })
     })
@@ -854,7 +861,7 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
         } else {
 		  const _adm = await panel.isAdmin(panel.username);
           if (!_adm) location.reload()
-          panel.adminTab()
+          if(panel.onAdminP) panel.adminTab()
         }
       })
     })
