@@ -102,7 +102,7 @@ module.exports = {
 	rateLimits: {
 		'/api/login/': { windowMs: 60*1000, max: 2, delayMs: 500, delayAfter: 1 },
 		'/api/register/': { windowMs: 30*60*1000, max: 1, delayMs: 0 },
-		'/api/tokens/': { windowMs: 30*1000, max: 20 },
+		'/api/tokens/': { windowMs: 30*1000, max: 55, delayMs: 200, delayAfter: 10 },
 		'/api/': { windowMs: 60*1000, max: 100, delayMs: 150, delayAfter: 50 },
 	},
 
