@@ -4,7 +4,7 @@
 
 /* safe background */
 .hero {
-background-color: #2d2d2d;
+	background-color: #2d2d2d;
 }
 
 section#home #b {
@@ -184,7 +184,7 @@ section#login p.control a#registerBtn { border-left: 0px; }
 
 
 section#auth, section#dashboard { display: none; background-color: #272727; } /* safe */
-section#auth input { background: rgba(255, 255, 255, 255); }
+section#auth input { background: rgba(0, 0, 0, 0); }
 section#auth input, section#auth a {
 	border-left: 0px;
     border-top: 0px;
