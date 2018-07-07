@@ -2,6 +2,11 @@
 		HOME
 ------------------ */
 
+/* safe background */
+.hero {
+background-color: #2d2d2d;
+}
+
 section#home #b {
 	-webkit-animation-delay: 0.5s;
 	animation-delay: 0.5s;
@@ -14,6 +19,7 @@ section#home #b {
 	-webkit-animation-timing-function: cubic-bezier(0, 0.71, 0.29, 1);
 	animation-timing-function: cubic-bezier(0, 0.71, 0.29, 1);
 	border-radius: 24px;
+	background-color: #333333; /* safe */
 	display: inline-block;
 	height: 240px;
 	margin-bottom: 40px;
@@ -25,9 +31,9 @@ section#home #b {
 
 section#home div#dropzone {
 	border: 1px solid #dbdbdb;
-	background-color: rgba(255, 255, 255, 0);
-    border-color: #ff3860;
-    color: #ff3860;
+	background-color: rgba(0, 0, 0, 0);
+    border-color: #C64333; /* safe */
+    color: #C64333; /* safe */
     display: none;
     width: 100%;
     border-radius: 3px;
@@ -44,8 +50,94 @@ section#home div#dropzone {
     cursor: pointer;   
 }
 
+/* even more safe shit */
+
+.subtitle, .title, .subtitle strong {
+	color: #fff;
+}
+
+html {
+	background-color: #272727;
+}
+
+.menu-list a:hover {
+    background-color: #333333;
+    color: #C64333;
+}
+
+.menu-list a {
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    padding: .5em .75em;
+}
+
+.menu-list a.is-active {
+    background-color: #C64333;
+    color: #fff;
+}
+
+.table.is-striped tbody tr:nth-child(even):hover, .tag {
+    background-color: #333333;
+}
+.table {
+	background-color: #333333;
+}
+
+.safe-progress {
+	width: 50%;
+	display: inline-block;
+}
+
+.table td, .table th {
+    border: 1px solid #666666;
+    border-width: 0 0 1px;
+	color: #fff;
+    padding: .5em .75em;
+    vertical-align: top;
+}
+
+.table.is-narrow td, .table.is-narrow th {
+    padding: .25em .5em;
+    background-color: #333333;
+}
+
+.label {
+    color: #fff;
+    font-weight: 700;
+}
+
+.menu-label {
+    color: #C64333;
+    font-size: .8em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.name, .size, .size strong {
+	color: #fff;
+}
+
+.message-body {
+    border: 1px solid #666;
+    border-radius: 3px;
+    color: #fff;
+    padding: 1em 1.25em;
+}
+
+.message {
+    background-color: #333333;
+    border-radius: 3px;
+    font-size: 1rem;
+}
+
+a:hover {
+	color: #C64333;
+}
+/* end even more safe shit */
+
 section#home div#uploads, section#home p#tokenContainer, section#home a#panel { display: none; }
-section#home div#dropzone:hover { background-color: #ff3860; border-color: #ff3860; color: #fff; }
+section#home div#dropzone:hover { background-color: #C64333; border-color: #C64333; color: #fff; } /* safe */
 section#home h3#maxFileSize { font-size: 14px; }
 section#home h3#links span { padding-left: 5px; padding-right: 5px; }
 section#home img.logo { height: 200px; margin-top: 20px; }
@@ -91,7 +183,7 @@ section#login p.control a#loginBtn { border-right: 0px; }
 section#login p.control a#registerBtn { border-left: 0px; }
 
 
-section#auth, section#dashboard { display: none }
+section#auth, section#dashboard { display: none; background-color: #272727; } /* safe */
 section#auth input { background: rgba(0, 0, 0, 0); }
 section#auth input, section#auth a {
 	border-left: 0px;
@@ -102,12 +194,26 @@ section#auth input, section#auth a {
 }
 
 section#dashboard .table { font-size: 12px }
-section#dashboard div#table div.column { display:flex; width: 200px; height: 220px; margin: 9px; background: #f9f9f9; overflow: hidden; flex-wrap: wrap; align-items: center; }
+section#dashboard div#table div.column { display:flex; width: 200px; height: 200px; margin: 9px; background: #f9f9f9; overflow: hidden; align-items: center; }
 section#dashboard div#table div.column a { width: 100%; }
-section#dashboard div#table div.column a:first-child { height: 180px; }
 section#dashboard div#table div.column a img { width:200px; }
 
 .select-wrapper {
 	text-align: center;
 	margin-bottom: 10px;
+}
+
+/* safe dashboard shit */
+.pagination-link:hover, .pagination-next:hover, .pagination-previous:hover {
+    border-color: #C64333;
+    color: #fff;
+    background-color: #C64333;
+}
+
+a#submitAlbum {
+	background-color: #C64333;
+}
+
+a#submitAlbum:hover {
+	background-color: #a2382a;
 }
