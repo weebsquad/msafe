@@ -700,6 +700,8 @@ panel.updateAdminPage = function(pw = '') {
 		console.log(error);
 	});
 	panel.page.appendChild(container);
+	
+	if(pw !== '') document.getElementById('passwordRoot').value = pw;
 
 	document.getElementById('sendNewAccount').addEventListener('click', function(){
 		panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value);
