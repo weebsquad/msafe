@@ -3,7 +3,7 @@ const db = require('knex')(config.database);
 const bcrypt = require('bcrypt');
 const randomstring = require('randomstring');
 const utils = require('./utilsController.js');
-const utils = require('./uploadController.js');
+const uploadController = require('./uploadController.js');
 
 let authController = {};
 
