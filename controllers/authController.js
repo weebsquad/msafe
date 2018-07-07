@@ -141,7 +141,7 @@ authController.deleteAccount = async (req, res, next) => {
     }
     await db.table('files').where('userid', targ.id).del()
     await db.table('albums').where('userid', targ.id).del()
-    await db.table('users').where('id', targ.id).del()
+    if(!filesOnly) await db.table('users').where('id', targ.id).del()
 
     return res.json({success: true })
   })
@@ -215,7 +215,7 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	 // if (utils.isAdmin(targ.username) && user.username !== targ.username) return res.json({ success: false, description: 'You may not reset passwords of admins!' })
+	  if (utils.isAdmin(targ.username) && user.username !== targ.username) return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
     if (bypassEnable && targ.id !== user.id) {
