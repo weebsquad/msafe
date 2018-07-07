@@ -766,7 +766,7 @@ panel.registerNewUser = function (username, pass) {
         type: 'success'
       }, async function () {
 		  const _adm = await panel.isAdmin(panel.username);
-          if (!p_adm) location.reload()
+          if (!_adm) location.reload()
       })
     })
     .catch(function (error) {
