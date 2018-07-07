@@ -31,12 +31,13 @@ function handleRateLimit(options, req, res, next) {
 	if (options.headers) {
 		res.setHeader('Retry-After', retrya);
 	}
+	let json = { success: false, description: options.message, retryAfter: retrya };
 	res.format({
 		html: function(){
-			res.status(options.statusCode).end(options.message);
+			res.status(options.statusCode).end(json);
 		},
 		json: function(){
-			res.status(options.statusCode).json({ success: false, description: options.message, retryAfter: retrya });
+			res.status(options.statusCode).json(json);
 		}
 	});
 }
