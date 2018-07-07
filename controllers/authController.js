@@ -49,14 +49,12 @@ authController.deleteAccount = async (req, res, next) => {
 	if(username === user.username && user.username === 'root') {
 		return res.json({ success: false, description: 'Cannot delete root account!' });
 	}
-	bcrypt.hash(password, 10, async (err, hash) => {
+	bcrypt.compare(password, user.password, (err, result) => {
 		if (err) {
 			console.log(err);
-			return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' });
+			return res.json({ success: false, description: 'There was an error' });
 		}
-		console.log(user.password);
-		console.log(hash);
-		if(hash !== user.password) return res.json({ success: false, description: 'Incorrect password provided' });
+		if(result === false) return res.json({ success: false, description: 'Incorrect password provided' });
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' });
 			
 		const newtoken = randomstring.generate(64);
