@@ -489,8 +489,8 @@ panel.accountScreen = function() {
 			<input id="password" class="input is-expanded" type="password" placeholder="Your new password">
 		</p>
 		<label class="label">Action:</label>
+		<a id="sendDeleteFiles" class="button is-primary">Delete Files</a>
 		<a id="sendDeleteAcc" class="button is-primary">Delete Account</a>
-		<a id="sendDeleteAcc" class="button is-primary">Delete Files</a>
 	`;
 	
 	panel.page.appendChild(container);
@@ -498,6 +498,12 @@ panel.accountScreen = function() {
 	document.getElementById('sendDeleteAcc').addEventListener('click', function(){
 		if (document.getElementById('password')) {
 			panel.deleteAccount(document.getElementById('password').value);
+		} 
+	});
+	
+	document.getElementById('sendDeleteFiles').addEventListener('click', function(){
+		if (document.getElementById('password')) {
+			panel.deleteAccount(document.getElementById('password').value, panel.username, true);
 		} 
 	});
 };
