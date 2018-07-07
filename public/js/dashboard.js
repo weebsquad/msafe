@@ -668,8 +668,8 @@ panel.updateAdminPage = function(pw = '') {
 		for(var item of response.data.users){
 			var tr = document.createElement('tr');
 			let disabledTxt = 'Enable';
-			let disableButtonType = 'is-warning';
-			if(item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-success'; }
+			let disableButtonType = 'is-success';
+			if(item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning'; }
 			tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
