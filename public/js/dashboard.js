@@ -797,7 +797,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
         title: 'Done',
         text: 'Account disabled',
         type: 'success'
-      }, asyncfunction () {
+      }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
           location.reload('/')
