@@ -115,12 +115,13 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		// Check encoding 
 		const dbFiles = await db.table('files')
 		.where(function () {
-			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '')
-		})
-		for(let key in dbFiles) {
+			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id)
+		}).first()
+		console.log(dbFiles);
+		/*for(let key in dbFiles) {
 			let obj = dbFiles[key];
 			if(id === obj['encodedString']) id = obj['name'];
-		}
+		}*/
 		// Finally handle the actual ID
 		const file = `${_path}/${id}`;
 		const ex = fs.existsSync(file);
