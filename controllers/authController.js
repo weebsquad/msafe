@@ -7,9 +7,8 @@ const uploadController = require('./uploadController.js')
 
 let authController = {}
 
-
 authController.listAdmins = async (req, res, next) => {
-	return res.json({ success: true, admins: config.admins })
+  return res.json({ success: true, admins: config.admins })
 }
 
 authController.verify = async (req, res, next) => {
