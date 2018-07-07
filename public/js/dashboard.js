@@ -645,52 +645,48 @@ panel.adminTab = function() {
 		
 
 
-			container.innerHTML = container.innerHTML + `
-				<hr>
-				<table class="table is-striped is-narrow is-left">
-					<thead>
-						<tr>
-							  <th>ID</th>
-							  <th>Name</th>
-							  <th>Disabled</th>
-							  <th></th>
-						</tr>
-					</thead>
-					<tbody id="table">
-					</tbody>
-				</table>
-				<hr>
-			`;
-
-			var table = document.getElementById('table');
-
-			for(var item of response.data.users){
-
-				var tr = document.createElement('tr');
-
-					
-				tr.innerHTML = `
+		container.innerHTML = container.innerHTML + `
+			<hr>
+			<table class="table is-striped is-narrow is-left">
+				<thead>
 					<tr>
-						<th>${item.id}</th>
-						<th>${item.username}</th>
-						<td>${!item.enabled}</td>
-						<td>
-							<a class="button is-small is-danger is-outlined" title="Disable" onclick="panel.deleteUser(${item.id})">
-								<span class="icon is-small">
-									<i class="fa fa-archive"></i>
-								</span>
-							</a>
-							<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel.deleteUser(${item.id})">
-								<span class="icon is-small">
-									<i class="fa fa-trash-o"></i>
-								</span>
-							</a>
-						</td>
+						  <th>ID</th>
+						  <th>Name</th>
+						  <th>Disabled</th>
+							 <th></th>
 					</tr>
-					`;
+				</thead>
+				<tbody id="table">
+				</tbody>
+			</table>
+			<hr>
+		`;
 
-				table.appendChild(tr);
-			}
+		var table = document.getElementById('table');
+
+		for(var item of response.data.users){
+			var tr = document.createElement('tr');
+			tr.innerHTML = `
+				<tr>
+					<th>${item.id}</th>
+					<th>${item.username}</th>
+					<td>${!item.enabled}</td>
+					<td>
+					<a class="button is-small is-danger is-outlined" title="Disable" onclick="panel.deleteUser(${item.id})">
+							<span class="icon is-small">
+								<i class="fa fa-archive"></i>
+							</span>
+						</a>
+						<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel.deleteUser(${item.id})">
+							<span class="icon is-small">
+								<i class="fa fa-trash-o"></i>
+							</span>
+						</a>
+					</td>
+				</tr>
+				`;
+
+			table.appendChild(tr);
 		}
 	})
 	.catch(function (error) {
