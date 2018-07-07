@@ -14,7 +14,7 @@ panel.isAdmin = async function(name) {
 
 panel.fetchAdmins = async function() {
 	panel.admins = new Array();
-	axios.get('/api/albums').then(function (response) {
+	axios.get('/api/admins').then(function (response) {
 		if (response.data.success === false) {
 			if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
 			else return swal('An error ocurred', response.data.description, 'error')
