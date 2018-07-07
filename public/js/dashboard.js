@@ -476,6 +476,11 @@ panel.getAlbumsSidebar = function(){
 
 };
 
+
+panel.accountScreen = function() {
+	console.log('hi'):
+};
+
 panel.getAlbum = function(item){
 	panel.setActiveMenu(item);
 	panel.getUploads(item.id);
