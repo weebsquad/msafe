@@ -47,7 +47,7 @@ authController.disableAccount = async (req, res, next) => {
 	
 	const username = req.body.username;
 	const password = req.body.password;
-	const state = req.body.state;
+	let state = req.body.state;
 	if(typeof(state) !== 'boolean' && typeof(state) !== 'number') return res.json({ success: false, description: 'No disable state provided!' });
 	if(state === 0) state = false;
 	if(state === 1) state = true;
@@ -187,20 +187,32 @@ authController.changePassword = async (req, res, next) => {
 	const user = await utils.authorize(req, res);
 
 	let password = req.body.password;
-	if (password === undefined) return res.json({ success: false, description: 'No password provided' });
-
+	let random = req.body.random || false;
+	if(random === 0) random = false;
+	if(random === 1) random = true;
+	if (password === undefined && random === false) return res.json({ success: false, description: 'No password provided' });
+	if(random) password = randomstring.generate(8);
 	if (password.length < 6 || password.length > 64) {
 		return res.json({ success: false, description: 'Password must have 6-64 characters' });
 	}
 
+	let bypassEnable = false;
+	if(user && user.username === 'root') bypassEnable = true;
 	bcrypt.hash(password, 10, async (err, hash) => {
 		if (err) {
 			console.log(err);
 			return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' });
 		}
+		let targ = user;
+		if(bypassEnable) {
+			targ = await db.table('users').where('username', username).first()
+			if(!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' });
+		}
 
-		await db.table('users').where('id', user.id).update({ password: hash });
-		return res.json({ success: true });
+		await db.table('users').where('id', targ.id).update({ password: hash });
+		let ret = { success: true };
+		if(random) ret['newpw'] = password;
+		return res.json(ret);
 	});
 };
 

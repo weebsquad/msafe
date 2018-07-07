@@ -585,19 +585,19 @@ panel.changePassword = function(){
 	});
 };
 
-panel.sendNewPassword = function(pass){
+panel.sendNewPassword = function(pass, username = panel.username, random = false){
 
-	axios.post('/api/password/change', {password: pass})
+	axios.post('/api/password/change', {username: username, password: pass, random: random})
 	.then(function (response) {
-
 		if(response.data.success === false){
 			if(response.data.description === 'No token provided') return panel.verifyToken(panel.token);
 			else return swal("An error ocurred", response.data.description, "error");		
 		}
-
+		let _r = 'Password was changed successfully.';
+		if(random) _r = 'User\'s new password: ' + response.data.newpw;
 		swal({
-			title: "Woohoo!", 
-			text: 'Your password was changed successfully.', 
+			title: "Success!", 
+			text: _r, 
 			type: "success"
 		}, function(){
 			location.reload();
@@ -676,6 +676,11 @@ panel.updateAdminPage = function(pw = '') {
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
+						<a class="button is-primary is-info is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
+							<span class="icon is-small">
+								<i class="fa fa-trash-o"></i>
+							</span>
+						</a>
 						<a class="button is-small is-info is-outlined is-rounded" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-trash-o"></i>
@@ -763,7 +768,12 @@ panel.deleteFilesOfUser = function(mem) {
 	let pw = _x[1];
 	panel.deleteAccount(pw, user, true);
 };
-
+panel.resetUserPw, = function(mem) {
+	let _x = mem;
+	let user = _x[0];
+	let pw = _x[1];
+	panel.deleteAccount(pw, user, true);
+};
 panel.registerNewUser = function(username, pass){
 
 	axios.post('/api/register', {username:username, password: pass})
