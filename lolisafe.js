@@ -27,7 +27,7 @@ safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
 let limiter = new RateLimit({ windowMs: 10000, max: 2, delayMs: 5 });
-let apiLimit = new RateLimit({ windowMs: 3000, max: 3, delayMs: 0});
+let apiLimit = new RateLimit({ windowMs: 3000, max: 10, delayMs: 0, message: 'You are being ratelimited!'});
 safe.use('/api/login/', limiter);
 safe.use('/api/register/', limiter);
 safe.use('/api/tokens/', limiter);
