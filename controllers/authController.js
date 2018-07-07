@@ -7,6 +7,11 @@ const uploadController = require('./uploadController.js')
 
 let authController = {}
 
+
+authController.listAdmins = async (req, res, next) => {
+	return res.json({ success: true, admins: config.admins })
+}
+
 authController.verify = async (req, res, next) => {
   const username = req.body.username
   const password = req.body.password
@@ -35,7 +40,7 @@ authController.verify = async (req, res, next) => {
 
 authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
-  if (user.username !== 'root') return res.json({ success: false, description: 'No permission!' })
+  if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').whereNot('username', 'root').select('id', 'username', 'enabled', 'timestamp')
 
   return res.json({ success: true, users })
@@ -44,7 +49,7 @@ authController.listAccounts = async (req, res, next) => {
 authController.disableAccount = async (req, res, next) => {
   let bypassEnable = false
   const user = await utils.authorize(req, res)
-  if (user && user.username === 'root') bypassEnable = true
+  if (user && utils.isAdmin(user.username)) bypassEnable = true
 
   const username = req.body.username
   const password = req.body.password
@@ -56,8 +61,8 @@ authController.disableAccount = async (req, res, next) => {
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
 
-  if (username === user.username && user.username === 'root') {
-    return res.json({ success: false, description: 'Cannot disable root account!' })
+  if (username === user.username && utils.isAdmin(user.username)) {
+    return res.json({ success: false, description: 'Cannot disable admin accounts!' })
   }
   bcrypt.compare(password, user.password, async (err, result) => {
     if (err) {
@@ -88,7 +93,7 @@ authController.disableAccount = async (req, res, next) => {
 authController.deleteAccount = async (req, res, next) => {
   let bypassEnable = false
   const user = await utils.authorize(req, res)
-  if (user && user.username === 'root') bypassEnable = true
+  if (user && utils.isAdmin(user.username)) bypassEnable = true
 
   const username = req.body.username
   const password = req.body.password
@@ -97,8 +102,8 @@ authController.deleteAccount = async (req, res, next) => {
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
 
-  if (username === user.username && user.username === 'root') {
-    return res.json({ success: false, description: 'Cannot delete root account!' })
+  if (username === user.username && utils.isAdmin(user.username)) {
+    return res.json({ success: false, description: 'Cannot delete admin accounts!' })
   }
   bcrypt.compare(password, user.password, async (err, result) => {
     if (err) {
@@ -143,7 +148,7 @@ authController.register = async (req, res, next) => {
   let bypassEnable = false
   const token = req.headers.token || ''
   const _user = await db.table('users').where('token', token).first()
-  if (_user && _user.username === 'root') bypassEnable = true
+  if (_user && utils.isAdmin(_user.username)) bypassEnable = true
   if (config.enableUserAccounts === false && !bypassEnable) {
     return res.json({ success: false, description: 'Register is disabled at the moment' })
   }
@@ -196,7 +201,7 @@ authController.changePassword = async (req, res, next) => {
   }
 
   let bypassEnable = false
-  if (user && user.username === 'root') bypassEnable = true
+  if (user && utils.isAdmin(user.username)') bypassEnable = true
   bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
       console.log(err)

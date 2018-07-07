@@ -12,6 +12,7 @@ routes.get('/check', (req, res, next) => {
   })
 })
 
+routes.get('/admins', (req, res, next) => authController.listAdmins(req, res, next))
 routes.post('/login', (req, res, next) => authController.verify(req, res, next))
 routes.post('/register', (req, res, next) => authController.register(req, res, next))
 routes.post('/account/delete', (req, res, next) => authController.deleteAccount(req, res, next))

@@ -5,6 +5,11 @@ panel.username
 panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 
+
+panel.isAdmin = function(name) {
+	if(name === 'root') return true;
+	return false;
+}
 panel.preparePage = function () {
   if (!panel.token) return window.location = '/auth'
   panel.verifyToken(panel.token, true)
@@ -47,7 +52,7 @@ panel.prepareDashboard = function () {
   panel.page = document.getElementById('page')
   document.getElementById('auth').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
-  if (panel.username === 'root') { // adminstuff
+  if (panel.isAdmin(panel.username)) { // adminstuff
     document.getElementById('itemAdmin').style.display = 'block'
   }
 
@@ -140,7 +145,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
       }
     } else {
       var albumOrUser = 'Album'
-      if (panel.username === 'root') { albumOrUser = 'User' }
+      if (panel.isAdmin(panel.username)) { albumOrUser = 'User' }
 
       container.innerHTML = `
 				${pagination}
@@ -169,7 +174,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
         var tr = document.createElement('tr')
 
         var displayAlbumOrUser = item.album
-        if (panel.username === 'root') {
+        if (panel.isAdmin(panel.username)) {
           displayAlbumOrUser = ''
           if (item.username !== undefined) { displayAlbumOrUser = item.username }
         }
@@ -543,7 +548,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
         text: _r,
         type: 'success'
       }, function () {
-        if(panel.username !== 'root') return location.reload()
+        if(!panel.isAdmin(panel.username)) return location.reload()
 		panel.updateAdminPage();
       })
     })
@@ -722,7 +727,7 @@ panel.registerNewUser = function (username, pass) {
         text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${password}`,
         type: 'success'
       }, function () {
-        if (panel.username !== 'root') location.reload()
+        if (!panel.isAdmin(panel.username)) location.reload()
       })
     })
     .catch(function (error) {
@@ -779,7 +784,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-          if (panel.username !== 'root') return location.reload()
+          if (!panel.isAdmin(panel.username)) return location.reload()
           panel.adminTab()
         }
       })
@@ -807,7 +812,7 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-          if (panel.username !== 'root') location.reload()
+          if (!panel.isAdmin(panel.username)) location.reload()
           panel.adminTab()
         }
       })

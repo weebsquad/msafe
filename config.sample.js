@@ -109,6 +109,11 @@ module.exports = {
 	},
 	
 	/*
+		Add other admin accounts here!
+	*/
+	admins: ['root'],
+	
+	/*
 		Whitelisted files when using alternateViewing mode
 	*/
 	

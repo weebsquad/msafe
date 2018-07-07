@@ -21,6 +21,11 @@ utilsController.getPrettyDate = function (date) {
 		date.getSeconds()
 }
 
+utilsController.isAdmin = function (name) {
+  if (config.admins.indexOf(name) > -1) return true
+  return false
+}
+
 utilsController.authorize = async (req, res) => {
   const token = req.headers.token
   if (token === undefined) return res.status(401).json({ success: false, description: 'No token provided' })

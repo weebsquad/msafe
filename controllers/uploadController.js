@@ -209,7 +209,7 @@ uploadsController.delete = async (req, res) => {
   const file = await db.table('files')
     .where('id', id)
     .where(function () {
-      if (user.username !== 'root') {
+      if (!utils.isAdmin(user.username)) {
         this.where('userid', user.id)
       }
     })
@@ -266,7 +266,7 @@ uploadsController.list = async (req, res) => {
       else this.where('albumid', req.params.id)
     })
     .where(function () {
-      if (user.username !== 'root') this.where('userid', user.id)
+      if (!utils.isAdmin(user.username)) this.where('userid', user.id)
     })
     .orderBy('id', 'DESC')
     .limit(25)
@@ -293,7 +293,7 @@ uploadsController.list = async (req, res) => {
     }
 
     // Only push usernames if we are root
-    if (user.username === 'root') {
+    if (utils.isAdmin(user.username)) {
       if (file.userid !== undefined && file.userid !== null && file.userid !== '') {
         userids.push(file.userid)
       }
@@ -306,7 +306,7 @@ uploadsController.list = async (req, res) => {
   }
 
   // If we are a normal user, send response
-  if (user.username !== 'root') return res.json({ success: true, files })
+  if (!utils.isAdmin(user.username)) return res.json({ success: true, files })
 
   // If we are root but there are no uploads attached to a user, send response
   if (userids.length === 0) return res.json({ success: true, files })
