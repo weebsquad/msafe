@@ -41,7 +41,9 @@ authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
-
+  users.forEach(function(vl) {
+	  vl.admin = utils.isAdmin(vl.username);
+  });
   return res.json({ success: true, users })
 }
 
@@ -201,7 +203,7 @@ authController.changePassword = async (req, res, next) => {
   }
 
   let bypassEnable = false
-  if (user && utils.isAdmin(user.username) && username !== user.username) bypassEnable = true
+  if (user && utils.isAdmin(user.username)) bypassEnable = true
   bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
       console.log(err)
@@ -211,7 +213,7 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if (utils.isAdmin(targ.username))  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
+	  if (utils.isAdmin(targ.username) && username !== targ.username)  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
 	if(bypassEnable && targ.id !== user.id) {

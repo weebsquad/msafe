@@ -600,7 +600,7 @@ panel.updateAdminPage = function (pw = '') {
 
   let url = '/api/account/list'
 
-  axios.get(url).then(function (response) {
+  axios.get(url).then(async function (response) {
     if (response.data.success === false) {
       if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
       else return swal('An error ocurred', response.data.description, 'error')
@@ -616,6 +616,7 @@ panel.updateAdminPage = function (pw = '') {
 				<thead>
 					<tr>
 						  <th>ID</th>
+						  <th>Admin</th>
 						  <th>Name</th>
 						  <th>Disabled</th>
 							 <th></th>
@@ -628,6 +629,8 @@ panel.updateAdminPage = function (pw = '') {
 
     var table = document.getElementById('table')
     for (var item of response.data.users) {
+	  if(item.username === panel.username) continue;
+	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
@@ -635,6 +638,7 @@ panel.updateAdminPage = function (pw = '') {
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
+					<th>${item.admin}</th>
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
