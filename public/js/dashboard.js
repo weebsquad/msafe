@@ -613,7 +613,7 @@ panel.sendNewPassword = function(pass){
 
 
 panel.adminTab - function() {
-	
+	panel.page.innerHTML = '';
 };
 
 
