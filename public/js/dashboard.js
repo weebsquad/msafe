@@ -665,12 +665,6 @@ panel.updateAdminPage = function(pw = '') {
 		`;
 
 		var table = document.getElementById('table');
-		function _sendAdminAction(func, txt, username, state = '') {
-			let args = new Array(username);
-			if(state !== '') args.push(state);
-			args.push(document.getElementById('passwordRoot').value);
-			panel.adminAction(func, txt, args);
-		}
 		for(var item of response.data.users){
 			var tr = document.createElement('tr');
 			tr.innerHTML = `
@@ -679,17 +673,17 @@ panel.updateAdminPage = function(pw = '') {
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
-						<a class="button is-small is-danger is-outlined adminOrange" title="Disable" onclick="_sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
+						<a class="button is-small is-danger is-outlined adminOrange" title="Disable" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-trash-o"></i>
 							</span>
 						</a>
-						<a class="button is-small is-danger is-outlined adminBlue" title="Disable" onclick="_sendAdminAction(panel.disableUser, 'disable', '${item.username}', !${item.enabled})">
+						<a class="button is-small is-danger is-outlined adminBlue" title="Disable" onclick="panel._sendAdminAction(panel.disableUser, 'disable', '${item.username}', !${item.enabled})">
 							<span class="icon is-small">
 								<i class="fa fa-archive"></i>
 							</span>
 						</a>
-						<a class="button is-small is-danger is-outlined" title="Delete" onclick="_sendAdminAction(panel.deleteUser, 'delete', '${item.username}')">
+						<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel._sendAdminAction(panel.deleteUser, 'delete', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-ban"></i>
 							</span>
@@ -720,7 +714,12 @@ panel.adminTab = function() {
 	panel.updateAdminPage();
 };
 
-
+panel._sendAdminAction = function(func, txt, username, state = '') {
+	let args = new Array(username);
+	if(state !== '') args.push(state);
+	args.push(document.getElementById('passwordRoot').value);
+	panel.adminAction(func, txt, args);
+};
 panel.adminAction = function(_func, txt, args) {
 	swal({
 		title: "Are you sure?",
