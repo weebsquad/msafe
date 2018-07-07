@@ -740,6 +740,7 @@ panel.deleteUser = function(mem) {
 	let _x = mem;
 	let user = _x[0];
 	let pw = _x[1];
+	console.log('delete ' + user);
 };
 
 panel.disableUser = function(mem) {
@@ -747,12 +748,14 @@ panel.disableUser = function(mem) {
 	let user = _x[0];
 	let state = _x[1];
 	let pw = _x[2];
+	console.log('disable ' + user);
 };
 
 panel.deleteFilesOfUser = function(mem) {
 	let _x = mem;
 	let user = _x[0];
 	let pw = _x[1];
+	console.log('delete files ' + user);
 };
 
 panel.registerNewUser = function(username, pass){
