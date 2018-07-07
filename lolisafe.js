@@ -26,17 +26,16 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-function handleRateLimit(req, res, next) {
-	let _opt = config.rateLimits[req.originalUrl];
-	console.log(_opt);
-	console.log(req);
+function handleRateLimit(_opts, req, res, next) {
+	//let _opt = config.rateLimits[req.originalUrl];
+	console.log(_opts);
 	return;
 	if (options.headers) {
 	res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
 	}
 	res.format({
 		html: function(){
-				res.status(options.statusCode).end(options.message);
+			res.status(options.statusCode).end(options.message);
 		},
 		json: function(){
 			res.status(options.statusCode).json({ message: options.message });
@@ -47,7 +46,10 @@ function handleRateLimit(req, res, next) {
 // Load ratelimits
 for(let key in config.rateLimits) {
 	let obj = config.rateLimits[key];
-	obj['handler'] = handleRateLimit;
+	let _a = function(req, res, next) {
+		handleRateLimit(obj, req, nes, next);
+	}
+	obj['handler'] = _a;
 	let rl = new RateLimit(obj);
 	safe.use(key, rl);
 }
