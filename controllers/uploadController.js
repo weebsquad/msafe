@@ -49,8 +49,8 @@ const upload = multer({
 uploadsController.upload = async (req, res, next) => {
   let user;
   if (config.private === true) {
-    user = await utils.authorize(req, res)
-	if(!user) user = 'no';
+    let _checkuser = await utils.authorize(req, res)
+	if(!_checkuser) return;
   }
   if(user === 'no') return;
   let encodeVersion = req.headers.encodeversion || 0
