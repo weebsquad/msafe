@@ -241,16 +241,15 @@ a#itemAdmin {
 
 
 .swal-overlay {
-  background-color: rgba(43, 165, 137, 0.45);
+  background-color: rgba(43, 165, 137, 0.45)!important;
 }
 
 .swal-modal {
-  background-color: rgba(63,255,106,0.69);
-  border: 3px solid white;
+  background-color: rgba(63,255,106,0.69)!important;
 }
 
 .swal-footer {
-  background-color: rgb(245, 248, 250);
+  background-color: rgb(245, 248, 250)!important;
   margin-top: 32px;
   border-top: 1px solid #E9EEF1;
   overflow: hidden;
