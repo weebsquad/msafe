@@ -700,6 +700,7 @@ panel.updateAdminPage = function (pw = '') {
 		  obj.addEventListener('click', function () {
 			panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
 		  })
+		  console.log('added event!');
 	  },
   };
   for(let key in _waitmaps) {
@@ -707,11 +708,11 @@ panel.updateAdminPage = function (pw = '') {
 	  const _int = setInterval(function() {
 		  const _test = document.getElementById(key);
 		  if(_test) {
-			  console.log('found object' + key);
+			  console.log('found object ' + key);
 			  clearInterval(_int);
-			  obj(_test);
+			  setTimeout(function() { obj(_test); }, 200);
 		  }
-	  }, 50);
+	  }, 75);
   }
 }
 
