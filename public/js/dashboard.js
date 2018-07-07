@@ -667,23 +667,26 @@ panel.updateAdminPage = function(pw = '') {
 		var table = document.getElementById('table');
 		for(var item of response.data.users){
 			var tr = document.createElement('tr');
+			let disabledTxt = 'Enable';
+			let disableButtonType = 'is-warning';
+			if(item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-success'; }
 			tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
-						<a class="button is-small is-danger is-outlined adminOrange" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
+						<a class="button is-small is-link is-outlined is-rounded" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-trash-o"></i>
 							</span>
 						</a>
-						<a class="button is-small is-danger is-outlined adminBlue" title="Disable" onclick="panel._sendAdminAction(panel.disableUser, 'disable', '${item.username}', !${item.enabled})">
+						<a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt}', '${item.username}', !${item.enabled})">
 							<span class="icon is-small">
 								<i class="fa fa-archive"></i>
 							</span>
 						</a>
-						<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel._sendAdminAction(panel.deleteUser, 'delete', '${item.username}')">
+						<a class="button is-small is-danger is-outlined is-rounded" title="Delete" onclick="panel._sendAdminAction(panel.deleteUser, 'delete', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-ban"></i>
 							</span>
