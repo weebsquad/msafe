@@ -13,3 +13,6 @@ yarn.lock
 package-lock.json
 .vscode/
 charmap.js
+start.sh
+restart.sh
+stop.sh
