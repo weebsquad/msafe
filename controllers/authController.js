@@ -86,11 +86,11 @@ authController.disableAccount = async (req, res, next) => {
 
     await db.table('users').where('id', targ.id).update({ enabled: state })
     if (!state) {
-      const newtoken = randomstring.generate(64)
+      /*const newtoken = randomstring.generate(64)
       await db.table('users').where('token', targ.token).update({
         token: newtoken,
         timestamp: Math.floor(Date.now() / 1000)
-      })
+      })*/
     }
 
     return res.json({success: true })
