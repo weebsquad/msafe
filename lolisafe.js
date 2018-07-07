@@ -70,7 +70,7 @@ for (let key in config.rateLimits) {
   }
   obj['handler'] = _a
   obj['keyGenerator'] = rateLimitKey
-  obj['skip'] = rateLimitSkip;
+  obj['skip'] = rateLimitSkip
   let rl = new RateLimit(obj)
   safe.use(key, rl)
 }
