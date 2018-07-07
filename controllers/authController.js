@@ -38,7 +38,7 @@ authController.listAccounts = async (req, res, next) => {
 	
 	return res.json({ success: true, users });
 	
-});
+};
 
 authController.disableAccount = async (req, res, next) => {
 	let bypassEnable = false;
@@ -78,7 +78,7 @@ authController.disableAccount = async (req, res, next) => {
 		
 	});
 
-});
+};
 
 
 authController.deleteAccount = async (req, res, next) => {
