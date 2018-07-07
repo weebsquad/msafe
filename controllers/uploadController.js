@@ -50,7 +50,7 @@ uploadsController.upload = async (req, res, next) => {
   let user;
   if (config.private === true) {
     let _checkuser = await utils.authorize(req, res)
-	if(!_checkuser) return res.end()
+	if(!_checkuser) { console.log('hi'); return res.end() }
   }
 
   let encodeVersion = req.headers.encodeversion || 0
