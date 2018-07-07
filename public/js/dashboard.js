@@ -768,11 +768,11 @@ panel.deleteFilesOfUser = function(mem) {
 	let pw = _x[1];
 	panel.deleteAccount(pw, user, true);
 };
-panel.resetUserPw, = function(mem) {
+panel.resetUserPw = function(mem) {
 	let _x = mem;
 	let user = _x[0];
 	let pw = _x[1];
-	panel.deleteAccount(pw, user, true);
+	panel.sendNewPassword('', user, true);
 };
 panel.registerNewUser = function(username, pass){
 
