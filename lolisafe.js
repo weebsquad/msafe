@@ -34,7 +34,7 @@ function handleRateLimit(options, req, res, next) {
 	let json = { success: false, description: options.message, retryAfter: retrya };
 	res.format({
 		html: function(){
-			res.status(options.statusCode).end(json);
+			res.status(options.statusCode).end(JSON.stringify(json));
 		},
 		json: function(){
 			res.status(options.statusCode).json(json);
