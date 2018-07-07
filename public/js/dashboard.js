@@ -684,6 +684,7 @@ panel.updateAdminPage = function (pw = '') {
 		buttons = '';
 		item.username = `(self) ${item.username}`;
 	  }
+	  console.log(item.enabled);
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
