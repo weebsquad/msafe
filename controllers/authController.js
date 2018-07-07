@@ -58,11 +58,10 @@ authController.deleteAccount = async (req, res, next) => {
 		let targ = user;
 		if(bypassEnable) {
 			targ = await db.table('users').where('username', username).first()
-			if(!targ) return res.json({ success: false, description: 'Couldnt find this user!' });
-			return res.json({ success: false, description: 'found usr' });
+			if(!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' });
 		}
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' });
-		/*
+		
 		const newtoken = randomstring.generate(64);
 		await db.table('users').where('id', targ.id).update({ enabled: 0 });
 		await db.table('users').where('token', targ.token).update({
@@ -80,7 +79,7 @@ authController.deleteAccount = async (req, res, next) => {
 			}
 		}
 		await db.table('files').where('userid', targ.id).del()
-		await db.table('albums').where('userid', targ.id).del()*/
+		await db.table('albums').where('userid', targ.id).del()
 		
 	});
 };
