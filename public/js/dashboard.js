@@ -562,6 +562,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       }
       let _r = 'Password was changed successfully.'
       if (random) _r = 'User\'s new password: ' + response.data.newpw
+	  console.log(response.data);
       swal({
         title: 'Success!',
         text: _r,
@@ -674,14 +675,28 @@ panel.updateAdminPage = function (pw = '') {
       console.log(error)
     })
   panel.page.appendChild(container)
-  let _int = setInterval(function () {
-    let rootpw = document.getElementById('passwordRoot')
-    if (pw !== '' && rootpw) { clearInterval(_int); rootpw.value = pw }
-  }, 100)
-
-  document.getElementById('sendNewAccount').addEventListener('click', function () {
-    panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
-  })
+  
+  
+  const _waitmaps = {
+	  'passwordRoot': function(rootpw) {
+		   if (pw !== '' && rootpw) { rootpw.value = pw }
+	  },
+	  'sendNewAccount': function(obj) {
+		  obj.addEventListener('click', function () {
+			panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
+		  })
+	  },
+  };
+  for(let key in _waitmaps) {
+	  let obj = _waitmaps[key];
+	  const _int = setInterval(function() {
+		  const _test = document.getElementById(key);
+		  if(_test) {
+			  clearInterval(_int);
+			  obj(_test);
+		  }
+	  }, 50);
+  }
 }
 
 panel.adminTab = function () {
