@@ -47,11 +47,9 @@ const upload = multer({
 }).array('files[]')
 
 uploadsController.upload = async (req, res, next) => {
-  let user;
   if (config.private === true) {
     const _checkuser = await utils.authorize(req, res)
-	if(!_checkuser) { console.log('hi'); return res.end() }
-	console.log(_checkuser);
+	if(!_checkuser.id) return;
   }
 
   let encodeVersion = req.headers.encodeversion || 0
@@ -60,7 +58,7 @@ uploadsController.upload = async (req, res, next) => {
   encodeVersion = parseInt(encodeVersion)
 
   const token = req.headers.token || ''
-  user = await db.table('users').where('token', token).first()
+  const user = await db.table('users').where('token', token).first()
   if (user && (user.enabled === false || user.enabled === 0)) {
     return res.json({
       success: false,
@@ -205,6 +203,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 
 uploadsController.delete = async (req, res) => {
   const user = await utils.authorize(req, res)
+  if(!user.id) return;
   const id = req.body.id
   if (id === undefined || id === '') {
     return res.json({ success: false, description: 'No file specified' })
@@ -260,7 +259,7 @@ uploadsController.deleteFile = function (file) {
 
 uploadsController.list = async (req, res) => {
   const user = await utils.authorize(req, res)
-
+  if(!user.id) return;
   let offset = req.params.page
   if (offset === undefined) offset = 0
 
