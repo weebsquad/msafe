@@ -676,7 +676,7 @@ panel.updateAdminPage = function(pw = '') {
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
-						<a class="button is-small is-link is-outlined is-rounded" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
+						<a class="button is-small is-info is-outlined is-rounded" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-trash-o"></i>
 							</span>
