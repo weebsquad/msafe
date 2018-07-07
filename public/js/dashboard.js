@@ -782,6 +782,8 @@ panel.registerNewUser = function (username, pass) {
         title: 'Yay',
         text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${pass}`,
         type: 'success'
+		closeOnEsc: false,
+		closeOnClickOutside: false,
       }, async function () {
 		  const _adm = await panel.isAdmin(panel.username);
           if (!_adm) return location.reload()
@@ -838,6 +840,9 @@ panel.disableAccount = function (password, username = panel.username, state) {
         title: 'Done',
         text: `Account ${_st}`,
         type: 'success'
+		timer: 3000,
+		closeOnEsc: true,
+		closeOnClickOutside: true,
       }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
@@ -867,6 +872,9 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
         title: 'Done',
         text: _t,
         type: 'success'
+		timer: 3000,
+		closeOnEsc: true,
+		closeOnClickOutside: true,
       }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')

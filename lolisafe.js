@@ -31,7 +31,7 @@ async function rateLimitKey (req, res) {
   const token = req.headers.token
   if (token) {
     const user = await db.table('users').where('token', token).first()
-    if (user && !config.enableUserAccounts) key = user.id
+    if (user && (!config.enableUserAccounts || !config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
   }
   return key
 }
