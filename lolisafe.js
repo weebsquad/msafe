@@ -50,6 +50,7 @@ function handleRateLimit(options, req, res, next) {
 			res.status(options.statusCode).json(json);
 		}
 	});
+	res.end();
 }
 
 // Load ratelimits
