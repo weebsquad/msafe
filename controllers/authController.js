@@ -190,6 +190,7 @@ authController.changePassword = async (req, res, next) => {
   let username = req.body.username
   if (username === undefined) username = ''
   let password = req.body.password
+  let adminpw = req.body.adminpw || ''
   let random = req.body.random || false
   if (random === 0) random = false
   if (random === 1) random = true
@@ -200,7 +201,7 @@ authController.changePassword = async (req, res, next) => {
   }
 
   let bypassEnable = false
-  if (user && utils.isAdmin(user.username)) bypassEnable = true
+  if (user && utils.isAdmin(user.username) && username !== user.username) bypassEnable = true
   bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
       console.log(err)
@@ -210,12 +211,28 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
+	  if (utils.isAdmin(targ.username))  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
-    await db.table('users').where('id', targ.id).update({ password: hash })
-    let ret = { success: true }
-    if (random) ret['newpw'] = password
-    return res.json(ret)
+	if(bypassEnable && targ.id !== user.id) {
+		bcrypt.compare(adminpw, user.password, async (err, result) => {
+			if (err) {
+			  console.log(err)
+			  return res.json({ success: false, description: 'There was an error' })
+			}
+			if (result === false) return res.json({ success: false, description: 'Wrong password' })'
+			await db.table('users').where('id', targ.id).update({ password: hash })
+			let ret = { success: true }
+			if (random) ret['newpw'] = password
+			return res.json(ret)
+		});	
+	} else {
+
+		await db.table('users').where('id', targ.id).update({ password: hash })
+		let ret = { success: true }
+		if (random) ret['newpw'] = password
+		return res.json(ret)
+	}
   })
 }
 

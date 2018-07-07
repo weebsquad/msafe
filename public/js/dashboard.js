@@ -553,8 +553,8 @@ panel.changePassword = function () {
   })
 }
 
-panel.sendNewPassword = function (pass, username = panel.username, random = false) {
-  axios.post('/api/password/change', {username: username, password: pass, random: random})
+panel.sendNewPassword = function (pass, username = panel.username, random = false, adminpw = '') {
+  axios.post('/api/password/change', {username: username, password: pass, random: random, adminpw: adminpw})
     .then(function (response) {
       if (response.data.success === false) {
         if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
@@ -732,7 +732,7 @@ panel.resetUserPw = function (mem) {
   let _x = mem
   let user = _x[0]
   let pw = _x[1]
-  panel.sendNewPassword('', user, true)
+  panel.sendNewPassword('', user, true, pw)
 }
 panel.registerNewUser = function (username, pass) {
   axios.post('/api/register', {username: username, password: pass})
