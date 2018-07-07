@@ -47,6 +47,10 @@ authController.disableAccount = async (req, res, next) => {
 	
 	const username = req.body.username;
 	const password = req.body.password;
+	const state = req.body.state;
+	if(typeof(state) !== 'boolean' && typeof(state) !== 'number') return res.json({ success: false, description: 'No disable state provided!' });
+	if(state === 0) state = false;
+	if(state === 1) state = true;
 	
 	if (username === undefined) return res.json({ success: false, description: 'No username provided' });
 	if (password === undefined) return res.json({ success: false, description: 'No password provided' });
@@ -67,12 +71,14 @@ authController.disableAccount = async (req, res, next) => {
 		}
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable this user' });
 		
-		const newtoken = randomstring.generate(64);
-		await db.table('users').where('id', targ.id).update({ enabled: 0 });
-		await db.table('users').where('token', targ.token).update({
-			token: newtoken,
-			timestamp: Math.floor(Date.now() / 1000)
-		});
+		await db.table('users').where('id', targ.id).update({ enabled: state });
+		if(!state) {
+			const newtoken = randomstring.generate(64);
+			await db.table('users').where('token', targ.token).update({
+				token: newtoken,
+				timestamp: Math.floor(Date.now() / 1000)
+			});
+		}
 		
 		return res.json({success: true });
 		

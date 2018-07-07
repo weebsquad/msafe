@@ -240,9 +240,11 @@ a#itemAdmin {
 }
 
 .adminBlue {
-	background: #6666ff
+	background: #6666ff;
+	color: #6666ff;
 }
 
 .adminOrange {
-	background: #e65c00
+	background: #e65c00;
+	color: #e65c00;
 }

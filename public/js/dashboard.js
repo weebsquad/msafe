@@ -673,7 +673,7 @@ panel.updateAdminPage = function(pw = '') {
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
-						<a class="button is-small is-danger is-outlined adminOrange" title="Disable" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
+						<a class="button is-small is-danger is-outlined adminOrange" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-trash-o"></i>
 							</span>
@@ -739,7 +739,7 @@ panel.deleteUser = function(mem) {
 	let _x = mem;
 	let user = _x[0];
 	let pw = _x[1];
-	console.log('delete ' + user);
+	panel.deleteAccount(pw, user, false);
 };
 
 panel.disableUser = function(mem) {
@@ -747,14 +747,14 @@ panel.disableUser = function(mem) {
 	let user = _x[0];
 	let state = _x[1];
 	let pw = _x[2];
-	console.log('disable ' + user);
+	panel.disableAccount(pw, user, state)
 };
 
 panel.deleteFilesOfUser = function(mem) {
 	let _x = mem;
 	let user = _x[0];
 	let pw = _x[1];
-	console.log('delete files ' + user);
+	panel.deleteAccount(pw, user, true);
 };
 
 panel.registerNewUser = function(username, pass){
@@ -815,8 +815,9 @@ panel.accountScreen = function() {
 
 
 
-panel.disableAccount = function(password, username = panel.username) {
-	axios.post('/api/account/disable', {username:username, password: password})
+panel.disableAccount = function(password, username = panel.username, state) {
+	if(typeof(state) !== 'boolean') state = false;
+	axios.post('/api/account/disable', {username:username, password: password, state: state})
 	.then(function (response) {
 
 		if(response.data.success === false){
