@@ -486,7 +486,7 @@ panel.accountScreen = function() {
 
 		<label class="label">Enter your password</label>
 		<p class="control has-addons">
-			<input id="password" class="input is-expanded" type="password" placeholder="Your new password">
+			<input id="password" class="input is-expanded" type="password" placeholder="Your password">
 		</p>
 		<label class="label">Action:</label>
 		<a id="sendDeleteFiles" class="button is-primary">Delete Files</a>
@@ -669,13 +669,19 @@ panel.deleteAccount = function(password, username = panel.username, filesOnly = 
 		if(response.data.success === false){
 			return swal("An error ocurred", response.data.description, "error");		
 		}
-
+		let _t = 'Account & data deleted!';
+		if(filesOnly) _t = 'files deleted!';
 		swal({
 			title: "Done", 
-			text: 'Account & data deleted!', 
+			text: _t, 
 			type: "success"
 		}, function(){
-			location.reload();
+			if(username === panel.username && !filesOnly) {
+				localStorage.removeItem("token");
+				location.reload('/');
+			} else {
+				location.reload();
+			}
 		});
 
 	})
