@@ -49,7 +49,7 @@ authController.deleteAccount = async (req, res, next) => {
 	if(username === user.username && user.username === 'root') {
 		return res.json({ success: false, description: 'Cannot delete root account!' });
 	}
-	bcrypt.compare(password, user.password, (err, result) => async {
+	bcrypt.compare(password, user.password, async (err, result) => {
 		if (err) {
 			console.log(err);
 			return res.json({ success: false, description: 'There was an error' });
