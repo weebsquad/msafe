@@ -62,25 +62,26 @@ authController.deleteAccount = async (req, res, next) => {
 			return res.json({ success: false, description: 'found usr' });
 		}
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' });
-			
+		/*
 		const newtoken = randomstring.generate(64);
-		await db.table('users').where('id', user.id).update({ enabled: 0 });
-		await db.table('users').where('token', user.token).update({
+		await db.table('users').where('id', targ.id).update({ enabled: 0 });
+		await db.table('users').where('token', targ.token).update({
 			token: newtoken,
 			timestamp: Math.floor(Date.now() / 1000)
 		});
 		const userFiles = await db.table('files')
 			.where(function () {
-				this.where('userid', user.id)
+				this.where('userid', targ.id)
 			})
 		for(let key in userFiles) {
 			let obj = userFiles[key];
-			if(obj['userid'] === user.id) { 
+			if(obj['userid'] === targ.id) { 
 				uploadController.deleteFile(obj['name']);
 			}
 		}
-		await db.table('files').where('userid', user.id).del()
-		await db.table('albums').where('userid', user.id).del()
+		await db.table('files').where('userid', targ.id).del()
+		await db.table('albums').where('userid', targ.id).del()*/
+		
 	});
 };
 
