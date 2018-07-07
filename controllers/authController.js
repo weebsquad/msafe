@@ -104,7 +104,7 @@ authController.deleteAccount = async (req, res, next) => {
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
 
-  if (username === user.username && utils.isAdmin(user.username)) {
+  if (username === user.username && utils.isAdmin(user.username) && !filesOnly) {
     return res.json({ success: false, description: 'Cannot delete admin accounts!' })
   }
   bcrypt.compare(password, user.password, async (err, result) => {
