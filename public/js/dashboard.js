@@ -5,11 +5,24 @@ panel.username
 panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 
-
-panel.isAdmin = function(name) {
-	if(name === 'root') return true;
+panel.admins = new Array();
+panel.isAdmin = async function(name) {
+	if(panel.admins.length === 0) await fetchAdmins();
+	if(panel.admins.indexOf(name) > -1) return true;
 	return false;
 }
+
+panel.fetchAdmins = async function() {
+	panel.admins = new Array();
+	axios.get('/api/albums').then(function (response) {
+		if (response.data.success === false) {
+			if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
+			else return swal('An error ocurred', response.data.description, 'error')
+		}
+		response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
+	});
+}
+
 panel.preparePage = function () {
   if (!panel.token) return window.location = '/auth'
   panel.verifyToken(panel.token, true)
@@ -48,11 +61,12 @@ panel.verifyToken = function (token, reloadOnError) {
     })
 }
 
-panel.prepareDashboard = function () {
+panel.prepareDashboard = async function () {
   panel.page = document.getElementById('page')
   document.getElementById('auth').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
-  if (panel.isAdmin(panel.username)) { // adminstuff
+  const _adm = await panel.isAdmin(panel.username);
+  if (_adm) { // adminstuff
     document.getElementById('itemAdmin').style.display = 'block'
   }
 
@@ -88,7 +102,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
   let url = '/api/uploads/' + page
   if (album !== undefined) { url = '/api/album/' + album + '/' + page }
 
-  axios.get(url).then(function (response) {
+  axios.get(url).then(async function (response) {
     if (response.data.success === false) {
       if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
       else return swal('An error ocurred', response.data.description, 'error')
@@ -145,7 +159,8 @@ panel.getUploads = function (album = undefined, page = undefined) {
       }
     } else {
       var albumOrUser = 'Album'
-      if (panel.isAdmin(panel.username)) { albumOrUser = 'User' }
+	  const _adm = await panel.isAdmin(panel.username);
+      if (_adm) { albumOrUser = 'User' }
 
       container.innerHTML = `
 				${pagination}
@@ -174,7 +189,8 @@ panel.getUploads = function (album = undefined, page = undefined) {
         var tr = document.createElement('tr')
 
         var displayAlbumOrUser = item.album
-        if (panel.isAdmin(panel.username)) {
+		const _adm = await panel.isAdmin(panel.username);
+        if (_adm) {
           displayAlbumOrUser = ''
           if (item.username !== undefined) { displayAlbumOrUser = item.username }
         }
@@ -547,8 +563,9 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
         title: 'Success!',
         text: _r,
         type: 'success'
-      }, function () {
-        if(!panel.isAdmin(panel.username)) return location.reload()
+      }, async function () {
+		const _adm = await panel.isAdmin(panel.username);
+        if(!_adm) return location.reload()
 		panel.updateAdminPage();
       })
     })
@@ -726,8 +743,9 @@ panel.registerNewUser = function (username, pass) {
         title: 'Yay',
         text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${password}`,
         type: 'success'
-      }, function () {
-        if (!panel.isAdmin(panel.username)) location.reload()
+      }, async function () {
+		  const _adm = await panel.isAdmin(panel.username);
+          if (!p_adm) location.reload()
       })
     })
     .catch(function (error) {
@@ -779,12 +797,13 @@ panel.disableAccount = function (password, username = panel.username, state) {
         title: 'Done',
         text: 'Account disabled',
         type: 'success'
-      }, function () {
+      }, asyncfunction () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-          if (!panel.isAdmin(panel.username)) return location.reload()
+		  const _adm = await panel.isAdmin(panel.username);
+          if (!_adm) return location.reload()
           panel.adminTab()
         }
       })
@@ -807,12 +826,13 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
         title: 'Done',
         text: _t,
         type: 'success'
-      }, function () {
+      }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-          if (!panel.isAdmin(panel.username)) location.reload()
+		  const _adm = await panel.isAdmin(panel.username);
+          if (!_adm) location.reload()
           panel.adminTab()
         }
       })
