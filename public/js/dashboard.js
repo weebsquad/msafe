@@ -570,7 +570,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       }, async function () {
 		const _adm = await panel.isAdmin(panel.username);
         if(!_adm) return location.reload()
-		panel.updateAdminPage();
+		panel.adminTab();
       })
     })
     .catch(function (error) {

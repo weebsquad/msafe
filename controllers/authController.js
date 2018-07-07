@@ -75,8 +75,9 @@ authController.disableAccount = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
+	  if(user.id !== targ.id && utils.isAdmin(targ.username))  return res.json({ success: false, description: 'No permission to disable this user' })
     }
-    if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable this user' })
+    if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable other users' })
 
     await db.table('users').where('id', targ.id).update({ enabled: state })
     if (!state) {
@@ -116,8 +117,9 @@ authController.deleteAccount = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
+	  if(user.id !== targ.id && utils.isAdmin(targ.username))  return res.json({ success: false, description: 'No permission to delete this user' })
     }
-    if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' })
+    if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete other users' })
 
     const newtoken = randomstring.generate(64)
     if (!filesOnly) {
@@ -213,7 +215,7 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if (utils.isAdmin(targ.username) && username !== targ.username)  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
+	  if (utils.isAdmin(targ.username) && user.username !== targ.username)  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
 	if(bypassEnable && targ.id !== user.id) {
