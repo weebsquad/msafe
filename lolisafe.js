@@ -47,7 +47,7 @@ function handleRateLimit(_opts, req, res, next) {
 for(let key in config.rateLimits) {
 	let obj = config.rateLimits[key];
 	let _a = function(req, res, next) {
-		handleRateLimit(obj, req, nes, next);
+		handleRateLimit(obj, req, res, next);
 	}
 	obj['handler'] = _a;
 	let rl = new RateLimit(obj);
