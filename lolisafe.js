@@ -26,12 +26,16 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-let limiter = new RateLimit({ windowMs: 10000, max: 2 });
+let limiter = new RateLimit({ windowMs: 10000, max: 2, delayMs: 5 });
+let apiLimit = new RateLimit({ windowMs: 3000, max: 3, delayMs: 0});
 safe.use('/api/login/', limiter);
 safe.use('/api/register/', limiter);
+safe.use('/api/tokens/', limiter);
+safe.use('/api', apiLimit);
 
-safe.use(bodyParser.urlencoded({ extended: true }));
-safe.use(bodyParser.json());
+
+safe.use(bodyParser.json({limit: '50mb'}));
+safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 if (config.serveFilesWithNode && !config.useAlternateViewing) {
 	safe.use('/', express.static(config.uploads.folder));
