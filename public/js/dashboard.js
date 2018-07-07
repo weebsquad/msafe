@@ -616,7 +616,7 @@ panel.updateAdminPage = function (pw = '') {
 					<td>
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
-								<i class="fa fa-feather"></i>
+								<i class="fa fa-address-card"></i>
 							</span>
 						</a>
 						<a class="button is-small is-info is-outlined is-rounded" title="Erase Files/Albums" onclick="panel._sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
