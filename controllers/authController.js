@@ -55,6 +55,12 @@ authController.deleteAccount = async (req, res, next) => {
 			return res.json({ success: false, description: 'There was an error' });
 		}
 		if(result === false) return res.json({ success: false, description: 'Wrong password' });
+		let targ = user;
+		if(bypassEnable) {
+			targ = await db.table('users').where('username', username).first()
+			if(!targ) return res.json({ success: false, description: 'Couldnt find this user!' });
+			return res.json({ success: false, description: 'found usr' });
+		}
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' });
 			
 		const newtoken = randomstring.generate(64);
