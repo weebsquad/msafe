@@ -179,7 +179,7 @@ section#login input, section#login p.control a.button {
     box-shadow: 0 0 0;
 }
 
-section#login p.control a.button { margin-left: 10px; }
+section#login p.control a.button { margin-left: 15px; }
 section#login p.control a#loginBtn { border-right: 0px; }
 section#login p.control a#registerBtn { border-left: 0px; }
 
