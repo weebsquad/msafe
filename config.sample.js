@@ -33,7 +33,7 @@ module.exports = {
 	port: 9999,
 
 	// Pages to process for the frontend
-	pages: ['home', 'auth', 'dashboard', 'faq'],
+	pages: ['home', 'auth', 'dashboard', 'faq', 'privacy'],
 
 	// Add file extensions here which should be blocked
 	blockedExtensions: [
@@ -111,8 +111,7 @@ module.exports = {
 	*/
 	
 	whitelistedQueries: { 
-		'sharex': 'public/sharex.txt',
-		'privacypolicy': 'public/privacy.txt'
+		'sharex': 'public/sharex.txt'
 	},
 
 	// The following values shouldn't be touched
