@@ -20,7 +20,7 @@ authController.verify = async (req, res, next) => {
 
   const user = await db.table('users').where('username', username).first()
   if (!user) return res.json({ success: false, description: 'Username doesn\'t exist' })
-  if (user.enabled === false || user.enabled === 0) {
+  if ((user.enabled === false || user.enabled === 0) && !utils.isAdmin(user.username)) {
     return res.json({
       success: false,
       description: 'This account has been disabled'
@@ -215,7 +215,7 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if (utils.isAdmin(targ.username) && user.username !== targ.username) return res.json({ success: false, description: 'You may not reset passwords of admins!' })
+	 // if (utils.isAdmin(targ.username) && user.username !== targ.username) return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
     if (bypassEnable && targ.id !== user.id) {
