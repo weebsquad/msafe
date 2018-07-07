@@ -223,6 +223,6 @@ a#submitAlbum:hover {
 a#registerBtn.button, a#loginBtn.button {
     color: #30a9ed;
     font-size: 18px;
-    background: #f9f9f9;
-    border-color: #30a9ed;
+    background: #272727;
+    border-color: #272727;
 }
