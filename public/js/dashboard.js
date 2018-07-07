@@ -7,7 +7,7 @@ panel.filesView = localStorage.filesView
 
 panel.admins = new Array();
 panel.isAdmin = async function(name) {
-	if(panel.admins.length === 0) await fetchAdmins();
+	if(panel.admins.length === 0) await panel.fetchAdmins();
 	if(panel.admins.indexOf(name) > -1) return true;
 	return false;
 }
