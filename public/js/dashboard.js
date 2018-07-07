@@ -478,7 +478,7 @@ panel.getAlbumsSidebar = function(){
 
 
 panel.accountScreen = function() {
-	console.log('hi'):
+	console.log('hi');
 };
 
 panel.getAlbum = function(item){
