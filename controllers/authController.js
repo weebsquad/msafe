@@ -39,7 +39,7 @@ authController.verify = async (req, res, next) => {
 
 authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
   let files = await db.table('files').select('userid')
@@ -56,7 +56,7 @@ authController.listAccounts = async (req, res, next) => {
 authController.disableAccount = async (req, res, next) => {
   let bypassEnable = false
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   if (user && utils.isAdmin(user.username)) bypassEnable = true
 
   const username = req.body.username
@@ -88,11 +88,11 @@ authController.disableAccount = async (req, res, next) => {
 
     await db.table('users').where('id', targ.id).update({ enabled: state })
     if (!state) {
-      /*const newtoken = randomstring.generate(64)
+      /* const newtoken = randomstring.generate(64)
       await db.table('users').where('token', targ.token).update({
         token: newtoken,
         timestamp: Math.floor(Date.now() / 1000)
-      })*/
+      }) */
     }
 
     return res.json({success: true })
@@ -102,7 +102,7 @@ authController.disableAccount = async (req, res, next) => {
 authController.deleteAccount = async (req, res, next) => {
   let bypassEnable = false
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   if (user && utils.isAdmin(user.username)) bypassEnable = true
 
   const username = req.body.username
@@ -200,7 +200,7 @@ authController.register = async (req, res, next) => {
 
 authController.changePassword = async (req, res, next) => {
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   let username = req.body.username
   if (username === undefined) username = ''
   let password = req.body.password

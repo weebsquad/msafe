@@ -49,7 +49,7 @@ const upload = multer({
 uploadsController.upload = async (req, res, next) => {
   if (config.private === true) {
     const _checkuser = await utils.authorize(req, res)
-	if(!_checkuser.id) return;
+    if (!_checkuser.id) return
   }
 
   let encodeVersion = req.headers.encodeversion || 0
@@ -203,7 +203,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 
 uploadsController.delete = async (req, res) => {
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   const id = req.body.id
   if (id === undefined || id === '') {
     return res.json({ success: false, description: 'No file specified' })
@@ -259,7 +259,7 @@ uploadsController.deleteFile = function (file) {
 
 uploadsController.list = async (req, res) => {
   const user = await utils.authorize(req, res)
-  if(!user.id) return;
+  if (!user.id) return
   let offset = req.params.page
   if (offset === undefined) offset = 0
 

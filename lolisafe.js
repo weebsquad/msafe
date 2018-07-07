@@ -26,7 +26,7 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 safe.set('view engine', 'handlebars')
 safe.enable('view cache')
 
-async function rateLimitKey (req) {
+async function rateLimitKey (req, res) {
   let key = req.ip
   const token = req.headers.token
   if (token) {
@@ -34,6 +34,15 @@ async function rateLimitKey (req) {
     if (user) key = user.id
   }
   return key
+}
+
+async function rateLimitSkip (req, res) {
+  const token = req.headers.token
+  if (token && config.adminsBypassRatelimiting) {
+    const user = await db.table('users').where('token', token).first()
+    if (user && config.admins.indexOf(user.username) > -1) return true
+  }
+  return false
 }
 
 function handleRateLimit (options, req, res, next) {
@@ -61,6 +70,7 @@ for (let key in config.rateLimits) {
   }
   obj['handler'] = _a
   obj['keyGenerator'] = rateLimitKey
+  obj['skip'] = rateLimitSkip;
   let rl = new RateLimit(obj)
   safe.use(key, rl)
 }

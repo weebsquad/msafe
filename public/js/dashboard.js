@@ -649,9 +649,9 @@ panel.updateAdminPage = function (pw = '') {
 	  if(item.username === panel.username) continue;
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
       var tr = document.createElement('tr')
-      let disabledTxt = 'Enable'
+      let disabledTxt = 'enable'
       let disableButtonType = 'is-success'
-      if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
+      if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'disable'; disableButtonType = 'is-warning' }
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
