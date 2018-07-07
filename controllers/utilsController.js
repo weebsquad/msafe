@@ -27,6 +27,7 @@ utilsController.authorize = async (req, res) => {
 
 	const user = await db.table('users').where('token', token).first();
 	if (!user) return res.status(401).json({ success: false, description: 'Invalid token' });
+	if(user.enabled === 0 || user.enabled === false) return res.status(401).json({ success: false, description: 'This account has been disabled' });
 	return user;
 };
 

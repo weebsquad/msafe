@@ -628,7 +628,29 @@ panel.registerNewUser = function(username, pass){
 		return swal("An error ocurred", 'There was an error with the request, please check the console for more information.', "error");
 		console.log(error);
 	});
+};
 
+panel.deleteAcc = function(password, username = panel.username) {
+	axios.post('/api/account/delete', {username:username, password: password})
+	.then(function (response) {
+
+		if(response.data.success === false){
+			return swal("An error ocurred", response.data.description, "error");		
+		}
+
+		swal({
+			title: "Woohoo!", 
+			text: 'Account & data deleted!', 
+			type: "success"
+		}, function(){
+			location.reload();
+		});
+
+	})
+	.catch(function (error) {
+		return swal("An error ocurred", 'There was an error with the request, please check the console for more information.', "error");
+		console.log(error);
+	});
 };
 
 panel.setActiveMenu = function(item){

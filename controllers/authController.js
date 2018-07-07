@@ -3,6 +3,7 @@ const db = require('knex')(config.database);
 const bcrypt = require('bcrypt');
 const randomstring = require('randomstring');
 const utils = require('./utilsController.js');
+const utils = require('./uploadController.js');
 
 let authController = {};
 
@@ -32,6 +33,48 @@ authController.verify = async (req, res, next) => {
 
 
 
+
+
+authController.deleteAccount = async (req, res, next) => {
+	let bypassEnable = false;
+	const user = await utils.authorize(req, res);
+	if(user && user.username === 'root') bypassEnable = true;
+	
+	const username = req.body.username;
+	const password = req.body.password;
+	
+	if (username === undefined) return res.json({ success: false, description: 'No username provided' });
+	if (password === undefined) return res.json({ success: false, description: 'No password provided' });
+	
+	if(username === user.username && user.username === 'root') {
+		return res.json({ success: false, description: 'Cannot delete root account!' });
+	}
+	bcrypt.hash(password, 10, async (err, hash) => {
+		if (err) {
+			console.log(err);
+			return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' });
+		}
+		if(bypassEnable || hash !== user.password) return res.json({ success: false, description: 'Wrong password or no perm to delete this user' });
+		const newtoken = randomstring.generate(64);
+		/*await db.table('users').where('id', user.id).update({ enabled: 0 });
+		await db.table('users').where('token', user.token).update({
+			token: newtoken,
+			timestamp: Math.floor(Date.now() / 1000)
+		});*/
+		const userFiles = await db.table('files')
+			.where(function () {
+				this.where('userid', user.id)
+			})
+		for(let key in userFiles) {
+			let obj = userFiles[key];
+			if(obj['userid'] === user.id) { 
+				uploadController.deleteFile(obj['name']);
+			}
+		}
+		await db.table('files').where('userid', user.id).del()
+		await db.table('albums').where('userid', user.id).del()
+	});
+});
 
 authController.register = async (req, res, next) => {
 	let bypassEnable = false;
