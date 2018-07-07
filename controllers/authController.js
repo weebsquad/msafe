@@ -40,7 +40,7 @@ authController.verify = async (req, res, next) => {
 authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
-  let users = await db.table('users').whereNot('username', 'root').select('id', 'username', 'enabled', 'timestamp')
+  let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
 
   return res.json({ success: true, users })
 }
