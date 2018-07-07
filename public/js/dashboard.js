@@ -478,7 +478,28 @@ panel.getAlbumsSidebar = function(){
 
 
 panel.accountScreen = function() {
+	panel.page.innerHTML = '';
+	var container = document.createElement('div');
+	container.className = "container";
+	container.innerHTML = `
+		<h2 class="subtitle">Manage your account</h2>
+
+		<label class="label">Enter your password</label>
+		<p class="control has-addons">
+			<input id="password" class="input is-expanded" type="password" placeholder="Your new password">
+		</p>
+		<label class="label">Action:</label>
+		<a id="sendDeleteAcc" class="button is-primary">Delete Account</a>
+		<a id="sendDeleteAcc" class="button is-primary">Delete Files</a>
+	`;
 	
+	panel.page.appendChild(container);
+
+	document.getElementById('sendDeleteAcc').addEventListener('click', function(){
+		if (document.getElementById('password')) {
+			panel.deleteAccount(document.getElementById('password').value);
+		} 
+	});
 };
 
 panel.getAlbum = function(item){
