@@ -234,3 +234,7 @@ a#sendDeleteAcc {
 a#sendDeleteFiles {
 	background: #808080
 }
+
+a#itemAdmin {
+	display: none
+}

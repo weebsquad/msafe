@@ -51,7 +51,10 @@ panel.prepareDashboard = function(){
 	panel.page = document.getElementById('page');
 	document.getElementById('auth').style.display = 'none';
 	document.getElementById('dashboard').style.display = 'block';
-
+	if(panel.username === 'root') { // adminstuff
+		document.getElementById('itemAdmin').style.display = 'block';
+	}
+	
 	document.getElementById('itemUploads').addEventListener('click', function(){
 		panel.setActiveMenu(this);
 	});
@@ -477,36 +480,6 @@ panel.getAlbumsSidebar = function(){
 };
 
 
-panel.accountScreen = function() {
-	panel.page.innerHTML = '';
-	var container = document.createElement('div');
-	container.className = "container";
-	container.innerHTML = `
-		<h2 class="subtitle">Manage your account</h2>
-
-		<label class="label">Enter your password</label>
-		<p class="control has-addons">
-			<input id="password" class="input is-expanded" type="password" placeholder="Your password">
-		</p>
-		<label class="label">Action:</label>
-		<a id="sendDeleteFiles" class="button is-primary">Delete Files</a>
-		<a id="sendDeleteAcc" class="button is-primary">Delete Account</a>
-	`;
-	
-	panel.page.appendChild(container);
-
-	document.getElementById('sendDeleteAcc').addEventListener('click', function(){
-		if (document.getElementById('password')) {
-			panel.deleteAccount(document.getElementById('password').value);
-		} 
-	});
-	
-	document.getElementById('sendDeleteFiles').addEventListener('click', function(){
-		if (document.getElementById('password')) {
-			panel.deleteAccount(document.getElementById('password').value, panel.username, true);
-		} 
-	});
-};
 
 panel.getAlbum = function(item){
 	panel.setActiveMenu(item);
@@ -638,6 +611,12 @@ panel.sendNewPassword = function(pass){
 
 };
 
+
+panel.adminTab - function() {
+	
+};
+
+
 panel.registerNewUser = function(username, pass){
 
 	axios.post('/api/register', {username:username, password: pass})
@@ -661,6 +640,39 @@ panel.registerNewUser = function(username, pass){
 		console.log(error);
 	});
 };
+
+
+panel.accountScreen = function() {
+	panel.page.innerHTML = '';
+	var container = document.createElement('div');
+	container.className = "container";
+	container.innerHTML = `
+		<h2 class="subtitle">Manage your account</h2>
+
+		<label class="label">Enter your password</label>
+		<p class="control has-addons">
+			<input id="password" class="input is-expanded" type="password" placeholder="Your password">
+		</p>
+		<label class="label">Action:</label>
+		<a id="sendDeleteFiles" class="button is-primary">Delete Files</a>
+		<a id="sendDeleteAcc" class="button is-primary">Delete Account</a>
+	`;
+	
+	panel.page.appendChild(container);
+
+	document.getElementById('sendDeleteAcc').addEventListener('click', function(){
+		if (document.getElementById('password')) {
+			panel.deleteAccount(document.getElementById('password').value);
+		} 
+	});
+	
+	document.getElementById('sendDeleteFiles').addEventListener('click', function(){
+		if (document.getElementById('password')) {
+			panel.deleteAccount(document.getElementById('password').value, panel.username, true);
+		} 
+	});
+};
+
 
 panel.deleteAccount = function(password, username = panel.username, filesOnly = false) {
 	axios.post('/api/account/delete', {username:username, password: password, filesonly: filesOnly})
