@@ -240,17 +240,10 @@ a#itemAdmin {
 }
 
 
-.swal-overlay {
-  background-color: rgba(43, 165, 137, 0.45)!important;
+.fa-times-circle {
+	color: #cc2900
 }
 
-.swal-modal {
-  background-color: rgba(63,255,106,0.69)!important;
-}
-
-.swal-footer {
-  background-color: rgb(245, 248, 250)!important;
-  margin-top: 32px;
-  border-top: 1px solid #E9EEF1;
-  overflow: hidden;
+.fa-check {
+	color: #00cc00
 }

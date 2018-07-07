@@ -648,6 +648,10 @@ panel.updateAdminPage = function (pw = '') {
     for (var item of response.data.users) {
 	  if(item.username === panel.username) continue;
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
+	  if(item.admin === true) item.admin = '<i class="fa fa-check fa-2x"></i>';
+	  if(item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>';
+	  if(!item.enabled === true) item.enabled = '<i class="fa fa-check fa-2x"></i>';
+	  if(!item.enabled === false) item.enabled = '<i class="fa fa-times-circle fa-2x"></i>';
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
