@@ -610,9 +610,7 @@ panel.sendNewPassword = function(pass){
 	});
 
 };
-
-
-panel.adminTab = function() {
+panel.updateAdminPage = function(pw = '') {
 	panel.page.innerHTML = '';
 	var container = document.createElement('div');
 	container.className = "container";
@@ -647,6 +645,10 @@ panel.adminTab = function() {
 
 		container.innerHTML = container.innerHTML + `
 			<hr>
+			<label class="label">Your password</label>
+			<input id="passwordRoot" class="input is-expanded" type="text" placeholder="Account password - needed for administrative actions">
+			<hr>
+			
 			<table class="table is-striped is-narrow is-left">
 				<thead>
 					<tr>
@@ -663,7 +665,12 @@ panel.adminTab = function() {
 		`;
 
 		var table = document.getElementById('table');
-
+		function _sendAdminAction(func, txt, username, state = '') {
+			let args = new Array(username);
+			if(state !== '') args.push(state);
+			args.push(document.getElementById('passwordRoot').value);
+			panel.adminAction(func, txt, args);
+		}
 		for(var item of response.data.users){
 			var tr = document.createElement('tr');
 			tr.innerHTML = `
@@ -672,14 +679,19 @@ panel.adminTab = function() {
 					<th>${item.username}</th>
 					<td>${!item.enabled}</td>
 					<td>
-					<a class="button is-small is-danger is-outlined" title="Disable" onclick="panel.deleteUser(${item.id})">
+						<a class="button is-small is-danger is-outlined adminOrange" title="Disable" onclick="_sendAdminAction(panel.deleteFilesOfUser, 'delete files of', '${item.username}')">
+							<span class="icon is-small">
+								<i class="fa fa-trash-o"></i>
+							</span>
+						</a>
+						<a class="button is-small is-danger is-outlined adminBlue" title="Disable" onclick="_sendAdminAction(panel.disableUser, 'disable', '${item.username}', !${item.enabled})">
 							<span class="icon is-small">
 								<i class="fa fa-archive"></i>
 							</span>
 						</a>
-						<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel.deleteUser(${item.id})">
+						<a class="button is-small is-danger is-outlined" title="Delete" onclick="_sendAdminAction(panel.deleteUser, 'delete', '${item.username}')">
 							<span class="icon is-small">
-								<i class="fa fa-trash-o"></i>
+								<i class="fa fa-ban"></i>
 							</span>
 						</a>
 					</td>
@@ -701,16 +713,46 @@ panel.adminTab = function() {
 	});
 };
 
-panel.deleteUser = function(id) {
-	
+
+panel.adminTab = function() {
+	const rootpw = document.getElementById('passwordRoot');
+	if(rootpw) return updateAdminPage(rootpw.value);
+	updateAdminPage();
 };
 
-panel.disableUser = function(id, state) {
-	
+
+panel.adminAction = function(_func, txt, args) {
+	swal({
+		title: "Are you sure?",
+		text: `Are you sure you want to ${txt} this user `,
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#ff3860",
+		confirmButtonText: "Yes",
+		closeOnConfirm: false
+	},
+	function(){
+		_func(args);
+	});
 };
 
-panel.deleteFilesOfUser = function(id) {
-	
+panel.deleteUser = function(mem) {
+	let _x = mem;
+	let user = _x[0];
+	let pw = _x[1];
+};
+
+panel.disableUser = function(mem) {
+	let _x = mem;
+	let user = _x[0];
+	let state = _x[1];
+	let pw = _x[2];
+};
+
+panel.deleteFilesOfUser = function(mem) {
+	let _x = mem;
+	let user = _x[0];
+	let pw = _x[1];
 };
 
 panel.registerNewUser = function(username, pass){
@@ -724,10 +766,10 @@ panel.registerNewUser = function(username, pass){
 
 		swal({
 			title: "Yay", 
-			text: 'User account added!', 
+			text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${password}`, 
 			type: "success"
 		}, function(){
-			location.reload();
+			if(panel.username !== 'root') location.reload();
 		});
 
 	})
@@ -770,6 +812,37 @@ panel.accountScreen = function() {
 };
 
 
+
+panel.disableAccount = function(password, username = panel.username) {
+	axios.post('/api/account/disable', {username:username, password: password})
+	.then(function (response) {
+
+		if(response.data.success === false){
+			return swal("An error ocurred", response.data.description, "error");		
+		}
+
+		swal({
+			title: "Done", 
+			text: 'Account disabled', 
+			type: "success"
+		}, function(){
+			if(username === panel.username && !filesOnly) {
+				localStorage.removeItem("token");
+				location.reload('/');
+			} else {
+				if(panel.username !== 'root') return location.reload();
+				panel.adminTab();
+			}
+		});
+
+	})
+	.catch(function (error) {
+		return swal("An error ocurred", 'There was an error with the request, please check the console for more information.', "error");
+		console.log(error);
+	});
+};
+
+
 panel.deleteAccount = function(password, username = panel.username, filesOnly = false) {
 	axios.post('/api/account/delete', {username:username, password: password, filesonly: filesOnly})
 	.then(function (response) {
@@ -788,7 +861,8 @@ panel.deleteAccount = function(password, username = panel.username, filesOnly = 
 				localStorage.removeItem("token");
 				location.reload('/');
 			} else {
-				location.reload();
+				if(panel.username !== 'root') location.reload();
+				panel.adminTab();
 			}
 		});
 

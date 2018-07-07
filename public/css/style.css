@@ -238,3 +238,11 @@ a#sendDeleteFiles {
 a#itemAdmin {
 	display: none
 }
+
+.adminBlue {
+	background: #6666ff
+}
+
+.adminOrange {
+	background: #e65c00
+}
