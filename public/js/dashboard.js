@@ -781,7 +781,7 @@ panel.registerNewUser = function (username, pass) {
       swal({
         title: 'Yay',
         text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${pass}`,
-        type: 'success'
+        type: 'success',
 		closeOnEsc: false,
 		closeOnClickOutside: false,
       }, async function () {
