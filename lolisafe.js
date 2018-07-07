@@ -31,7 +31,7 @@ async function rateLimitKey (req, res) {
   const token = req.headers.token
   if (token) {
     const user = await db.table('users').where('token', token).first()
-    if (user) key = user.id
+    if (user && !config.enableUserAccounts) key = user.id
   }
   return key
 }
