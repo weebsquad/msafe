@@ -56,7 +56,7 @@ panel.verifyToken = function (token, reloadOnError) {
       return panel.prepareDashboard()
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -215,7 +215,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
     }
   })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -250,7 +250,7 @@ panel.deleteFile = function (id) {
         panel.getUploads()
       })
       .catch(function (error) {
-        return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
         console.log(error)
       })
   }
@@ -325,7 +325,7 @@ panel.getAlbums = function () {
     })
   })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -363,7 +363,7 @@ panel.renameAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-        return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
         console.log(error)
       })
   })
@@ -394,7 +394,7 @@ panel.deleteAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-        return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
         console.log(error)
       })
   }
@@ -416,7 +416,7 @@ panel.submitAlbum = function () {
       panel.getAlbums()
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -449,7 +449,7 @@ panel.getAlbumsSidebar = function () {
       }
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -487,7 +487,7 @@ panel.changeToken = function () {
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -510,7 +510,7 @@ panel.getNewToken = function () {
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -570,7 +570,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -664,7 +664,7 @@ panel.updateAdminPage = function (pw = '') {
     }
   })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
   panel.page.appendChild(container)
@@ -749,7 +749,7 @@ panel.registerNewUser = function (username, pass) {
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -809,7 +809,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
@@ -838,7 +838,7 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
       })
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
       console.log(error)
     })
 }
