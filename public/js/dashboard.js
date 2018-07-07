@@ -285,6 +285,7 @@ panel.getAlbums = function () {
 			<table class="table is-striped is-narrow">
 				<thead>
 					<tr>
+						  <th>ID</th>
 						  <th>Name</th>
 						  <th>Files</th>
 						  <th>Created At</th>
@@ -303,6 +304,7 @@ panel.getAlbums = function () {
       var tr = document.createElement('tr')
       tr.innerHTML = `
 				<tr>
+					<th>${item.id}</th>
 					<th>${item.name}</th>
 					<th>${item.files}</th>
 					<td>${item.date}</td>
@@ -443,7 +445,7 @@ panel.getAlbumsSidebar = function () {
         li = document.createElement('li')
         a = document.createElement('a')
         a.id = album.id
-        a.innerHTML = album.id + ' | ' + album.name
+        a.innerHTML = album.name
 
         a.addEventListener('click', function () {
           panel.getAlbum(this)
