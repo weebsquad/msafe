@@ -105,6 +105,15 @@ module.exports = {
 		'/api/tokens/': { windowMs: 30*1000, max: 55, delayMs: 200, delayAfter: 10 },
 		'/api/': { windowMs: 60*1000, max: 100, delayMs: 150, delayAfter: 50 },
 	},
+	
+	/*
+		Whitelisted files when using alternateViewing mode
+	*/
+	
+	whitelistedQueries: { 
+		'sharex': 'public/sharex.txt',
+		'privacypolicy': 'public/privacy.txt'
+	};
 
 	// The following values shouldn't be touched
 	database: {
