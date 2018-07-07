@@ -662,7 +662,7 @@ panel.updateAdminPage = function (pw = '') {
 					<th>${item.admin}</th>
 					<th>${item.username}</th>
 					<th>${item.filecount}</th>
-					<td>${!item.enabled}</td>
+					<td>${item.enabled}</td>
 					<td>
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
