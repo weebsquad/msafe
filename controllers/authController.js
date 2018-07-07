@@ -201,7 +201,7 @@ authController.changePassword = async (req, res, next) => {
   }
 
   let bypassEnable = false
-  if (user && utils.isAdmin(user.username)') bypassEnable = true
+  if (user && utils.isAdmin(user.username)) bypassEnable = true
   bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
       console.log(err)
