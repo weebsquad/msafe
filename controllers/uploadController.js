@@ -47,8 +47,10 @@ const upload = multer({
 }).array('files[]')
 
 uploadsController.upload = async (req, res, next) => {
+  let user;
   if (config.private === true) {
-    await utils.authorize(req, res)
+    user = await utils.authorize(req, res)
+	if(!user) return;
   }
   let encodeVersion = req.headers.encodeversion || 0
   if (!utils.isNumeric(encodeVersion)) encodeVersion = 0
