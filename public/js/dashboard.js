@@ -616,7 +616,7 @@ panel.registerNewUser = function(username, pass){
 		}
 
 		swal({
-			title: "Woohoo!", 
+			title: "Yay", 
 			text: 'User account added!', 
 			type: "success"
 		}, function(){
@@ -630,7 +630,7 @@ panel.registerNewUser = function(username, pass){
 	});
 };
 
-panel.deleteAcc = function(password, username = panel.username) {
+panel.deleteAccount = function(password, username = panel.username) {
 	axios.post('/api/account/delete', {username:username, password: password})
 	.then(function (response) {
 
@@ -639,7 +639,7 @@ panel.deleteAcc = function(password, username = panel.username) {
 		}
 
 		swal({
-			title: "Woohoo!", 
+			title: "Done", 
 			text: 'Account & data deleted!', 
 			type: "success"
 		}, function(){
