@@ -74,7 +74,7 @@ authController.deleteAccount = async (req, res, next) => {
 		await db.table('files').where('userid', user.id).del()
 		await db.table('albums').where('userid', user.id).del()
 	});
-});
+};
 
 authController.register = async (req, res, next) => {
 	let bypassEnable = false;
