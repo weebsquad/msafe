@@ -66,6 +66,7 @@ panel.prepareDashboard = async function () {
   document.getElementById('auth').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
   const _adm = await panel.isAdmin(panel.username);
+  console.log(_adm);
   if (_adm) { // adminstuff
     document.getElementById('itemAdmin').style.display = 'block'
   }
