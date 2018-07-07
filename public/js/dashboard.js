@@ -646,7 +646,8 @@ panel.updateAdminPage = function (pw = '') {
 
     var table = document.getElementById('table')
     for (var item of response.data.users) {
-	  if(item.username === panel.username) continue;
+	  //if(item.username === panel.username) continue;
+	 
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
 	  if(item.admin === true) item.admin = '<i class="fa fa-check fa-2x"></i>';
 	  if(item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>';
@@ -654,16 +655,10 @@ panel.updateAdminPage = function (pw = '') {
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
+	  item.enabledog = item.enabled;
 	  if(!item.enabled === true) item.enabled = '<i class="fa fa-check fa-2x"></i>';
 	  if(!item.enabled === false) item.enabled = '<i class="fa fa-times-circle fa-2x"></i>';
-      tr.innerHTML = `
-				<tr>
-					<th>${item.id}</th>
-					<th>${item.admin}</th>
-					<th>${item.username}</th>
-					<th>${item.filecount}</th>
-					<td>${item.enabled}</td>
-					<td>
+	  let buttons = `
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
 								<i class="fa fa-address-card"></i>
@@ -674,7 +669,7 @@ panel.updateAdminPage = function (pw = '') {
 								<i class="fa fa-trash-o"></i>
 							</span>
 						</a>
-						<a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
+						<a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabledog})">
 							<span class="icon is-small">
 								<i class="fa fa-archive"></i>
 							</span>
@@ -684,6 +679,20 @@ panel.updateAdminPage = function (pw = '') {
 								<i class="fa fa-ban"></i>
 							</span>
 						</a>
+	  `;
+	  if(item.username === panel.username) { 
+		buttons = '';
+		item.username = `(self) ${item.username}`;
+	  }
+      tr.innerHTML = `
+				<tr>
+					<th>${item.id}</th>
+					<th>${item.admin}</th>
+					<th>${item.username}</th>
+					<th>${item.filecount}</th>
+					<td>${item.enabled}</td>
+					<td>
+						${buttons}
 					</td>
 				</tr>
 				`
