@@ -228,5 +228,9 @@ a#registerBtn.button, a#loginBtn.button {
 }
 
 a#sendDeleteAcc {
-	color: #cc2900
+	background: #cc2900
+}
+
+a#sendDeleteFiles {
+	background: #808080
 }
