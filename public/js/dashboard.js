@@ -649,9 +649,9 @@ panel.updateAdminPage = function (pw = '') {
 	  if(item.username === panel.username) continue;
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
       var tr = document.createElement('tr')
-      let disabledTxt = 'enable'
+      let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
-      if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'disable'; disableButtonType = 'is-warning' }
+      if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
@@ -670,7 +670,7 @@ panel.updateAdminPage = function (pw = '') {
 								<i class="fa fa-trash-o"></i>
 							</span>
 						</a>
-						<a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt}', '${item.username}', !${item.enabled})">
+						<a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
 							<span class="icon is-small">
 								<i class="fa fa-archive"></i>
 							</span>
