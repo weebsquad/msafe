@@ -716,8 +716,8 @@ panel.updateAdminPage = function(pw = '') {
 
 panel.adminTab = function() {
 	const rootpw = document.getElementById('passwordRoot');
-	if(rootpw) return updateAdminPage(rootpw.value);
-	updateAdminPage();
+	if(rootpw) return panel.updateAdminPage(rootpw.value);
+	panel.updateAdminPage();
 };
 
 
