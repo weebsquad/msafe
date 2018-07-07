@@ -26,13 +26,12 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-function rateLimitKey(req) {
+async function rateLimitKey(req) {
 	let key = req.ip;
 	const token = req.headers.token;
 	if(token) {
 		const user = await db.table('users').where('token', token).first();
 		if(user) key = user.id;
-		
 	}
 	return key;
 }
