@@ -41,9 +41,9 @@ authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
-  users.forEach(function(vl) {
-	  vl.admin = utils.isAdmin(vl.username);
-  });
+  users.forEach(function (vl) {
+	  vl.admin = utils.isAdmin(vl.username)
+  })
   return res.json({ success: true, users })
 }
 
@@ -75,7 +75,7 @@ authController.disableAccount = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if(user.id !== targ.id && utils.isAdmin(targ.username))  return res.json({ success: false, description: 'No permission to disable this user' })
+	  if (user.id !== targ.id && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'No permission to disable this user' })
     }
     if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable other users' })
 
@@ -117,7 +117,7 @@ authController.deleteAccount = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if(user.id !== targ.id && utils.isAdmin(targ.username))  return res.json({ success: false, description: 'No permission to delete this user' })
+	  if (user.id !== targ.id && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'No permission to delete this user' })
     }
     if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete other users' })
 
@@ -215,28 +215,27 @@ authController.changePassword = async (req, res, next) => {
     if (bypassEnable) {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
-	  if (utils.isAdmin(targ.username) && user.username !== targ.username)  return res.json({ success: false, description: 'You may not reset passwords of admins!' })
+	  if (utils.isAdmin(targ.username) && user.username !== targ.username) return res.json({ success: false, description: 'You may not reset passwords of admins!' })
     }
 
-	if(bypassEnable && targ.id !== user.id) {
-		bcrypt.compare(adminpw, user.password, async (err, result) => {
-			if (err) {
+    if (bypassEnable && targ.id !== user.id) {
+      bcrypt.compare(adminpw, user.password, async (err, result) => {
+        if (err) {
 			  console.log(err)
 			  return res.json({ success: false, description: 'There was an error' })
-			}
-			if (result === false) return res.json({ success: false, description: 'Wrong password' })
-			await db.table('users').where('id', targ.id).update({ password: hash })
-			let ret = { success: true }
-			if (random) ret['newpw'] = password
-			return res.json(ret)
-		});	
-	} else {
-
-		await db.table('users').where('id', targ.id).update({ password: hash })
-		let ret = { success: true }
-		if (random) ret['newpw'] = password
-		return res.json(ret)
-	}
+        }
+        if (result === false) return res.json({ success: false, description: 'Wrong password' })
+        await db.table('users').where('id', targ.id).update({ password: hash })
+        let ret = { success: true }
+        if (random) ret['newpw'] = password
+        return res.json(ret)
+      })
+    } else {
+      await db.table('users').where('id', targ.id).update({ password: hash })
+      let ret = { success: true }
+      if (random) ret['newpw'] = password
+      return res.json(ret)
+    }
   })
 }
 

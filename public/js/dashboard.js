@@ -96,27 +96,7 @@ panel.prepareDashboard = async function () {
 		  _f(_obj);
 	  }
   });
-  /*
-  document.getElementById('itemUploads').addEventListener('click', function () {
-    panel.setActiveMenu(this)
-  })
 
-  document.getElementById('itemManageGallery').addEventListener('click', function () {
-    panel.setActiveMenu(this)
-  })
-
-  document.getElementById('itemTokens').addEventListener('click', function () {
-    panel.setActiveMenu(this)
-  })
-
-  document.getElementById('itemPassword').addEventListener('click', function () {
-    panel.setActiveMenu(this)
-  })
-  
-  document.getElementById('itemPassword').addEventListener('click', function () {
-    panel.setActiveMenu(this)
-  })
-  */
 
   document.getElementById('itemLogout').innerHTML = `Logout ( ${panel.username} )`
 
@@ -727,6 +707,7 @@ panel.updateAdminPage = function (pw = '') {
 	  const _int = setInterval(function() {
 		  const _test = document.getElementById(key);
 		  if(_test) {
+			  console.log('found object' + key);
 			  clearInterval(_int);
 			  obj(_test);
 		  }
