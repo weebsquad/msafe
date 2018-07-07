@@ -44,7 +44,7 @@ authController.listAccounts = async (req, res, next) => {
   users.forEach(async function (vl) {
 	  vl.admin = utils.isAdmin(vl.username)
 	  let _userfiles = db.table('files').where('userid', vl.id).select('id')
-	  vl.filecount = _userfiles.length;
+	  vl.filecount = _userfiles.length
   })
   return res.json({ success: true, users })
 }
