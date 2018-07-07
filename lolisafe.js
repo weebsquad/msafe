@@ -112,16 +112,12 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		}
 			
 		const _path = path.join(__dirname, config.uploads.folder);
+		
 		// Check encoding 
-		const dbFiles = await db.table('files')
-		.where(function () {
-			this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id)
-		}).first()
-		console.log(dbFiles);
-		/*for(let key in dbFiles) {
-			let obj = dbFiles[key];
-			if(id === obj['encodedString']) id = obj['name'];
-		}*/
+		const encFile = await db.table('files')
+		.where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
+		if(encFile) id = encFile['name'];
+
 		// Finally handle the actual ID
 		const file = `${_path}/${id}`;
 		const ex = fs.existsSync(file);
