@@ -635,7 +635,7 @@ panel.adminTab = function() {
 
 	
 
-	let url = '/api/account/list/';
+	let url = '/api/account/list';
 
 	axios.get(url).then(function (response) {
 		if(response.data.success === false){
