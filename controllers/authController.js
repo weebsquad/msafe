@@ -54,6 +54,7 @@ authController.deleteAccount = async (req, res, next) => {
 			console.log(err);
 			return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' });
 		}
+		console.log(user.password);
 		if(bypassEnable || hash !== user.password) return res.json({ success: false, description: 'Wrong password or no perm to delete this user' });
 		const newtoken = randomstring.generate(64);
 		/*await db.table('users').where('id', user.id).update({ enabled: 0 });
