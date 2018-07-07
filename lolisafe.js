@@ -26,6 +26,17 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
+function rateLimitKey(req) {
+	let key = req.ip;
+	const token = req.headers.token;
+	if(token) {
+		const user = await db.table('users').where('token', token).first();
+		if(user) key = user.id;
+		
+	}
+	return key;
+}
+
 function handleRateLimit(options, req, res, next) {
 	let retrya = Math.ceil(options.windowMs / 1000);
 	if (options.headers) {
@@ -49,16 +60,11 @@ for(let key in config.rateLimits) {
 		handleRateLimit(obj, req, res, next);
 	}
 	obj['handler'] = _a;
+	obj['keyGenerator'] = rateLimitKey;
 	let rl = new RateLimit(obj);
 	safe.use(key, rl);
 }
 	
-//let limiter = new RateLimit({ windowMs: 10000, max: 2, delayMs: 100, delayAfter: 1, handler: rateLimit });
-//let apiLimit = new RateLimit({ windowMs: 3000, max: 50, delayMs: 0, handler: rateLimit});
-//safe.use('/api/login/', limiter);
-//safe.use('/api/register/', limiter);
-//safe.use('/api/tokens/', limiter);
-//safe.use('/api', apiLimit);
 
 
 
@@ -72,6 +78,14 @@ if (config.serveFilesWithNode && !config.useAlternateViewing) {
 safe.use('/', express.static('./public'));
 safe.use('/', album);
 safe.use('/api', api);
+
+
+
+/*
+
+		Load our pages
+
+*/
 
 for (let page of config.pages) {
 	let root = './pages/';
