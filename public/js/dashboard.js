@@ -839,7 +839,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
       swal({
         title: 'Done',
         text: `Account ${_st}`,
-        type: 'success'
+        type: 'success',
 		timer: 3000,
 		closeOnEsc: true,
 		closeOnClickOutside: true,
@@ -871,7 +871,7 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
       swal({
         title: 'Done',
         text: _t,
-        type: 'success'
+        type: 'success',
 		timer: 3000,
 		closeOnEsc: true,
 		closeOnClickOutside: true,
