@@ -95,6 +95,16 @@ module.exports = {
 
 	// Folder where to store logs
 	logsFolder: 'logs',
+	
+	/*
+		Setup ratelimits for different API endpoints
+	*/
+	rateLimits: {
+		'/api/login/': { windowMs: 60*1000, max: 2, delayMs: 500, delayAfter: 1 },
+		'/api/register/': { windowMs: 30*60*1000, max: 1, delayMs: 0 },
+		'/api/tokens/': { windowMs: 30*1000, max: 20 },
+		'/api/': { windowMs: 60*1000, max: 100, delayMs: 150, delayAfter: 50 },
+	},
 
 	// The following values shouldn't be touched
 	database: {

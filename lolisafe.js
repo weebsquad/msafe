@@ -26,12 +26,38 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-let limiter = new RateLimit({ windowMs: 10000, max: 2, delayMs: 5 });
-let apiLimit = new RateLimit({ windowMs: 3000, max: 10, delayMs: 0, message: 'You are being ratelimited!'});
-safe.use('/api/login/', limiter);
-safe.use('/api/register/', limiter);
-safe.use('/api/tokens/', limiter);
-safe.use('/api', apiLimit);
+function handleRateLimit(req, res, next) {
+	let _opt = req.originalUrl;
+	console.log(_opt);
+	return;
+	if (options.headers) {
+	res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
+	}
+	res.format({
+		html: function(){
+				res.status(options.statusCode).end(options.message);
+		},
+		json: function(){
+			res.status(options.statusCode).json({ message: options.message });
+		}
+	});
+}
+
+// Load ratelimits
+for(let key in config.rateLimits) {
+	let obj = config.rateLimits[key];
+	obj['handler'] = handleRateLimit;
+	let rl = new RateLimit(obj);
+	safe.use(key, rl);
+}
+	
+//let limiter = new RateLimit({ windowMs: 10000, max: 2, delayMs: 100, delayAfter: 1, handler: rateLimit });
+//let apiLimit = new RateLimit({ windowMs: 3000, max: 50, delayMs: 0, handler: rateLimit});
+//safe.use('/api/login/', limiter);
+//safe.use('/api/register/', limiter);
+//safe.use('/api/tokens/', limiter);
+//safe.use('/api', apiLimit);
+
 
 
 safe.use(bodyParser.json({limit: '50mb'}));
