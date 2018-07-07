@@ -41,10 +41,13 @@ authController.listAccounts = async (req, res, next) => {
   const user = await utils.authorize(req, res)
   if (!utils.isAdmin(user.username)) return res.json({ success: false, description: 'No permission!' })
   let users = await db.table('users').select('id', 'username', 'enabled', 'timestamp')
+  let files = await db.table('files').select('id')
   users.forEach(async function (vl) {
 	  vl.admin = utils.isAdmin(vl.username)
-	  let _userfiles = await db.table('files').where('userid', vl.id).select('id')
-	  vl.filecount = _userfiles.length
+	  vl.filecount = 0;
+	  files.forEach(function(vl2) {
+		  if(vl2.userid === vl.id) vl.filecount++;
+	  });
   })
   return res.json({ success: true, users })
 }
