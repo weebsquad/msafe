@@ -113,7 +113,7 @@ module.exports = {
 	whitelistedQueries: { 
 		'sharex': 'public/sharex.txt',
 		'privacypolicy': 'public/privacy.txt'
-	};
+	},
 
 	// The following values shouldn't be touched
 	database: {
