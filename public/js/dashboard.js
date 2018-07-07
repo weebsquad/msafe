@@ -612,8 +612,30 @@ panel.sendNewPassword = function(pass){
 };
 
 
-panel.adminTab - function() {
+panel.adminTab = function() {
 	panel.page.innerHTML = '';
+	var container = document.createElement('div');
+	container.className = "container";
+	container.innerHTML = `
+		<h2 class="subtitle">New account</h2>
+
+		<label class="label">Username</label>
+		<p class="control has-addons">
+			<input id="username" class="input is-expanded" type="text" placeholder="Account username">
+		</p>
+		<label class="label">Password</label>
+		<p class="control has-addons">
+			<input id="password" class="input is-expanded" type="text" placeholder="Account password">
+		</p>
+		<a id="sendNewAccount" class="button is-primary">Create</a>
+	`;
+
+	panel.page.appendChild(container);
+
+	document.getElementById('sendNewAccount').addEventListener('click', function(){
+		panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value);
+
+	});
 };
 
 
