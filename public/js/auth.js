@@ -53,6 +53,7 @@ page.verify = function(){
 
 window.onload = function () {
 	page.verify();
+	const input = document.getElementById("pass");
 	input.addEventListener("keyup", function(event) {
 	  event.preventDefault();
 	  if (event.keyCode === 13) {
