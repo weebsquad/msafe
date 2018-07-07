@@ -27,8 +27,9 @@ safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
 function handleRateLimit(req, res, next) {
-	let _opt = req.originalUrl;
+	let _opt = config.rateLimits[req.originalUrl];
 	console.log(_opt);
+	console.log(req);
 	return;
 	if (options.headers) {
 	res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
