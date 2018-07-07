@@ -31,8 +31,54 @@ authController.verify = async (req, res, next) => {
 	});
 };
 
+authController.listAccounts = async (req, res, next) => {
+	const user = await utils.authorize(req, res);
+	if(user.username !== 'root') return res.json({ success: false, description: 'No permission!' });
+	let users = await db.table('users').whereNot('username', 'root').select('id', 'username', 'enabled', 'timestamp');
+	
+	return res.json({ success: true, users });
+	
+});
 
+authController.disableAccount = async (req, res, next) => {
+	let bypassEnable = false;
+	const user = await utils.authorize(req, res);
+	if(user && user.username === 'root') bypassEnable = true;
+	
+	const username = req.body.username;
+	const password = req.body.password;
+	
+	if (username === undefined) return res.json({ success: false, description: 'No username provided' });
+	if (password === undefined) return res.json({ success: false, description: 'No password provided' });
+	
+	if(username === user.username && user.username === 'root') {
+		return res.json({ success: false, description: 'Cannot disable root account!' });
+	}
+	bcrypt.compare(password, user.password, async (err, result) => {
+		if (err) {
+			console.log(err);
+			return res.json({ success: false, description: 'There was an error' });
+		}
+		if(result === false) return res.json({ success: false, description: 'Wrong password' });
+		let targ = user;
+		if(bypassEnable) {
+			targ = await db.table('users').where('username', username).first()
+			if(!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' });
+		}
+		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable this user' });
+		
+		const newtoken = randomstring.generate(64);
+		await db.table('users').where('id', targ.id).update({ enabled: 0 });
+		await db.table('users').where('token', targ.token).update({
+			token: newtoken,
+			timestamp: Math.floor(Date.now() / 1000)
+		});
+		
+		return res.json({success: true });
+		
+	});
 
+});
 
 
 authController.deleteAccount = async (req, res, next) => {
@@ -83,6 +129,7 @@ authController.deleteAccount = async (req, res, next) => {
 		}
 		await db.table('files').where('userid', targ.id).del()
 		await db.table('albums').where('userid', targ.id).del()
+		await db.table('users').where('id', targ.id).del()
 		
 		return res.json({success: true });
 		

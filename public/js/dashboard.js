@@ -198,7 +198,7 @@ panel.getUploads = function(album = undefined, page = undefined){
 						<th>${displayAlbumOrUser}</th>
 						<td>${item.date}</td>
 						<td>
-							<a class="button is-small is-danger is-outlined" title="Delete album" onclick="panel.deleteFile(${item.id})">
+							<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel.deleteFile(${item.id})">
 								<span class="icon is-small">
 									<i class="fa fa-trash-o"></i>
 								</span>
@@ -628,8 +628,75 @@ panel.adminTab = function() {
 			<input id="password" class="input is-expanded" type="text" placeholder="Account password">
 		</p>
 		<a id="sendNewAccount" class="button is-primary">Create</a>
+		<br><br>
+		<br>
+		
 	`;
 
+	
+
+	let url = '/api/account/list/';
+
+	axios.get(url).then(function (response) {
+		if(response.data.success === false){
+			if(response.data.description === 'No token provided') return panel.verifyToken(panel.token);
+			else return swal("An error ocurred", response.data.description, "error");		
+		}
+		
+
+
+			container.innerHTML = container.innerHTML + `
+				<hr>
+				<table class="table is-striped is-narrow is-left">
+					<thead>
+						<tr>
+							  <th>ID</th>
+							  <th>Name</th>
+							  <th>Disabled</th>
+							  <th></th>
+						</tr>
+					</thead>
+					<tbody id="table">
+					</tbody>
+				</table>
+				<hr>
+			`;
+
+			var table = document.getElementById('table');
+
+			for(var item of response.data.users){
+
+				var tr = document.createElement('tr');
+
+					
+				tr.innerHTML = `
+					<tr>
+						<th>${item.id}</th>
+						<th>${item.username}</th>
+						<td>${!item.enabled}</td>
+						<td>
+							<a class="button is-small is-danger is-outlined" title="Disable" onclick="panel.deleteUser(${item.id})">
+								<span class="icon is-small">
+									<i class="fa fa-archive"></i>
+								</span>
+							</a>
+							<a class="button is-small is-danger is-outlined" title="Delete" onclick="panel.deleteUser(${item.id})">
+								<span class="icon is-small">
+									<i class="fa fa-trash-o"></i>
+								</span>
+							</a>
+						</td>
+					</tr>
+					`;
+
+				table.appendChild(tr);
+			}
+		}
+	})
+	.catch(function (error) {
+		return swal("An error ocurred", 'There was an error with the request, please check the console for more information.', "error");
+		console.log(error);
+	});
 	panel.page.appendChild(container);
 
 	document.getElementById('sendNewAccount').addEventListener('click', function(){
@@ -638,6 +705,17 @@ panel.adminTab = function() {
 	});
 };
 
+panel.deleteUser = function(id) {
+	
+};
+
+panel.disableUser = function(id, state) {
+	
+};
+
+panel.deleteFilesOfUser = function(id) {
+	
+};
 
 panel.registerNewUser = function(username, pass){
 

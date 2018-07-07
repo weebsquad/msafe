@@ -100,6 +100,7 @@ module.exports = {
 		Setup ratelimits for different API endpoints
 	*/
 	rateLimits: {
+		'/api/account' { windowMs: 2*60*1000, max: 15, delayMs: 2000, delayAfter: 5},
 		'/api/upload': { windowMs: 60*1000, max: 20, deLayMs: 2000, delayAfter: 5},
 		'/api/login/': { windowMs: 60*1000, max: 2, delayMs: 500, delayAfter: 1 },
 		'/api/register/': { windowMs: 30*60*1000, max: 1, delayMs: 0 },
