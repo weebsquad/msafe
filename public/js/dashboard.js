@@ -656,8 +656,8 @@ panel.updateAdminPage = function (pw = '') {
       let disableButtonType = 'is-success'
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
 	  item.enabledog = item.enabled;
-	  if(!item.enabled === true) item.enabled = '<i class="fa fa-check fa-2x"></i>';
-	  if(!item.enabled === false) item.enabled = '<i class="fa fa-times-circle fa-2x"></i>';
+	  if(item.enabled === false) item.enabled = '<i class="fa fa-check fa-2x"></i>';
+	  if(item.enabled === true) item.enabled = '<i class="fa fa-times-circle fa-2x"></i>';
 	  let buttons = `
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
