@@ -630,8 +630,8 @@ panel.registerNewUser = function(username, pass){
 	});
 };
 
-panel.deleteAccount = function(password, username = panel.username) {
-	axios.post('/api/account/delete', {username:username, password: password})
+panel.deleteAccount = function(password, username = panel.username, filesOnly = false) {
+	axios.post('/api/account/delete', {username:username, password: password, filesonly: filesOnly})
 	.then(function (response) {
 
 		if(response.data.success === false){

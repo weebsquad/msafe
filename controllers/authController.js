@@ -42,6 +42,7 @@ authController.deleteAccount = async (req, res, next) => {
 	
 	const username = req.body.username;
 	const password = req.body.password;
+	const filesOnly = req.body.filesonly || false;
 	
 	if (username === undefined) return res.json({ success: false, description: 'No username provided' });
 	if (password === undefined) return res.json({ success: false, description: 'No password provided' });
@@ -63,11 +64,13 @@ authController.deleteAccount = async (req, res, next) => {
 		if(!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete this user' });
 		
 		const newtoken = randomstring.generate(64);
-		await db.table('users').where('id', targ.id).update({ enabled: 0 });
-		await db.table('users').where('token', targ.token).update({
-			token: newtoken,
-			timestamp: Math.floor(Date.now() / 1000)
-		});
+		if(!filesOnly) {
+			await db.table('users').where('id', targ.id).update({ enabled: 0 });
+			await db.table('users').where('token', targ.token).update({
+				token: newtoken,
+				timestamp: Math.floor(Date.now() / 1000)
+			});
+		}
 		const userFiles = await db.table('files')
 			.where(function () {
 				this.where('userid', targ.id)
