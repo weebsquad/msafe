@@ -648,6 +648,7 @@ panel.updateAdminPage = function (pw = '') {
     for (var item of response.data.users) {
 	  if(item.username === panel.username) continue;
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
+	  console.log(item);
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
