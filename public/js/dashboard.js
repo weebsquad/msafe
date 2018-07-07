@@ -7,20 +7,23 @@ panel.filesView = localStorage.filesView
 
 panel.admins = new Array();
 panel.isAdmin = async function(name) {
-	if(panel.admins.length === 0) await panel.fetchAdmins();
+	if(panel.admins.length < 1) await panel.fetchAdmins();
 	if(panel.admins.indexOf(name) > -1) return true;
 	return false;
 }
 
 panel.fetchAdmins = async function() {
 	panel.admins = new Array();
-	axios.get('/api/admins').then(function (response) {
-		if (response.data.success === false) {
-			if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
-			else return swal('An error ocurred', response.data.description, 'error')
-		}
-		response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
-	});
+	return new Promise(resolve, reject) {
+		axios.get('/api/admins').then(function (response) {
+			if (response.data.success === false) {
+				if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
+				else return swal('An error ocurred', response.data.description, 'error')
+			}
+			response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
+			resolve();
+		});
+	}
 }
 
 panel.preparePage = function () {
