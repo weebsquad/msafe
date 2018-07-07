@@ -646,7 +646,7 @@ panel.updateAdminPage = function(pw = '') {
 		container.innerHTML = container.innerHTML + `
 			<hr>
 			<label class="label">Your password</label>
-			<input id="passwordRoot" class="input is-expanded" type="text" placeholder="Account password - needed for administrative actions">
+			<input id="passwordRoot" class="input is-expanded" type="password" placeholder="Account password - needed for administrative actions">
 			<hr>
 			
 			<table class="table is-striped is-narrow is-left">
@@ -700,8 +700,10 @@ panel.updateAdminPage = function(pw = '') {
 		console.log(error);
 	});
 	panel.page.appendChild(container);
-	
-	if(pw !== '') document.getElementById('passwordRoot').value = pw;
+	let _int = setInterval(function() {
+		let rootpw = document.getElementById('passwordRoot');
+		if(pw !== '' && rootpw) { clearInterval(_int); rootpw.value = pw; }
+	}, 100);
 
 	document.getElementById('sendNewAccount').addEventListener('click', function(){
 		panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value);
