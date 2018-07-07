@@ -140,8 +140,10 @@ authController.deleteAccount = async (req, res, next) => {
       }
     }
     await db.table('files').where('userid', targ.id).del()
-    await db.table('albums').where('userid', targ.id).del()
-    if(!filesOnly) await db.table('users').where('id', targ.id).del()
+    if(!filesOnly) { 
+		await db.table('users').where('id', targ.id).del()
+	    await db.table('albums').where('userid', targ.id).del()
+	}
 
     return res.json({success: true })
   })
