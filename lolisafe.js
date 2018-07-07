@@ -26,19 +26,17 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 safe.set('view engine', 'handlebars');
 safe.enable('view cache');
 
-function handleRateLimit(_opts, req, res, next) {
-	//let _opt = config.rateLimits[req.originalUrl];
-	console.log(_opts);
-	return;
+function handleRateLimit(options, req, res, next) {
+	let retrya = Math.ceil(options.windowMs / 1000);
 	if (options.headers) {
-	res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
+		res.setHeader('Retry-After', retrya);
 	}
 	res.format({
 		html: function(){
 			res.status(options.statusCode).end(options.message);
 		},
 		json: function(){
-			res.status(options.statusCode).json({ message: options.message });
+			res.status(options.statusCode).json({ success: false, description: options.message, retryAfter: retrya });
 		}
 	});
 }
