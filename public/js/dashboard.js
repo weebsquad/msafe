@@ -74,6 +74,29 @@ panel.prepareDashboard = async function () {
     document.getElementById('itemAdmin').style.display = 'block'
   }
 
+  const mapTabs = ['itemUploads', 'itemManageGallery', 'itemTokens', 'itemPassword', 'itemLogout', 'itemAdmin', 'itemAccount'];
+  
+  mapTabs.forEach(function(vlx) {
+	  const vl = vlx;
+	  const _obj = document.getElementById(vl);
+	  function _f(elem) {
+		  elem.addEventListener('click', function () {
+			panel.setActiveMenu(this)
+		  })
+	  }
+	  if(!_obj) {
+		  const _int = setInterval(function() {
+			  const _check = document.getElementById(vl);
+			  if(_check) {
+				  clearInterval(_int);
+				  _f(_check);
+			  }
+		  }, 50);
+	  } else {
+		  _f(_obj);
+	  }
+  });
+  /*
   document.getElementById('itemUploads').addEventListener('click', function () {
     panel.setActiveMenu(this)
   })
@@ -89,6 +112,11 @@ panel.prepareDashboard = async function () {
   document.getElementById('itemPassword').addEventListener('click', function () {
     panel.setActiveMenu(this)
   })
+  
+  document.getElementById('itemPassword').addEventListener('click', function () {
+    panel.setActiveMenu(this)
+  })
+  */
 
   document.getElementById('itemLogout').innerHTML = `Logout ( ${panel.username} )`
 
