@@ -543,7 +543,8 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
         text: _r,
         type: 'success'
       }, function () {
-        location.reload()
+        if(panel.username !== 'root') return location.reload()
+		panel.updateAdminPage();
       })
     })
     .catch(function (error) {
