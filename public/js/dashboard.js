@@ -5,6 +5,7 @@ panel.username
 panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 panel.onAdminP = false;
+panel.loadedAt;
 
 panel.stringifyError = function(err, filter, space) {
   var plainObject = {};
@@ -988,5 +989,7 @@ panel.setActiveMenu = function (item) {
 }
 
 window.onload = function () {
-  panel.preparePage()
+  setTimeout(function() {
+	panel.preparePage()
+  }, 10);
 }
