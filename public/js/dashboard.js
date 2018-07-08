@@ -115,7 +115,7 @@ panel.verifyToken = function (token, reloadOnError = false) {
   })
     .then(function (response) {
       if (response.data.success === false) {
-		page.errorHandler(response.data.description);
+		panel.errorHandler(response.data.description);
         return
       }
 
