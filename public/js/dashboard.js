@@ -88,11 +88,11 @@ panel.isAdmin = async function(name) {
 
 panel.fetchAdmins = async function() {
 	panel.admins = new Array();
-	return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve) {
 		axios.get('/api/admins').then(function (response) {
 			if (response.data.success === false) {
-				if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
-				else { /*panel.errorHandler(response.data.description);*/ resolve(); }
+				resolve();
+				return;
 			}
 			response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
 			resolve();
