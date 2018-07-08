@@ -15,32 +15,31 @@ panel.stringifyError = function(err, filter, space) {
   return JSON.stringify(plainObject, filter, space);
 };
 
-panel.errorHandler = async function(err, delay = 200) {
+panel.errorHandler = async function(err) {
 	const _handlers = {
 		'This account has been disabled': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-			setInterval(function() {
-				location.location = '/'
+			if(location.location === '/') { location.reload(); } else {
+				location.location = '/';
 				window.location = '/'
-			}, 100);
-			console.log('ok');
+			}
 		},
 		'Username doesn\'t exist': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-            setInterval(function() {
-				location.location = '/'
+			if(location.location === '/') { location.reload(); } else {
+				location.location = '/';
 				window.location = '/'
-			}, 100);
+			}
 		},
 		'Invalid token': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-			setInterval(function() {
-				location.location = '/'
+			if(location.location === '/') { location.reload(); } else {
+				location.location = '/';
 				window.location = '/'
-			}, 100);
+			}
 		},
 	};
 	if(typeof(err) === 'object') {
@@ -48,19 +47,19 @@ panel.errorHandler = async function(err, delay = 200) {
 		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
 			if(_strerror.response.data.success === false && typeof(_strerror.response.data.description) === 'string') {
 				swal({
-					title: 'Error',
+					title: 'Error(1)',
 					text: _strerror.response.data.description,
 					type: 'error',
 					confirmButtonText: 'Ok',
+					timer: _strerror.response.data.description.length*750,
 				 },
 				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') setTimeout(function() { _handlers[_strerror.response.data.description]() }, delay);
+					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
 				 })
 			}
 		} else {
 			swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
 			console.log(err)
-			return;
 		}
 	} else if(typeof(err) === 'string') {
 		if(typeof(_handlers[err]) === 'function') {
@@ -69,14 +68,15 @@ panel.errorHandler = async function(err, delay = 200) {
 					text: err,
 					type: 'error',
 					confirmButtonText: 'Ok',
+					timer: err.length*750;
 				 },
 				 function () {
-					setTimeout(function() { _handlers[err]() }, delay);
+					_handlers[err]();
 				 })
-			return;
 		}
+	} else {
+		console.log(err);
 	}
-	console.log(err);
 }
 
 panel.admins = new Array();
