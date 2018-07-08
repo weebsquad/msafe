@@ -120,9 +120,10 @@ page.verify = function () {
     token: page.token
   })
     .then(function (response) {
-      if (response.data.success === false) { return swal('Error', response.data.description, 'error') }
+      if (response.data.success === false) { page.errorHandler(response.data.description); } else {
 
-      window.location = '/dashboard'
+		window.location = '/dashboard'
+	  }
     })
     .catch(function (error) {
       page.errorHandler(error);

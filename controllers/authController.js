@@ -29,12 +29,8 @@ authController.verify = async (req, res, next) => {
 
   const user = await db.table('users').where('username', username).first()
   if (!user) return res.json({ success: false, description: 'Username doesn\'t exist' })
-  if ((user.enabled === false || user.enabled === 0) && !utils.isAdmin(user.username)) {
-    return res.json({
-      success: false,
-      description: 'This account has been disabled'
-    })
-  }
+  if ((user.enabled === false || user.enabled === 0) && !utils.isAdmin(user.username)) return res.json({ success: false, description: 'This account has been disabled' })
+  
 
   bcrypt.compare(password, user.password, (err, result) => {
     if (err) {

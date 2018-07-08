@@ -11,6 +11,7 @@ tokenController.verify = async (req, res, next) => {
 
   const user = await db.table('users').where('token', token).first()
   if (!user) return res.status(401).json({ success: false, description: 'Invalid token' })
+  if ((user.enabled === false || user.enabled === 0) && !utils.isAdmin(user.username)) return res.json({ success: false, description: 'This account has been disabled' })
   return res.json({ success: true, username: user.username })
 }
 
