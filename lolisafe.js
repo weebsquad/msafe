@@ -36,7 +36,7 @@ async function rateLimitKey (req, res) {
   return key
 }
 
-async function rateLimitSkip (req, res) {
+async function rateLimitSkip (req) {
   return false;
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
@@ -71,7 +71,7 @@ for (let key in config.rateLimits) {
   }
   obj['handler'] = _a
   obj['keyGenerator'] = rateLimitKey
-  //obj['skip'] = rateLimitSkip
+  obj['skip'] = rateLimitSkip
   let rl = new RateLimit(obj)
   safe.use(key, rl)
 }
