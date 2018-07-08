@@ -220,7 +220,7 @@ a#submitAlbum:hover {
 }
 
 
-a#registerBtn.button, a#loginBtn.button {
+a#loginBtn.button {
     color: #30a9ed;
     font-size: 18px;
     background: #272727;
@@ -229,6 +229,10 @@ a#registerBtn.button, a#loginBtn.button {
 
 a#registerBtn {
 	display: none;
+	color: #30a9ed;
+    font-size: 18px;
+    background: #272727;
+    border-color: #272727;
 }
 
 a#sendDeleteAcc {
