@@ -568,6 +568,7 @@ panel.changePassword = function () {
 }
 
 panel.sendNewPassword = function (pass, username = panel.username, random = false, adminpw = '') {
+	
   axios.post('/api/password/change', {username: username, password: pass, random: random, adminpw: adminpw})
     .then(function (response) {
       if (response.data.success === false) {
@@ -591,6 +592,8 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
 	  panel.errorHandler(error);
     })
 }
+
+
 panel.updateAdminPage = function (pw = '') {
   if(!panel.onAdminP) return;
   panel.page.innerHTML = ''
@@ -736,8 +739,13 @@ panel.updateAdminPage = function (pw = '') {
   }
 }
 
+panel.loadAdminTab = function() {
+	if(panel.onAdminP) return;
+	panel.onAdminP = true;
+	panel.updateAdminPage()
+}
+
 panel.adminTab = function () {
-  panel.onAdminP = true;
   const rootpw = document.getElementById('passwordRoot')
   if (rootpw) return panel.updateAdminPage(rootpw.value)
   panel.updateAdminPage()
