@@ -594,6 +594,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
     })
 }
 panel.updateAdminPage = function (pw = '') {
+  if(!panel.onAdminP) return;
   panel.page.innerHTML = ''
   var container = document.createElement('div')
   container.className = 'container'
@@ -617,11 +618,12 @@ panel.updateAdminPage = function (pw = '') {
   let url = '/api/account/list'
 
   axios.get(url).then(async function (response) {
+	if(!panel.onAdminP) return;
     if (response.data.success === false) {
       if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
       else return swal('An error ocurred', response.data.description, 'error')
     }
-
+    
     container.innerHTML = container.innerHTML + `
 			<hr>
 			<label class="label">Your password</label>
@@ -699,7 +701,7 @@ panel.updateAdminPage = function (pw = '') {
 					</td>
 				</tr>
 				`
-
+	  if(!panel.onAdminP) return;
       table.appendChild(tr)
     }
   })
@@ -733,10 +735,10 @@ panel.updateAdminPage = function (pw = '') {
 }
 
 panel.adminTab = function () {
+  panel.onAdminP = true;
   const rootpw = document.getElementById('passwordRoot')
   if (rootpw) return panel.updateAdminPage(rootpw.value)
   panel.updateAdminPage()
-  panel.onAdminP = true;
 }
 
 panel._sendAdminAction = function (func, txt, username, state = '') {
