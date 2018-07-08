@@ -18,7 +18,7 @@ rateLimiting.keyGen = async function (req, res) {
 }
 
 
-rateLimiting.updateCache = function(token) {
+rateLimiting.updateCache = async function(token) {
 	const usr = await db.table('users').where('token', token).first()
 	if(userCache[token] !== usr) userCache[token] = usr;
 }
