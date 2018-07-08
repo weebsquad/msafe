@@ -107,6 +107,7 @@ module.exports = {
 		'/api/tokens/': { windowMs: 30*1000, max: 55, delayMs: 200, delayAfter: 10 },
 		'/api/': { windowMs: 60*1000, max: 100, delayMs: 150, delayAfter: 50 },
 	},
+	skipFails: false, // Error requests won't be counted towards ratelimiting, can still allow people to spam the api
 	
 	/*
 		Add other admin accounts here!

@@ -60,6 +60,7 @@ rateLimiting.load = function (safe) {
 	  obj['handler'] = _a
 	  obj['keyGenerator'] = rateLimiting.keyGen
 	  obj['skip'] = rateLimiting.skipHandler
+	  obj['skipFailedRequests'] = config.skipFails;
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
   }
