@@ -41,7 +41,7 @@ page.errorHandler = async function(err) {
 					confirmButtonText: 'Ok',
 				 },
 				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
+					if(typeof(_handlers[_strerror.response.data.description]) === 'function') setTimeout(function() { _handlers[_strerror.response.data.description]() }, 200);
 				 })
 			}
 		} else {
@@ -58,7 +58,7 @@ page.errorHandler = async function(err) {
 					confirmButtonText: 'Ok',
 				 },
 				 function () {
-					_handlers[err]()
+					setTimeout(function() { _handlers[err]() }, 200);
 				 })
 			return;
 		}
