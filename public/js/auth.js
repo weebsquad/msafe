@@ -1,76 +1,75 @@
 var page = {}
 
+page.stringifyError = function (err, filter, space) {
+  var plainObject = {}
+  Object.getOwnPropertyNames(err).forEach(function (key) {
+    plainObject[key] = err[key]
+  })
+  return JSON.stringify(plainObject, filter, space)
+}
 
-page.stringifyError = function(err, filter, space) {
-  var plainObject = {};
-  Object.getOwnPropertyNames(err).forEach(function(key) {
-    plainObject[key] = err[key];
-  });
-  return JSON.stringify(plainObject, filter, space);
-};
-
-page.errorHandler = async function(err) {
-	const _handlers = {
-		'This account has been disabled': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Username doesn\'t exist': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Invalid token': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-	};
-	if(typeof(err) === 'object') {
-		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
-		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
-			if(_strerror.response.data.success === false && typeof(_strerror.response.data.description) === 'string') {
-				swal({
-					title: 'Error(1)',
-					text: _strerror.response.data.description,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: _strerror.response.data.description.length*750,
+page.errorHandler = async function (err) {
+  const _handlers = {
+    'This account has been disabled': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Username doesn\'t exist': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Invalid token': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    }
+  }
+  if (typeof (err) === 'object') {
+    const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'))
+    if (typeof (_strerror) === 'object' && typeof (_strerror.response) === 'object' && typeof (_strerror.response.data) === 'object') {
+      if (_strerror.response.data.success === false && typeof (_strerror.response.data.description) === 'string') {
+        swal({
+          title: 'Error(1)',
+          text: _strerror.response.data.description,
+          type: 'error',
+          confirmButtonText: 'Ok',
+          timer: _strerror.response.data.description.length * 750
 				 },
 				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
+          if (typeof (_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
 				 })
-			}
-		} else {
-			swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-			console.log(err)
-		}
-	} else if(typeof(err) === 'string') {
-		if(typeof(_handlers[err]) === 'function') {
-			swal({
-					title: 'Error(2)',
-					text: err,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: err.length*750,
+      }
+    } else {
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      console.log(err)
+    }
+  } else if (typeof (err) === 'string') {
+    if (typeof (_handlers[err]) === 'function') {
+      swal({
+        title: 'Error(2)',
+        text: err,
+        type: 'error',
+        confirmButtonText: 'Ok',
+        timer: err.length * 750
 				 },
 				 function () {
-					_handlers[err]();
+        _handlers[err]()
 				 })
-		}
-	} else {
-		console.log(err);
-	}
+    }
+  } else {
+    console.log(err)
+  }
 }
 
 page.do = function (dest) {
@@ -85,25 +84,24 @@ page.do = function (dest) {
     password: pass
   })
     .then(function (response) {
-      if (response.data.success === false) { page.errorHandler(response.data.description); } else {
-
+      if (response.data.success === false) { page.errorHandler(response.data.description) } else {
 		  localStorage.token = response.data.token
 		  window.location = '/dashboard'
 	  }
     })
     .catch(function (error) {
-      page.errorHandler(error);
+      page.errorHandler(error)
     })
 }
 
-page.load = function() {
-	if(page.registering === true) {	
-		document.getElementById('registerBtn').style.display = 'block';
-		document.getElementById('mainTitle').innerHTML = 'Login or register';
-	} else {
-		document.getElementById('registerBtn').style.display = 'none';
-		document.getElementById('mainTitle').innerHTML = 'Login';
-	}
+page.load = function () {
+  if (page.registering === true) {
+    document.getElementById('registerBtn').style.display = 'block'
+    document.getElementById('mainTitle').innerHTML = 'Login or register'
+  } else {
+    document.getElementById('registerBtn').style.display = 'none'
+    document.getElementById('mainTitle').innerHTML = 'Login'
+  }
 }
 
 page.getPublicVars = function () {
@@ -112,10 +110,10 @@ page.getPublicVars = function () {
       page.isPrivate = response.data.private
       page.maxFileSize = response.data.maxFileSize
       page.registering = response.data.register
-	  page.load();
+	  page.load()
     })
     .catch(function (error) {
-      page.errorHandler(error);
+      page.errorHandler(error)
     })
 }
 
@@ -127,13 +125,12 @@ page.verify = function () {
     token: page.token
   })
     .then(function (response) {
-      if (response.data.success === false) { page.errorHandler(response.data.description); } else {
-
-		window.location = '/dashboard'
+      if (response.data.success === false) { page.errorHandler(response.data.description) } else {
+        window.location = '/dashboard'
 	  }
     })
     .catch(function (error) {
-      page.errorHandler(error);
+      page.errorHandler(error)
     })
 }
 

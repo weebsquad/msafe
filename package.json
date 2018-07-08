@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "git reset --hard && git pull --force && node lolisafe",
-	"lint": "standard --fix controllers/*.js lolisafe.js routes/*.js && echo done"
+	"lint": "standard --fix controllers/*.js lolisafe.js routes/*.js public/js/*.js && echo done"
   },
   "license": "MIT",
   "dependencies": {

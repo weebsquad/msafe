@@ -4,104 +4,106 @@ panel.page
 panel.username
 panel.token = localStorage.token
 panel.filesView = localStorage.filesView
-panel.onAdminP = false;
-panel.loadedAt;
+panel.onAdminP = false
+panel.loadedAt
 
-panel.stringifyError = function(err, filter, space) {
-  var plainObject = {};
-  Object.getOwnPropertyNames(err).forEach(function(key) {
-    plainObject[key] = err[key];
-  });
-  return JSON.stringify(plainObject, filter, space);
-};
-
-panel.errorHandler = async function(err) {
-	hhh
-	const _handlers = {
-		'This account has been disabled': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Username doesn\'t exist': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Invalid token': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-	};
-	if(typeof(err) === 'object') {
-		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
-		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
-			if(_strerror.response.data.success === false && typeof(_strerror.response.data.description) === 'string') {
-				swal({
-					title: 'Error(1)',
-					text: _strerror.response.data.description,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: _strerror.response.data.description.length*750,
-				 },
-				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
-				 })
-			}
-		} else {
-			swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-			console.log(err)
-		}
-	} else if(typeof(err) === 'string') {
-		if(typeof(_handlers[err]) === 'function') {
-			swal({
-					title: 'Error(2)',
-					text: err,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: err.length*750,
-				 },
-				 function () {
-					_handlers[err]();
-				 })
-		}
-	} else {
-		console.log(err);
-	}
+panel.stringifyError = function (err, filter, space) {
+  var plainObject = {}
+  Object.getOwnPropertyNames(err).forEach(function (key) {
+    plainObject[key] = err[key]
+  })
+  return JSON.stringify(plainObject, filter, space)
 }
 
-panel.admins = new Array();
-panel.isAdmin = async function(name) {
-	if(panel.admins.length < 1) await panel.fetchAdmins();
-	if(panel.admins.indexOf(name) > -1) return true;
-	return false;
+panel.errorHandler = async function (err) {
+	ad();
+	asd();
+	xdd = asf
+  const _handlers = {
+    'This account has been disabled': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Username doesn\'t exist': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Invalid token': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    }
+  }
+  if (typeof (err) === 'object') {
+    const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'))
+    if (typeof (_strerror) === 'object' && typeof (_strerror.response) === 'object' && typeof (_strerror.response.data) === 'object') {
+      if (_strerror.response.data.success === false && typeof (_strerror.response.data.description) === 'string') {
+        swal({
+          title: 'Error(1)',
+          text: _strerror.response.data.description,
+          type: 'error',
+          confirmButtonText: 'Ok',
+          timer: _strerror.response.data.description.length * 750
+				 },
+				 function () {
+          if (typeof (_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
+				 })
+      }
+    } else {
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      console.log(err)
+    }
+  } else if (typeof (err) === 'string') {
+    if (typeof (_handlers[err]) === 'function') {
+      swal({
+        title: 'Error(2)',
+        text: err,
+        type: 'error',
+        confirmButtonText: 'Ok',
+        timer: err.length * 750
+				 },
+				 function () {
+        _handlers[err]()
+				 })
+    }
+  } else {
+    console.log(err)
+  }
 }
 
-panel.fetchAdmins = async function() {
-	panel.admins = new Array();
-	return new Promise(function(resolve) {
-		axios.get('/api/admins').then(function (response) {
-			if (response.data.success === false) {
-				resolve();
-				return;
-			}
-			response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
-			resolve();
-		}).catch(function(error) {
-			//panel.errorHandler(error); -- fuck this lol
-			//resolve();
-		});
-	});
+panel.admins = new Array()
+panel.isAdmin = async function (name) {
+  if (panel.admins.length < 1) await panel.fetchAdmins()
+  if (panel.admins.indexOf(name) > -1) return true
+  return false
+}
+
+panel.fetchAdmins = async function () {
+  panel.admins = new Array()
+  return new Promise(function (resolve) {
+    axios.get('/api/admins').then(function (response) {
+      if (response.data.success === false) {
+        resolve()
+        return
+      }
+      response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
+      resolve()
+    }).catch(function (error) {
+      // panel.errorHandler(error); -- fuck this lol
+      // resolve();
+    })
+  })
 }
 
 panel.preparePage = function () {
@@ -110,7 +112,6 @@ panel.preparePage = function () {
 }
 
 panel.verifyToken = function (token, reloadOnError = false) {
-
   axios.post('/api/tokens/verify', {
     token: token
   })
@@ -123,7 +124,7 @@ panel.verifyToken = function (token, reloadOnError = false) {
         }, function () {
           if (reloadOnError) {
             localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
+            delete axios.defaults.headers.common['token']
             location.location = '/auth'
           }
         })
@@ -137,7 +138,7 @@ panel.verifyToken = function (token, reloadOnError = false) {
       return panel.prepareDashboard()
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -145,34 +146,33 @@ panel.prepareDashboard = async function () {
   panel.page = document.getElementById('page')
   document.getElementById('auth').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
-  const _adm = await panel.isAdmin(panel.username);
+  const _adm = await panel.isAdmin(panel.username)
   if (_adm) { // adminstuff
     document.getElementById('itemAdmin').style.display = 'block'
   }
 
-  const mapTabs = ['itemUploads', 'itemManageGallery', 'itemTokens', 'itemPassword', 'itemLogout', 'itemAdmin', 'itemAccount'];
-  
-  mapTabs.forEach(function(vlx) {
-	  const vl = vlx;
-	  const _obj = document.getElementById(vl);
-	  function _f(elem) {
+  const mapTabs = ['itemUploads', 'itemManageGallery', 'itemTokens', 'itemPassword', 'itemLogout', 'itemAdmin', 'itemAccount']
+
+  mapTabs.forEach(function (vlx) {
+	  const vl = vlx
+	  const _obj = document.getElementById(vl)
+	  function _f (elem) {
 		  elem.addEventListener('click', function () {
-			panel.setActiveMenu(this)
+        panel.setActiveMenu(this)
 		  })
 	  }
-	  if(!_obj) {
-		  const _int = setInterval(function() {
-			  const _check = document.getElementById(vl);
-			  if(_check) {
-				  clearInterval(_int);
-				  _f(_check);
+	  if (!_obj) {
+		  const _int = setInterval(function () {
+			  const _check = document.getElementById(vl)
+			  if (_check) {
+				  clearInterval(_int)
+				  _f(_check)
 			  }
-		  }, 50);
+		  }, 50)
 	  } else {
-		  _f(_obj);
+		  _f(_obj)
 	  }
-  });
-
+  })
 
   document.getElementById('itemLogout').innerHTML = `Logout ( ${panel.username} )`
 
@@ -185,7 +185,7 @@ panel.logout = function () {
 }
 
 panel.getUploads = function (album = undefined, page = undefined) {
-  panel.onAdminP = false;
+  panel.onAdminP = false
   if (page === undefined) page = 0
 
   let url = '/api/uploads/' + page
@@ -248,7 +248,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
       }
     } else {
       var albumOrUser = 'Album'
-	  const _adm = await panel.isAdmin(panel.username);
+	  const _adm = await panel.isAdmin(panel.username)
       if (_adm) { albumOrUser = 'User' }
 
       container.innerHTML = `
@@ -278,7 +278,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
         var tr = document.createElement('tr')
 
         var displayAlbumOrUser = item.album
-		const _adm = await panel.isAdmin(panel.username);
+        const _adm = await panel.isAdmin(panel.username)
         if (_adm) {
           displayAlbumOrUser = ''
           if (item.username !== undefined) { displayAlbumOrUser = item.username }
@@ -304,7 +304,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
     }
   })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -338,7 +338,7 @@ panel.deleteFile = function (id) {
         panel.getUploads()
       })
       .catch(function (error) {
-		panel.errorHandler(error);
+        panel.errorHandler(error)
       })
   }
   )
@@ -414,7 +414,7 @@ panel.getAlbums = function () {
     })
   })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -451,7 +451,7 @@ panel.renameAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-		panel.errorHandler(error);
+        panel.errorHandler(error)
       })
   })
 }
@@ -481,7 +481,7 @@ panel.deleteAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-		panel.errorHandler(error);
+        panel.errorHandler(error)
       })
   }
   )
@@ -502,7 +502,7 @@ panel.submitAlbum = function () {
       panel.getAlbums()
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -534,18 +534,18 @@ panel.getAlbumsSidebar = function () {
       }
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
 panel.getAlbum = function (item) {
-  panel.onAdminP = false;
+  panel.onAdminP = false
   panel.setActiveMenu(item)
   panel.getUploads(item.id)
 }
 
 panel.changeToken = function () {
-  panel.onAdminP = false;
+  panel.onAdminP = false
   axios.get('/api/tokens')
     .then(function (response) {
       if (response.data.success === false) {
@@ -573,7 +573,7 @@ panel.changeToken = function () {
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -595,12 +595,12 @@ panel.getNewToken = function () {
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
 panel.changePassword = function () {
-  panel.onAdminP = false;
+  panel.onAdminP = false
   panel.page.innerHTML = ''
   var container = document.createElement('div')
   container.className = 'container'
@@ -636,7 +636,6 @@ panel.changePassword = function () {
 }
 
 panel.sendNewPassword = function (pass, username = panel.username, random = false, adminpw = '') {
-	
   axios.post('/api/password/change', {username: username, password: pass, random: random, adminpw: adminpw})
     .then(function (response) {
       if (response.data.success === false) {
@@ -645,25 +644,24 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       }
       let _r = 'Password was changed successfully.'
       if (random) _r = 'User\'s new password: ' + response.data.newpw
-	  console.log(response.data);
+	  console.log(response.data)
       swal({
         title: 'Success!',
         text: _r,
         type: 'success'
       }, async function () {
-		const _adm = await panel.isAdmin(panel.username);
-        if(!_adm) return location.reload()
-		if(panel.onAdminP) panel.adminTab()
+        const _adm = await panel.isAdmin(panel.username)
+        if (!_adm) return location.reload()
+        if (panel.onAdminP) panel.adminTab()
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
-
 panel.updateAdminPage = function (pw = '') {
-  if(!panel.onAdminP) return;
+  if (!panel.onAdminP) return
   panel.page.innerHTML = ''
   var container = document.createElement('div')
   container.className = 'container'
@@ -687,12 +685,12 @@ panel.updateAdminPage = function (pw = '') {
   let url = '/api/account/list'
 
   axios.get(url).then(async function (response) {
-	if(!panel.onAdminP) return;
+    if (!panel.onAdminP) return
     if (response.data.success === false) {
       if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
       else return swal('An error ocurred', response.data.description, 'error')
     }
-    
+
     container.innerHTML = container.innerHTML + `
 			<hr>
 			<label class="label">Your password</label>
@@ -716,19 +714,19 @@ panel.updateAdminPage = function (pw = '') {
 		`
 
     var table = document.getElementById('table')
-	
+
     for (var item of response.data.users) {
-	  //if(item.username === panel.username) continue;
-	 
-	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
+	  // if(item.username === panel.username) continue;
+
+	  if (typeof (item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username)
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
-	  if(item.enabled === 1) item.enabled = true;
-	  if(item.enabled === 0) item.enabled = false;
+	  if (item.enabled === 1) item.enabled = true
+	  if (item.enabled === 0) item.enabled = false
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
-	  if(item.enabled === false) item.enabledisp = '<i class="fa fa-check fa-2x"></i>';
-	  if(item.enabled === true) item.enabledisp = '<i class="fa fa-times-circle fa-2x"></i>';
+	  if (item.enabled === false) item.enabledisp = '<i class="fa fa-check fa-2x"></i>'
+	  if (item.enabled === true) item.enabledisp = '<i class="fa fa-times-circle fa-2x"></i>'
 	  let buttons = `
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
@@ -750,20 +748,19 @@ panel.updateAdminPage = function (pw = '') {
 								<i class="fa fa-ban"></i>
 							</span>
 						</a>
-	  `;
-	  if(item.admin === true) { 
-		buttons = ''; 
-		item.admin = '<i class="fa fa-check fa-2x"></i>';
+	  `
+	  if (item.admin === true) {
+        buttons = ''
+        item.admin = '<i class="fa fa-check fa-2x"></i>'
 	  }
-	  
-	  if(item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>';
-	  
-	  if(item.username === panel.username) { 
-		item.username = `(self) ${item.username}`;
-		item.enabledisp = '';
+
+	  if (item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>'
+
+	  if (item.username === panel.username) {
+        item.username = `(self) ${item.username}`
+        item.enabledisp = ''
 	  }
-	  
-		
+
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
@@ -776,10 +773,10 @@ panel.updateAdminPage = function (pw = '') {
 					</td>
 				</tr>
 				`
-	  if(!panel.onAdminP) return;
-	  try{
-		table.appendChild(tr)
-	  } catch(e) { /* */ }
+	  if (!panel.onAdminP) return
+	  try {
+        table.appendChild(tr)
+	  } catch (e) { /* */ }
     }
   })
     .catch(function (error) {
@@ -787,34 +784,33 @@ panel.updateAdminPage = function (pw = '') {
       console.log(error)
     })
   panel.page.appendChild(container)
-  
-  
+
   const _waitmaps = {
-	  'passwordRoot': function(key, rootpw) {
+	  'passwordRoot': function (key, rootpw) {
 		   if (pw !== '' && rootpw) { rootpw.value = pw }
 	  },
-	  'sendNewAccount': function(key, obj) {
+	  'sendNewAccount': function (key, obj) {
 		  document.getElementById(key).addEventListener('click', function () {
-			panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
+        panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
 		  })
-	  },
-  };
-  for(let key in _waitmaps) {
-	  let obj = _waitmaps[key];
-	  const _int = setInterval(function() {
-		  const _test = document.getElementById(key);
-		  if(_test) {
-			  clearInterval(_int);
-			  setTimeout(function() { obj(key, _test); }, 150);
+	  }
+  }
+  for (let key in _waitmaps) {
+	  let obj = _waitmaps[key]
+	  const _int = setInterval(function () {
+		  const _test = document.getElementById(key)
+		  if (_test) {
+			  clearInterval(_int)
+			  setTimeout(function () { obj(key, _test) }, 150)
 		  }
-	  }, 75);
+	  }, 75)
   }
 }
 
-panel.loadAdminTab = function() {
-	if(panel.onAdminP) return;
-	panel.onAdminP = true;
-	panel.updateAdminPage()
+panel.loadAdminTab = function () {
+  if (panel.onAdminP) return
+  panel.onAdminP = true
+  panel.updateAdminPage()
 }
 
 panel.adminTab = function () {
@@ -882,16 +878,16 @@ panel.registerNewUser = function (username, pass) {
         title: 'Yay',
         text: `User account added\n\n-Login info-\nUsername: ${username}\nPassword: ${pass}`,
         type: 'success',
-		closeOnEsc: false,
-		closeOnClickOutside: false,
+        closeOnEsc: false,
+        closeOnClickOutside: false
       }, async function () {
-		  const _adm = await panel.isAdmin(panel.username);
-          if (!_adm) return location.reload()
-		  if(panel.onAdminP) panel.adminTab()
+		  const _adm = await panel.isAdmin(panel.username)
+        if (!_adm) return location.reload()
+		  if (panel.onAdminP) panel.adminTab()
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -933,28 +929,28 @@ panel.disableAccount = function (password, username = panel.username, state) {
       if (response.data.success === false) {
         return swal('An error ocurred', response.data.description, 'error')
       }
-	  let _st = 'disabled';
-	  if(state) _st = 'enabled';
+	  let _st = 'disabled'
+	  if (state) _st = 'enabled'
       swal({
         title: 'Done',
         text: `Account ${_st}`,
         type: 'success',
-		timer: 3000,
-		closeOnEsc: true,
-		closeOnClickOutside: true,
+        timer: 3000,
+        closeOnEsc: true,
+        closeOnClickOutside: true
       }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-		  const _adm = await panel.isAdmin(panel.username);
+		  const _adm = await panel.isAdmin(panel.username)
           if (!_adm) return location.reload()
-          if(panel.onAdminP) panel.adminTab()
+          if (panel.onAdminP) panel.adminTab()
         }
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -970,22 +966,22 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
         title: 'Done',
         text: _t,
         type: 'success',
-		timer: 3000,
-		closeOnEsc: true,
-		closeOnClickOutside: true,
+        timer: 3000,
+        closeOnEsc: true,
+        closeOnClickOutside: true
       }, async function () {
         if (username === panel.username && !filesOnly) {
           localStorage.removeItem('token')
           location.reload('/')
         } else {
-		  const _adm = await panel.isAdmin(panel.username);
+		  const _adm = await panel.isAdmin(panel.username)
           if (!_adm) location.reload()
-          if(panel.onAdminP) panel.adminTab()
+          if (panel.onAdminP) panel.adminTab()
         }
       })
     })
     .catch(function (error) {
-	  panel.errorHandler(error);
+	  panel.errorHandler(error)
     })
 }
 
@@ -998,5 +994,5 @@ panel.setActiveMenu = function (item) {
 }
 
 window.onload = function () {
-	panel.preparePage()
+  panel.preparePage()
 }

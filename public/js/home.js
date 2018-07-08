@@ -7,77 +7,76 @@ upload.maxFileSize
 upload.album
 upload.myDropzone
 
+upload.stringifyError = function (err, filter, space) {
+  var plainObject = {}
+  Object.getOwnPropertyNames(err).forEach(function (key) {
+    plainObject[key] = err[key]
+  })
+  return JSON.stringify(plainObject, filter, space)
+}
 
-upload.stringifyError = function(err, filter, space) {
-  var plainObject = {};
-  Object.getOwnPropertyNames(err).forEach(function(key) {
-    plainObject[key] = err[key];
-  });
-  return JSON.stringify(plainObject, filter, space);
-};
-
-upload.errorHandler = async function(err) {
-	const _handlers = {
-		'This account has been disabled': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Username doesn\'t exist': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-		'Invalid token': function() {
-			localStorage.removeItem('token')
-			delete axios.defaults.headers.common['token']
-			if(location.location === '/') { location.reload(); } else {
-				location.location = '/';
-				window.location = '/'
-			}
-		},
-	};
-	if(typeof(err) === 'object') {
-		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
-		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
-			if(_strerror.response.data.success === false && typeof(_strerror.response.data.description) === 'string') {
-				swal({
-					title: 'Error(1)',
-					text: _strerror.response.data.description,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: _strerror.response.data.description.length*750,
+upload.errorHandler = async function (err) {
+  const _handlers = {
+    'This account has been disabled': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Username doesn\'t exist': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    },
+    'Invalid token': function () {
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token']
+      if (location.location === '/') { location.reload() } else {
+        location.location = '/'
+        window.location = '/'
+      }
+    }
+  }
+  if (typeof (err) === 'object') {
+    const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'))
+    if (typeof (_strerror) === 'object' && typeof (_strerror.response) === 'object' && typeof (_strerror.response.data) === 'object') {
+      if (_strerror.response.data.success === false && typeof (_strerror.response.data.description) === 'string') {
+        swal({
+          title: 'Error(1)',
+          text: _strerror.response.data.description,
+          type: 'error',
+          confirmButtonText: 'Ok',
+          timer: _strerror.response.data.description.length * 750
 				 },
 				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
+          if (typeof (_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
 				 })
-			}
-		} else {
-			swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-			console.log(err)
-		}
-	} else if(typeof(err) === 'string') {
-		if(typeof(_handlers[err]) === 'function') {
-			swal({
-					title: 'Error(2)',
-					text: err,
-					type: 'error',
-					confirmButtonText: 'Ok',
-					timer: err.length*750,
+      }
+    } else {
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      console.log(err)
+    }
+  } else if (typeof (err) === 'string') {
+    if (typeof (_handlers[err]) === 'function') {
+      swal({
+        title: 'Error(2)',
+        text: err,
+        type: 'error',
+        confirmButtonText: 'Ok',
+        timer: err.length * 750
 				 },
 				 function () {
-					_handlers[err]();
+        _handlers[err]()
 				 })
-		}
-	} else {
-		console.log(err);
-	}
+    }
+  } else {
+    console.log(err)
+  }
 }
 
 upload.checkIfPublic = function () {
@@ -88,7 +87,7 @@ upload.checkIfPublic = function () {
       upload.preparePage()
     })
     .catch(function (error) {
-      upload.errorHandler(error);
+      upload.errorHandler(error)
     })
 }
 
@@ -124,7 +123,7 @@ upload.verifyToken = function (token, reloadOnError) {
       return upload.prepareUpload()
     })
     .catch(function (error) {
-      upload.errorHandler(error);
+      upload.errorHandler(error)
     })
 }
 
@@ -156,7 +155,7 @@ upload.prepareUpload = function () {
         document.getElementById('albumDiv').style.display = 'block'
       })
       .catch(function (e) {
-        upload.errorHandler(error);
+        upload.errorHandler(error)
       })
   }
 
