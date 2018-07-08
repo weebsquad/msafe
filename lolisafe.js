@@ -36,12 +36,12 @@ async function rateLimitKey (req, res) {
   return key
 }
 
-async function rateLimitSkip (req) {
+function rateLimitSkip (req) {
   return false;
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
-    const user = await db.table('users').where('token', token).first()
-    if (user && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(user.username) > -1))) return true
+    //const user = await db.table('users').where('token', token).first()
+    //if (user && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(user.username) > -1))) return true
   }
   return false
 }
