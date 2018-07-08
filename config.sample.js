@@ -114,7 +114,10 @@ module.exports = {
 	admins: ['root'],
 	
 	// Wether or not admins should bypass all ratelimits
-	adminsBypassRatelimiting: true,
+	adminsBypassRatelimiting: false,
+	
+	// Users that should bypass ratelimiting
+	usersBypassRateLimiting: [],
 	
 	/*
 		Whitelisted files when using alternateViewing mode

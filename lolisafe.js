@@ -38,9 +38,9 @@ async function rateLimitKey (req, res) {
 
 async function rateLimitSkip (req, res) {
   const token = req.headers.token
-  if (token && config.adminsBypassRatelimiting) {
+  if (token && (config.adminsBypassRatelimiting || config.usersBypassRateLimiting.length > 0)) {
     const user = await db.table('users').where('token', token).first()
-    if (user && config.admins.indexOf(user.username) > -1) return true
+    if (user && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting && config.admins.indexOf(user.username) > -1))) return true
   }
   return false
 }

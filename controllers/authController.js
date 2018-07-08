@@ -202,7 +202,7 @@ authController.register = async (req, res, next) => {
   _checkpw.forEach(function (ch) {
 	  if (!(pwchars.indexOf(ch) > -1)) valid = false
   })
-  if (!valid) return res.json({ success: false, description: `Password contains illegal characters. Only alphanumeric characters and " ${symbols} " may be used` })
+  if (!valid) return res.json({ success: false, description: `Password contains illegal characters. Only alphanumeric characters and  ${symbols}  may be used` })
 
   const user = await db.table('users').where('username', username).first()
   if (user) return res.json({ success: false, description: 'Username already exists' })
