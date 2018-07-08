@@ -8,11 +8,54 @@ upload.album
 upload.myDropzone
 
 
+upload.stringifyError = function(err, filter, space) {
+  var plainObject = {};
+  Object.getOwnPropertyNames(err).forEach(function(key) {
+    plainObject[key] = err[key];
+  });
+  return JSON.stringify(plainObject, filter, space);
+};
+
 upload.errorHandler = async function(err) {
-	if(typeof(err) !== 'string') {
-		swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-		console.log(error)
-		return;
+	const _handlers = {
+		'This account has been disabled': function() {
+			localStorage.removeItem('token')
+			delete axios.defaults.headers.common['token']
+            location.location = '/'
+			window.location = '/'
+		},
+		'Username doesn\'t exist': function() {
+			localStorage.removeItem('token')
+			delete axios.defaults.headers.common['token']
+            location.location = '/'
+			window.location = '/'
+		},
+		'Invalid token': function() {
+			localStorage.removeItem('token')
+			delete axios.defaults.headers.common['token']
+			location.location = '/'
+			window.location = '/'
+		},
+	};
+	if(typeof(err) === 'object') {
+		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
+		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
+			if(_strerror.response.data.success === false && typeof(_strerror.response.data.description) === 'string') {
+				swal({
+					title: 'Error',
+					text: _strerror.response.data.description,
+					type: 'error',
+					confirmButtonText: 'Ok',
+				 },
+				 function () {
+					if(typeof(_handlers[_strerror.response.data.description]) === 'function') _handlers[_strerror.response.data.description]()
+				 })
+			}
+		} else {
+			swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+			console.log(err)
+			return;
+		}
 	}
 	console.log(err);
 }
