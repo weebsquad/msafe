@@ -94,6 +94,7 @@ upload.checkIfPublic = function () {
 upload.preparePage = function () {
   if (!upload.isPrivate) return upload.prepareUpload()
   if (!upload.token) return document.getElementById('loginToUpload').style.display = 'inline-flex'
+  document.getElementById('authButton2').href = '/dashboard'
   upload.verifyToken(upload.token, true)
 }
 
@@ -105,13 +106,13 @@ upload.verifyToken = function (token, reloadOnError) {
   })
     .then(function (response) {
       if (response.data.success === false) {
+		document.getElementById('authButton2').href = '/auth'
         upload.errorHandler(response.data.description)
         return
       }
 
       localStorage.token = token
       upload.token = token
-	  document.getElementById('authButton2').href = '/dashboard'
       return upload.prepareUpload()
     })
     .catch(function (error) {
