@@ -24,7 +24,13 @@ page.do = function (dest) {
 }
 
 page.load = function() {
-	if(page.registering === true) document.getElementById('registerBtn').style.display = 'block';
+	if(page.registering === true) {	
+		document.getElementById('registerBtn').style.display = 'block';
+		document.getElementById('mainTitle').innerHTML = 'Login or register';
+	} else {
+		document.getElementById('registerBtn').style.display = 'none';
+		document.getElementById('mainTitle').innerHTML = 'Login';
+	}
 }
 
 page.getPublicVars = function () {
