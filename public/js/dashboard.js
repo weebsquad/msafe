@@ -6,6 +6,16 @@ panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 panel.onAdminP = false;
 
+
+panel.errorHandler = async function(err) {
+	if(typeof(err) !== 'string') {
+		swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+		console.log(error)
+		return;
+	}
+	console.log(err);
+}
+
 panel.admins = new Array();
 panel.isAdmin = async function(name) {
 	if(panel.admins.length < 1) await panel.fetchAdmins();
@@ -32,8 +42,7 @@ panel.preparePage = function () {
   panel.verifyToken(panel.token, true)
 }
 
-panel.verifyToken = function (token, reloadOnError) {
-  if (reloadOnError === undefined) { reloadOnError = false }
+panel.verifyToken = function (token, reloadOnError = false) {
 
   axios.post('/api/tokens/verify', {
     token: token
@@ -60,8 +69,7 @@ panel.verifyToken = function (token, reloadOnError) {
       return panel.prepareDashboard()
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -228,8 +236,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
     }
   })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -263,8 +270,7 @@ panel.deleteFile = function (id) {
         panel.getUploads()
       })
       .catch(function (error) {
-        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-        console.log(error)
+		panel.errorHandler(error);
       })
   }
   )
@@ -340,8 +346,7 @@ panel.getAlbums = function () {
     })
   })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -378,8 +383,7 @@ panel.renameAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-        console.log(error)
+		panel.errorHandler(error);
       })
   })
 }
@@ -409,8 +413,7 @@ panel.deleteAlbum = function (id) {
         panel.getAlbums()
       })
       .catch(function (error) {
-        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-        console.log(error)
+		panel.errorHandler(error);
       })
   }
   )
@@ -431,8 +434,7 @@ panel.submitAlbum = function () {
       panel.getAlbums()
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -464,8 +466,7 @@ panel.getAlbumsSidebar = function () {
       }
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -504,8 +505,7 @@ panel.changeToken = function () {
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -527,8 +527,7 @@ panel.getNewToken = function () {
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -589,8 +588,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 panel.updateAdminPage = function (pw = '') {
@@ -813,8 +811,7 @@ panel.registerNewUser = function (username, pass) {
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -877,8 +874,7 @@ panel.disableAccount = function (password, username = panel.username, state) {
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
@@ -909,8 +905,7 @@ panel.deleteAccount = function (password, username = panel.username, filesOnly =
       })
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+	  panel.errorHandler(error);
     })
 }
 
