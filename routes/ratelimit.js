@@ -28,6 +28,7 @@ rateLimiting.skipHandler = function(req) {
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
     const user = userCache[token];
+	console.log(user);
     if (user !== undefined && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(user.username) > -1))) return true
 	updateCache(token);
   }
