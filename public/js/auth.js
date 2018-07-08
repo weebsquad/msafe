@@ -23,6 +23,12 @@ page.errorHandler = async function(err) {
             location.location = '/'
 			window.location = '/'
 		},
+		'Invalid token': function() {
+			localStorage.removeItem('token')
+			delete axios.defaults.headers.common['token']
+			location.location = '/'
+			window.location = '/'
+		},
 	};
 	if(typeof(err) === 'object') {
 		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
