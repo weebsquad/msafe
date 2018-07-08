@@ -36,6 +36,7 @@ panel.errorHandler = async function(err, delay = 200) {
 			window.location = '/'
 		},
 	};
+	try {
 	if(typeof(err) === 'object') {
 		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
 		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
@@ -70,6 +71,7 @@ panel.errorHandler = async function(err, delay = 200) {
 		}
 	}
 	console.log(err);
+	} catch(e) { console.error(e); }
 }
 
 panel.admins = new Array();
