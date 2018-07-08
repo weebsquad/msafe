@@ -238,9 +238,7 @@ a#registerBtn.button {
 }
 
 
-a#login {
-	display: none;
-}
+
 a#sendDeleteAcc {
 	background: #cc2900
 }
