@@ -702,7 +702,9 @@ panel.updateAdminPage = function (pw = '') {
 				</tr>
 				`
 	  if(!panel.onAdminP) return;
-      table.appendChild(tr)
+	  try{
+		table.appendChild(tr)
+	  } catch(e) { /* */ }
     }
   })
     .catch(function (error) {
