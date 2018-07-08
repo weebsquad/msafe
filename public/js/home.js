@@ -111,6 +111,7 @@ upload.verifyToken = function (token, reloadOnError) {
 
       localStorage.token = token
       upload.token = token
+	  document.getElementById('authButton').href = "/dashboard";
       return upload.prepareUpload()
     })
     .catch(function (error) {
