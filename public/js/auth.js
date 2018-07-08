@@ -137,10 +137,18 @@ page.verify = function () {
 window.onload = async function () {
   page.verify()
   const input = document.getElementById('pass')
+  const input2 = document.getElementById('user')
   input.addEventListener('keyup', function (event) {
 	  event.preventDefault()
 	  if (event.keyCode === 13) {
       document.getElementById('loginBtn').click()
 	  }
   })
+  input2.addEventListener('keyup', function (event) {
+	  event.preventDefault()
+	  if (event.keyCode === 13) {
+      document.getElementById('loginBtn').click()
+	  }
+  })
+  document.getElementById('login').style.display = 'block';
 }

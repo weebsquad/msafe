@@ -237,6 +237,10 @@ a#registerBtn.button {
 	align-items: center;
 }
 
+
+a#login {
+	display: none;
+}
 a#sendDeleteAcc {
 	background: #cc2900
 }
