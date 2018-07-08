@@ -88,6 +88,8 @@ panel.fetchAdmins = async function() {
 			}
 			response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
 			resolve();
+		}).catch(function(error) {
+			panel.errorHandler(error);
 		});
 	});
 }
