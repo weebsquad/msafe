@@ -632,7 +632,7 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
       }
       let _r = 'Password was changed successfully.'
       if (random) _r = 'User\'s new password: ' + response.data.newpw
-	  console.log(response.data)
+
       swal({
         title: 'Success!',
         text: _r,
