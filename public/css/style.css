@@ -227,7 +227,7 @@ a#loginBtn.button {
     border-color: #272727;
 }
 
-a#registerBtn {
+a#registerBtn.button {
 	display: none;
 	color: #30a9ed;
     font-size: 18px;
