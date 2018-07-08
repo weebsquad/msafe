@@ -5,6 +5,13 @@ const randomstring = require('randomstring')
 const utils = require('./utilsController.js')
 const uploadController = require('./uploadController.js')
 
+let alpha = 'qwertyuiopasdfghjklzxcvbnm'
+alpha = alpha + alpha.toUpperCase()
+const num = '0123456789'
+const symbols = '!@#$%^&*()_-+=?/>.<,;:}]{[~|'
+const pwchars = (alpha + num + symbols).split('')
+const usrchars = (alpha + num).split('')
+
 let authController = {}
 
 authController.listAdmins = async (req, res, next) => {
@@ -170,6 +177,8 @@ authController.register = async (req, res, next) => {
 
   const username = req.body.username
   const password = req.body.password
+  console.log(pwchars)
+  console.log(alphanum)
 
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
@@ -180,6 +189,21 @@ authController.register = async (req, res, next) => {
   if (password.length < 6 || password.length > 64) {
     return res.json({ success: false, description: 'Password must have 6-64 characters' })
   }
+
+  // Check username chars
+  let valid = true
+  const _checkusr = username.split('')
+  _checkusr.forEach(function (ch) {
+	  if (!(usrchars.indexOf(ch) > -1)) valid = false
+  })
+  if (!valid) return res.json({ success: false, description: 'Username contains illegal characters. Only alphanumeric characters may be used' })
+
+  // Check password chars
+  const _checkpw = password.split('')
+  _checkpw.forEach(function (ch) {
+	  if (!(pwchars.indexOf(ch) > -1)) valid = false
+  })
+  if (!valid) return res.json({ success: false, description: `Password contains illegal characters. Only alphanumeric characters and " ${symbols} " may be used` })
 
   const user = await db.table('users').where('username', username).first()
   if (user) return res.json({ success: false, description: 'Username already exists' })
@@ -216,6 +240,15 @@ authController.changePassword = async (req, res, next) => {
     return res.json({ success: false, description: 'Password must have 6-64 characters' })
   }
 
+  if (!random) {
+  // Check password chars
+    let valid = false
+    const _checkpw = password.split('')
+    _checkpw.forEach(function (ch) {
+	  if (!(pwchars.indexOf(ch) > -1)) valid = false
+    })
+    if (!valid) return res.json({ success: false, description: `Password contains illegal characters. Only alphanumeric characters and " ${symbols} " may be used` })
+  }
   let bypassEnable = false
   if (user && utils.isAdmin(user.username)) bypassEnable = true
   bcrypt.hash(password, 10, async (err, hash) => {
