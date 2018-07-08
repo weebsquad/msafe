@@ -1,5 +1,15 @@
 var page = {}
 
+
+page.errorHandler = async function(err) {
+	if(typeof(err) !== 'string') {
+		swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+		console.log(error)
+		return;
+	}
+	console.log(err);
+}
+
 page.do = function (dest) {
   var user = document.getElementById('user').value
   var pass = document.getElementById('pass').value
@@ -18,8 +28,7 @@ page.do = function (dest) {
       window.location = '/dashboard'
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+      page.errorHandler(error);
     })
 }
 
@@ -42,8 +51,7 @@ page.getPublicVars = function () {
 	  page.load();
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      return console.log(error)
+      page.errorHandler(error);
     })
 }
 
@@ -60,8 +68,7 @@ page.verify = function () {
       window.location = '/dashboard'
     })
     .catch(function (error) {
-      return swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      console.log(error)
+      page.errorHandler(error);
     })
 }
 

@@ -7,6 +7,16 @@ upload.maxFileSize
 upload.album
 upload.myDropzone
 
+
+upload.errorHandler = async function(err) {
+	if(typeof(err) !== 'string') {
+		swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+		console.log(error)
+		return;
+	}
+	console.log(err);
+}
+
 upload.checkIfPublic = function () {
   axios.get('/api/check')
     .then(function (response) {
@@ -15,8 +25,7 @@ upload.checkIfPublic = function () {
       upload.preparePage()
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      return console.log(error)
+      upload.errorHandler(error);
     })
 }
 
@@ -52,8 +61,7 @@ upload.verifyToken = function (token, reloadOnError) {
       return upload.prepareUpload()
     })
     .catch(function (error) {
-      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-      return console.log(error)
+      upload.errorHandler(error);
     })
 }
 
@@ -85,8 +93,7 @@ upload.prepareUpload = function () {
         document.getElementById('albumDiv').style.display = 'block'
       })
       .catch(function (e) {
-        swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-        return console.log(e)
+        upload.errorHandler(error);
       })
   }
 
