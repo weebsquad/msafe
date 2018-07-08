@@ -100,12 +100,13 @@ module.exports = {
 		Setup ratelimits for different API endpoints
 	*/
 	rateLimits: {
-		'/api/account': { windowMs: 2*60*1000, max: 15, delayMs: 2000, delayAfter: 5},
-		'/api/upload': { windowMs: 60*1000, max: 20, deLayMs: 2000, delayAfter: 5},
-		'/api/login/': { windowMs: 60*1000, max: 2, delayMs: 500, delayAfter: 1 },
-		'/api/register/': { windowMs: 30*60*1000, max: 1, delayMs: 0 },
-		'/api/tokens/': { windowMs: 30*1000, max: 55, delayMs: 200, delayAfter: 10 },
-		'/api/': { windowMs: 60*1000, max: 100, delayMs: 150, delayAfter: 50 },
+		'/api/admins': { windowMs: 60*1000, max: 100, autoDelays: true},
+		'/api/account': { windowMs: 2*60*1000, max: 20, autoDelays: true},
+		'/api/upload': { windowMs: 3*60*1000, max: 20, autoDelays: true},
+		'/api/login/': { windowMs: 5*60*1000, max: 5, delayMs: 1000, delayAfter: 1 },
+		'/api/register/': { windowMs: 15*60*1000, max: 5, delayMs: 2000, delayAfter: 1 },
+		'/api/tokens/': { windowMs: 2*60*1000, max: 30, autoDelays: true },
+		'/api/': { windowMs: 2*60*1000, max: 250, autoDelays: true },
 	},
 	skipFails: false, // Error requests won't be counted towards ratelimiting, can still allow people to spam the api
 	
