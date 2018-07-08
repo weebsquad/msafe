@@ -24,7 +24,7 @@ rateLimiting.updateCache = async function(token) {
 }
 
 let userCache = [];
-rateLimiting.skipHandler = function(req) {
+rateLimiting.skipHandler = function(req, res) {
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
     const user = userCache[token];
