@@ -227,6 +227,10 @@ a#registerBtn.button, a#loginBtn.button {
     border-color: #272727;
 }
 
+a#registerBtn {
+	display: none;
+}
+
 a#sendDeleteAcc {
 	background: #cc2900
 }

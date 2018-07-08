@@ -23,6 +23,24 @@ page.do = function (dest) {
     })
 }
 
+page.load = function() {
+	if(page.registering === true) document.getElementById('registerBtn').style.display = 'block';
+}
+
+page.getPublicVars = function () {
+  axios.get('/api/check')
+    .then(function (response) {
+      page.isPrivate = response.data.private
+      page.maxFileSize = response.data.maxFileSize
+      page.registering = response.data.register
+	  page.load();
+    })
+    .catch(function (error) {
+      swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
+      return console.log(error)
+    })
+}
+
 page.verify = function () {
   page.token = localStorage.token
   if (page.token === undefined) return
@@ -41,7 +59,7 @@ page.verify = function () {
     })
 }
 
-window.onload = function () {
+window.onload = async function () {
   page.verify()
   const input = document.getElementById('pass')
   input.addEventListener('keyup', function (event) {
