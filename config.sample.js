@@ -105,7 +105,7 @@ module.exports = {
 		'/api/upload': { windowMs: 3*60*1000, max: 20, autoDelays: true},
 		'/api/login/': { windowMs: 5*60*1000, max: 5, delayMs: 1000, delayAfter: 1 },
 		'/api/register/': { windowMs: 15*60*1000, max: 5, delayMs: 2000, delayAfter: 1 },
-		'/api/tokens/': { windowMs: 2*60*1000, max: 30, autoDelays: true },
+		'/api/tokens/': { windowMs: 2*60*1000, max: 40, autoDelays: true },
 		'/api/': { windowMs: 2*60*1000, max: 250, autoDelays: true },
 	},
 	skipFails: false, // Error requests won't be counted towards ratelimiting, can still allow people to spam the api
