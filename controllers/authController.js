@@ -177,8 +177,7 @@ authController.register = async (req, res, next) => {
 
   const username = req.body.username
   const password = req.body.password
-  console.log(pwchars)
-  console.log(alphanum)
+
 
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
