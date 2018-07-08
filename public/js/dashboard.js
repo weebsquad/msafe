@@ -68,7 +68,7 @@ panel.errorHandler = async function(err) {
 					text: err,
 					type: 'error',
 					confirmButtonText: 'Ok',
-					timer: err.length*750;
+					timer: err.length*750,
 				 },
 				 function () {
 					_handlers[err]();
