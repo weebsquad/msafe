@@ -647,6 +647,7 @@ panel.updateAdminPage = function (pw = '') {
 		`
 
     var table = document.getElementById('table')
+	
     for (var item of response.data.users) {
 	  //if(item.username === panel.username) continue;
 	 
