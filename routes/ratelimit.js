@@ -13,7 +13,7 @@ rateLimiting.keyGen = async function (req, res) {
   const token = req.headers.token
   if (token) {
     const user = await db.table('users').where('token', token).first()
-    if (user && (!config.enableUserAccounts || !config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
+    if (user && (!config.enableUserAccounts && config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
   }
   return key
 }
@@ -55,12 +55,20 @@ rateLimiting.load = function (safe) {
   for (let key in config.rateLimits) {
 	  let obj = config.rateLimits[key]
 	  let _a = function (req, res, next) {
-      rateLimiting.limitedHandler(obj, req, res, next)
+		rateLimiting.limitedHandler(obj, req, res, next)
 	  }
 	  obj['handler'] = _a
 	  obj['keyGenerator'] = rateLimiting.keyGen
 	  obj['skip'] = rateLimiting.skipHandler
 	  obj['skipFailedRequests'] = config.skipFails;
+	  if(obj['autoDelays'] === true) {
+		  delete obj['autoDelays'];
+		  let delayAft = (obj['max'])*0.75;
+		  let delayMs = (obj['windowMs']/delayAft)*0.65;
+		  obj['delayMs'] = delayMs;
+		  obj['delayAfter'] = delayAft;
+	  }
+	  console.log(obj);
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
   }
