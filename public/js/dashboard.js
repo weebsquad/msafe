@@ -20,23 +20,29 @@ panel.errorHandler = async function(err, delay = 200) {
 		'This account has been disabled': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-            location.location = '/'
-			window.location = '/'
+			setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
+			console.log('ok');
 		},
 		'Username doesn\'t exist': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-            location.location = '/'
-			window.location = '/'
+            setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
 		},
 		'Invalid token': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-			location.location = '/'
-			window.location = '/'
+			setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
 		},
 	};
-	try {
 	if(typeof(err) === 'object') {
 		const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'));
 		if(typeof(_strerror) === 'object' && typeof(_strerror.response) === 'object' && typeof(_strerror.response.data) === 'object') {
@@ -71,7 +77,6 @@ panel.errorHandler = async function(err, delay = 200) {
 		}
 	}
 	console.log(err);
-	} catch(e) { console.error(e); }
 }
 
 panel.admins = new Array();

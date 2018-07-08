@@ -21,20 +21,27 @@ upload.errorHandler = async function(err, delay = 200) {
 		'This account has been disabled': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-            location.location = '/'
-			window.location = '/'
+			setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
+			console.log('ok');
 		},
 		'Username doesn\'t exist': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-            location.location = '/'
-			window.location = '/'
+            setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
 		},
 		'Invalid token': function() {
 			localStorage.removeItem('token')
 			delete axios.defaults.headers.common['token']
-			location.location = '/'
-			window.location = '/'
+			setInterval(function() {
+				location.location = '/'
+				window.location = '/'
+			}, 100);
 		},
 	};
 	if(typeof(err) === 'object') {
