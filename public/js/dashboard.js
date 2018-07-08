@@ -91,15 +91,15 @@ panel.fetchAdmins = async function () {
   return new Promise(function (resolve) {
     axios.get('/api/admins').then(function (response) {
       if (response.data.success === false) {
-		panel.errorHandler(response.data.description);
+        panel.errorHandler(response.data.description)
         resolve()
         return
       }
       response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
       resolve()
     }).catch(function (error) {
-      panel.errorHandler(error);
-      resolve();
+      panel.errorHandler(error)
+      resolve()
     })
   })
 }
@@ -115,7 +115,7 @@ panel.verifyToken = function (token, reloadOnError = false) {
   })
     .then(function (response) {
       if (response.data.success === false) {
-		panel.errorHandler(response.data.description);
+        panel.errorHandler(response.data.description)
         return
       }
 
