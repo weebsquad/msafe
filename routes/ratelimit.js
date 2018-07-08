@@ -68,7 +68,6 @@ rateLimiting.load = function (safe) {
 		  obj['delayMs'] = delayMs;
 		  obj['delayAfter'] = delayAft;
 	  }
-	  console.log(obj);
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
   }
