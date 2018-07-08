@@ -15,7 +15,7 @@ panel.stringifyError = function(err, filter, space) {
   return JSON.stringify(plainObject, filter, space);
 };
 
-panel.errorHandler = async function(err) {
+panel.errorHandler = async function(err, delay = 200) {
 	const _handlers = {
 		'This account has been disabled': function() {
 			localStorage.removeItem('token')
@@ -47,7 +47,7 @@ panel.errorHandler = async function(err) {
 					confirmButtonText: 'Ok',
 				 },
 				 function () {
-					if(typeof(_handlers[_strerror.response.data.description]) === 'function') setTimeout(function() { _handlers[_strerror.response.data.description]() }, 200);
+					if(typeof(_handlers[_strerror.response.data.description]) === 'function') setTimeout(function() { _handlers[_strerror.response.data.description]() }, delay);
 				 })
 			}
 		} else {
@@ -64,7 +64,7 @@ panel.errorHandler = async function(err) {
 					confirmButtonText: 'Ok',
 				 },
 				 function () {
-					setTimeout(function() { _handlers[err]() }, 200);
+					setTimeout(function() { _handlers[err]() }, delay);
 				 })
 			return;
 		}
