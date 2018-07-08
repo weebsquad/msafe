@@ -685,10 +685,11 @@ panel.updateAdminPage = function (pw = '') {
 						</a>
 	  `;
 	  if(item.username === panel.username) { 
-		buttons = '';
 		item.username = `(self) ${item.username}`;
 		item.enabledisp = '';
 	  }
+	  
+	  if(panel.isAdmin(item.username)) buttons = '';
 
       tr.innerHTML = `
 				<tr>
