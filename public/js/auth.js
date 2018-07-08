@@ -52,7 +52,7 @@ page.errorHandler = async function(err) {
 	} else if(typeof(err) === 'string') {
 		if(typeof(_handlers[err]) === 'function') {
 			swal({
-					title: 'Error',
+					title: 'Error(2)',
 					text: err,
 					type: 'error',
 					confirmButtonText: 'Ok',
