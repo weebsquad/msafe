@@ -16,6 +16,7 @@ panel.stringifyError = function(err, filter, space) {
 };
 
 panel.errorHandler = async function(err) {
+	hhh
 	const _handlers = {
 		'This account has been disabled': function() {
 			localStorage.removeItem('token')
