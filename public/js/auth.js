@@ -135,9 +135,6 @@ page.verify = function () {
 }
 
 window.onload = async function () {
-  const _oldst = document.getElementById('login').style.display;
-  console.log(_oldst);
-  document.getElementById('login').style.display = 'none';
   page.verify()
   const input = document.getElementById('pass')
   const input2 = document.getElementById('user')
@@ -153,5 +150,4 @@ window.onload = async function () {
       document.getElementById('loginBtn').click()
 	  }
   })
-  document.getElementById('login').style.display = _oldst;
 }
