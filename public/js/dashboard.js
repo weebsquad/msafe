@@ -10,7 +10,7 @@ panel.onAdminP = false;
 panel.errorHandler = async function(err) {
 	if(typeof(err) !== 'string') {
 		swal('An error ocurred', 'There was an error with the request, please check the console for more information.', 'error')
-		console.log(error)
+		console.log(err)
 		return;
 	}
 	console.log(err);

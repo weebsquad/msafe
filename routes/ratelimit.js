@@ -23,7 +23,6 @@ rateLimiting.updateCache = async function (token) {
   if (userCache[token] !== usr) userCache[token] = usr
 }
 
-
 rateLimiting.skipHandler = function (req, res) {
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
@@ -55,23 +54,23 @@ rateLimiting.load = function (safe) {
   for (let key in config.rateLimits) {
 	  let obj = config.rateLimits[key]
 	  let _a = function (req, res, next) {
-		rateLimiting.limitedHandler(obj, req, res, next)
+      rateLimiting.limitedHandler(obj, req, res, next)
 	  }
 	  obj['handler'] = _a
 	  obj['keyGenerator'] = rateLimiting.keyGen
 	  obj['skip'] = rateLimiting.skipHandler
-	  obj['skipFailedRequests'] = config.skipFails;
-	  if(obj['autoDelays'] === true) {
-		  delete obj['autoDelays'];
-		  let delayAft = Math.round((obj['max'])*0.75);
-		  let delayMs = Math.round((obj['windowMs']/delayAft)*0.65);
-		  obj['delayMs'] = delayMs;
-		  obj['delayAfter'] = delayAft;
+	  obj['skipFailedRequests'] = config.skipFails
+	  if (obj['autoDelays'] === true) {
+		  delete obj['autoDelays']
+		  let delayAft = Math.round((obj['max']) * 0.75)
+		  let delayMs = Math.round((obj['windowMs'] / delayAft) * 0.65)
+		  obj['delayMs'] = delayMs
+		  obj['delayAfter'] = delayAft
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
   }
-  console.log('Loaded ratelimits!');
+  console.log('Loaded ratelimits!')
 }
 
 module.exports = rateLimiting
