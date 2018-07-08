@@ -56,6 +56,19 @@ upload.errorHandler = async function(err) {
 			console.log(err)
 			return;
 		}
+	} else if(typeof(err) === 'string') {
+		if(typeof(_handlers[err]) === 'function') {
+			swal({
+					title: 'Error',
+					text: err,
+					type: 'error',
+					confirmButtonText: 'Ok',
+				 },
+				 function () {
+					_handlers[err]()
+				 })
+			return;
+		}
 	}
 	console.log(err);
 }

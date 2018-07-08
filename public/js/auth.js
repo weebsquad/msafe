@@ -49,6 +49,19 @@ page.errorHandler = async function(err) {
 			console.log(err)
 			return;
 		}
+	} else if(typeof(err) === 'string') {
+		if(typeof(_handlers[err]) === 'function') {
+			swal({
+					title: 'Error',
+					text: err,
+					type: 'error',
+					confirmButtonText: 'Ok',
+				 },
+				 function () {
+					_handlers[err]()
+				 })
+			return;
+		}
 	}
 	console.log(err);
 }
@@ -65,10 +78,11 @@ page.do = function (dest) {
     password: pass
   })
     .then(function (response) {
-      if (response.data.success === false) { return swal('Error', response.data.description, 'error') }
+      if (response.data.success === false) { page.errorHandler(response.data.description); } else {
 
-      localStorage.token = response.data.token
-      window.location = '/dashboard'
+		  localStorage.token = response.data.token
+		  window.location = '/dashboard'
+	  }
     })
     .catch(function (error) {
       page.errorHandler(error);
