@@ -653,8 +653,6 @@ panel.updateAdminPage = function (pw = '') {
 	  //if(item.username === panel.username) continue;
 	 
 	  if(typeof(item.admin) !== 'boolean') item.admin = await panel.isAdmin(item.username);
-	  if(item.admin === true) item.admin = '<i class="fa fa-check fa-2x"></i>';
-	  if(item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>';
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
@@ -685,13 +683,19 @@ panel.updateAdminPage = function (pw = '') {
 							</span>
 						</a>
 	  `;
+	  if(item.admin === true) { 
+		buttons = ''; 
+		item.admin = '<i class="fa fa-check fa-2x"></i>';
+	  }
+	  
+	  if(item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>';
+	  
 	  if(item.username === panel.username) { 
 		item.username = `(self) ${item.username}`;
 		item.enabledisp = '';
 	  }
 	  
-	  if(panel.isAdmin(item.username)) buttons = '';
-
+		
       tr.innerHTML = `
 				<tr>
 					<th>${item.id}</th>
