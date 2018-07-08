@@ -81,16 +81,17 @@ panel.isAdmin = async function(name) {
 
 panel.fetchAdmins = async function() {
 	panel.admins = new Array();
-	return new Promise(function(resolve) {
+	return new Promise(function(resolve, reject) {
 		axios.get('/api/admins').then(function (response) {
 			if (response.data.success === false) {
 				if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
-				else return swal('An error ocurred', response.data.description, 'error')
+				else panel.errorHandler(response.data.description)
 			}
 			response.data.admins.forEach(function(vl) { panel.admins.push(vl); });
 			resolve();
 		}).catch(function(error) {
 			panel.errorHandler(error);
+			reject()
 		});
 	});
 }
