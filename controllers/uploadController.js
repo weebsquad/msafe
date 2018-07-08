@@ -59,23 +59,15 @@ uploadsController.upload = async (req, res, next) => {
 
   const token = req.headers.token || ''
   const user = await db.table('users').where('token', token).first()
-  if (user && (user.enabled === false || user.enabled === 0)) {
-    return res.json({
-      success: false,
-      description: 'This account has been disabled'
-    })
-  }
+  if (user && (user.enabled === false || user.enabled === 0))  return res.status(401).json({ success: false, description: 'This account has been disabled'})
+  
   const albumid = req.headers.albumid || req.params.albumid
 
   if (albumid && user) {
     let test = await db.table('albums')
     const album = await db.table('albums').where({ id: albumid, userid: user.id }).first()
-    if (!album) {
-      return res.json({
-        success: false,
-        description: 'Album doesn\'t exist or it doesn\'t belong to the user'
-      })
-    }
+    if (!album) return res.status(401).json({ success: false, description: 'Album doesn\'t exist or it doesn\'t belong to the user' })
+    
     return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion)
   }
   return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion)
