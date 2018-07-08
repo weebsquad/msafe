@@ -116,6 +116,7 @@ upload.verifyToken = function (token, reloadOnError) {
       return upload.prepareUpload()
     })
     .catch(function (error) {
+	  document.getElementById('authButton2').href = '/auth'
       upload.errorHandler(error)
     })
 }
