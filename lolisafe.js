@@ -1,7 +1,7 @@
 const config = require('./config.js')
 const api = require('./routes/api.js')
 const album = require('./routes/album.js')
-const rateLimiting = require('./routes/ratelimit.js');
+const rateLimiting = require('./routes/ratelimit.js')
 const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
@@ -27,7 +27,7 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 safe.set('view engine', 'handlebars')
 safe.enable('view cache')
 
-rateLimiting.load(safe);
+rateLimiting.load(safe)
 
 safe.use(bodyParser.json({limit: '50mb'}))
 safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))

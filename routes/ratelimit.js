@@ -5,7 +5,8 @@ const RateLimit = require('express-rate-limit')
 const db = require('knex')(config.database)
 const path = require('path')
 
-let rateLimiting = {};
+let rateLimiting = {}
+let userCache = []
 
 rateLimiting.keyGen = async function (req, res) {
   let key = req.ip
@@ -17,26 +18,24 @@ rateLimiting.keyGen = async function (req, res) {
   return key
 }
 
-
-rateLimiting.updateCache = async function(token) {
-	const usr = await db.table('users').where('token', token).first()
-	if(userCache[token] !== usr) userCache[token] = usr;
+rateLimiting.updateCache = async function (token) {
+  const usr = await db.table('users').where('token', token).first()
+  if (userCache[token] !== usr) userCache[token] = usr
 }
 
-let userCache = [];
-rateLimiting.skipHandler = function(req, res) {
+
+rateLimiting.skipHandler = function (req, res) {
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
-    const user = userCache[token];
-	console.log(user);
+    const user = userCache[token]
+    console.log(user)
     if (user !== undefined && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(user.username) > -1))) return true
-	updateCache(token);
+    rateLimiting.updateCache(token)
   }
   return false
 }
 
-
-rateLimiting.limitedHandler = function(options, req, res, next) {
+rateLimiting.limitedHandler = function (options, req, res, next) {
   let retrya = Math.ceil(options.windowMs / 1000)
   if (options.headers) {
     res.setHeader('Retry-After', retrya)
@@ -53,20 +52,18 @@ rateLimiting.limitedHandler = function(options, req, res, next) {
   res.end()
 }
 
-
-rateLimiting.load = function(safe) {
-	for (let key in config.rateLimits) {
+rateLimiting.load = function (safe) {
+  for (let key in config.rateLimits) {
 	  let obj = config.rateLimits[key]
 	  let _a = function (req, res, next) {
-		rateLimiting.limitedHandler(obj, req, res, next)
+      rateLimiting.limitedHandler(obj, req, res, next)
 	  }
 	  obj['handler'] = _a
 	  obj['keyGenerator'] = rateLimiting.keyGen
 	  obj['skip'] = rateLimiting.skipHandler
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	}
+  }
 }
 
-
-module.exports = rateLimiting;
+module.exports = rateLimiting
