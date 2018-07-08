@@ -16,9 +16,6 @@ panel.stringifyError = function (err, filter, space) {
 }
 
 panel.errorHandler = async function (err) {
-	ad();
-	asd();
-	xdd = asf
   const _handlers = {
     'This account has been disabled': function () {
       localStorage.removeItem('token')
@@ -94,14 +91,15 @@ panel.fetchAdmins = async function () {
   return new Promise(function (resolve) {
     axios.get('/api/admins').then(function (response) {
       if (response.data.success === false) {
+		panel.errorHandler(response.data.description);
         resolve()
         return
       }
       response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
       resolve()
     }).catch(function (error) {
-      // panel.errorHandler(error); -- fuck this lol
-      // resolve();
+      panel.errorHandler(error);
+      resolve();
     })
   })
 }
@@ -117,17 +115,7 @@ panel.verifyToken = function (token, reloadOnError = false) {
   })
     .then(function (response) {
       if (response.data.success === false) {
-        swal({
-          title: 'An error ocurred',
-          text: response.data.description,
-          type: 'error'
-        }, function () {
-          if (reloadOnError) {
-            localStorage.removeItem('token')
-            delete axios.defaults.headers.common['token']
-            location.location = '/auth'
-          }
-        })
+		page.errorHandler(response.data.description);
         return
       }
 
