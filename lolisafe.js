@@ -79,6 +79,8 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 
   safe.get('*/:id*/:id2*/:id3', async (req, res, next) => {
     let id = req.params.id
+	let id2 = req.params.id2;
+	let id3 = req.params.id3;
     // Check blacklisted files first
     for (let key in config.whitelistedQueries) {
       let obj = config.whitelistedQueries[key]
