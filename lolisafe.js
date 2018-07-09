@@ -95,6 +95,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Finally handle the actual ID
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
+	console.log(id);
     if (!ex) return res.status(404).sendFile('500.html', { root: './pages/error/' })
 
     res.sendFile(id, { root: _path })
