@@ -77,7 +77,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     res.sendFile(id, { root: _path })
   })
 
-  safe.get('*/:id', async (req, res, next) => {
+  safe.get('*/:id*/:id2*/:id3', async (req, res, next) => {
     let id = req.params.id
     // Check blacklisted files first
     for (let key in config.whitelistedQueries) {
@@ -96,6 +96,8 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
 	console.log(id);
+	console.log(id2);
+	console.log(id3);
     if (!ex) return res.status(404).sendFile('500.html', { root: './pages/error/' })
 
     res.sendFile(id, { root: _path })
