@@ -77,7 +77,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     res.sendFile(id, { root: _path })
   })
 
-  safe.get('/*:id', async (req, res, next) => {
+  safe.get('*/:id', async (req, res, next) => {
     let id = req.params.id
     // Check blacklisted files first
     for (let key in config.whitelistedQueries) {
