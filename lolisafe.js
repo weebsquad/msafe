@@ -97,13 +97,13 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     }
 
     const _path = path.join(__dirname, config.uploads.folder)
-    const url = req.url
+    const host = req.get('host');
     // Check encoding
     const encFile = await db.table('files')
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
     if (encFile) { 
 		id = encFile['name'];
-		res.location(`http://i0.tf/${id}`) 
+		res.setHeader('Location', `${host}/${id}`);
 	}
 
     // Finally handle the actual ID
