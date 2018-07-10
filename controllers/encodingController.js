@@ -36,6 +36,7 @@ encodingController.encode = function (string, version) {
   let encoded = ''
   let sepperator = ''
   let vchar = charmap[version]
+  if (typeof (vchar) !== 'object') return string
   const sepp = vchar['sepperator']
   let prefix = vchar['prefix']
   let suffix = vchar['suffix']
