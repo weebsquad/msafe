@@ -12,6 +12,8 @@ const fs = require('fs')
 const exphbs = require('express-handlebars')
 const safe = express()
 const path = require('path')
+const MimeLookup = require('mime-lookup');
+const mime = new MimeLookup(require('mime-db'));
 
 require('./database/db.js')(db)
 
@@ -39,8 +41,11 @@ if (config.obfuscateClJs) {
   safe.get('/js/:id', async (req, res, next) => {
     const id = req.params.id
     const _p = path.join(__dirname, 'public') + `/js/${id}`
-    if (fs.existsSync(_p)) return res.send(obfuscation.obfuscateFile(_p))
-    res.sendFile(id, { root: path.join(__dirname, 'public') + `/js/` })
+    if (fs.existsSync(_p)) {
+		res.setHeader("Content-Type", mime.lookup(req.url)); // Returning html without this for some reason
+		return res.send(obfuscation.obfuscateFile(_p))
+	}
+    res.status(404).sendFile('404.html', { root: './pages/error/' })
   })
 }
 safe.use('/', express.static('./public'))
