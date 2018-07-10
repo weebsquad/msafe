@@ -102,10 +102,9 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     const encFile = await db.table('files')
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
     if (encFile) { 
-		id = encFile['name']; 
-		console.log(url);
-		const newst = (url.substring(0, url.length - req.params.id.length));
-		//console.log(newst);
+		const newst = (url.substr(0, url.length - id.length));
+		id = encFile['name'];
+		console.log(newst);
 		//res.location(newst) 
 	}
 
