@@ -42,7 +42,6 @@ if (config.obfuscateClJs) {
     const id = req.params.id
     const _p = path.join(__dirname, 'public') + `/js/${id}`
     if (fs.existsSync(_p)) {
-		console.log(mime.lookup(req.url));
       res.setHeader('Content-Type', mime.lookup(req.url))
       return res.send(obfuscation.obfuscateFile(_p))
     }
