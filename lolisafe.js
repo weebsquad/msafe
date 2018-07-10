@@ -35,13 +35,13 @@ safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 if (config.serveFilesWithNode && !config.useAlternateViewing) safe.use('/', express.static(config.uploads.folder))
 
-if(config.obfuscateClJs) {
-	safe.get('/js/:id', async (req, res, next) => {
-		const id = req.params.id
-		const _p = path.join(__dirname, 'public') + `/js/${id}`
-		if(fs.existsSync(_p)) return res.send(obfuscation.obfuscateFile(_p));
-		res.sendFile(id, { root: path.join(__dirname, 'public') + `/js/` });
-	});
+if (config.obfuscateClJs) {
+  safe.get('/js/:id', async (req, res, next) => {
+    const id = req.params.id
+    const _p = path.join(__dirname, 'public') + `/js/${id}`
+    if (fs.existsSync(_p)) return res.send(obfuscation.obfuscateFile(_p))
+    res.sendFile(id, { root: path.join(__dirname, 'public') + `/js/` })
+  })
 }
 safe.use('/', express.static('./public'))
 safe.use('/', album)
@@ -56,7 +56,7 @@ safe.use('/api', api)
 for (let page of config.pages) {
   let root = './pages/'
   if (fs.existsSync(`./pages/custom/${page}.html`)) root = './pages/custom/'
-  
+
   function checkHost (req, res, next) {
     const host = req.get('host')
     const dom = config.domain.split('https://').join('').split('http://').join('')
@@ -84,7 +84,6 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 
   safe.get('*/:id', async (req, res, next) => {
     let id = req.params.id
-
 
     // Check blacklisted files first
     for (let key in config.whitelistedQueries) {

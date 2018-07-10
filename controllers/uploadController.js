@@ -205,10 +205,9 @@ uploadsController.delete = async (req, res) => {
     .where('id', id)
     .where(function () {
       if (!utils.isAdmin(user.username)) this.where('userid', user.id)
-      
     })
     .first()
-  if(!file) return res.json({ success: false, description: 'No file found' })
+  if (!file) return res.json({ success: false, description: 'No file found' })
   try {
     await uploadsController.deleteFile(file.name)
     await db.table('files').where('id', id).del()
