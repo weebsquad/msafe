@@ -105,7 +105,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		id = encFile['name']; 
 		console.log(url);
 		const newst = (url.substring(0, url.length - req.params.id.length));
-		console.log(newst);
+		//console.log(newst);
 		//res.location(newst) 
 	}
 
