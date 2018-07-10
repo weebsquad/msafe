@@ -43,7 +43,7 @@ if (config.obfuscateClJs) {
     const _p = path.join(__dirname, 'public') + `/js/${id}`
     if (fs.existsSync(_p)) {
 		console.log(mime.lookup(req.url));
-      res.setHeader('Content-Type', mime.lookup(req.url)) // Returning html without this for some reason
+      res.setHeader('Content-Type', mime.lookup(req.url))
       return res.send(obfuscation.obfuscateFile(_p))
     }
     res.status(404).sendFile('404.html', { root: './pages/error/' })
