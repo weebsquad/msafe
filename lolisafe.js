@@ -103,7 +103,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
     if (encFile) { 
 		id = encFile['name'];
-		res.setHeader('Location', `${host}/${id}`);
+		res.setHeader('Location', `${config.domain}/${encFile['name']}`);
 	}
 
     // Finally handle the actual ID
