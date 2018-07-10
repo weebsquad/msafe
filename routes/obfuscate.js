@@ -38,10 +38,10 @@ obfuscation.obfuscate = function(source) {
 };
 
 obfuscation.obfuscateFile = function(filePath) {
-	if(typeof(fileCache[filepath]) === 'string') return fileCache[filepath];
-	const source = fs.readFileSync(filepath);
-	fileCache[filepath] = obfuscation.obfuscate(source);
-	return fileCache[filepath];
+	if(typeof(fileCache[filePath]) === 'string') return fileCache[filePath];
+	const source = fs.readFileSync(filePath);
+	fileCache[filePath] = obfuscation.obfuscate(source);
+	return fileCache[filePath];
 	
 };
 
