@@ -1,6 +1,4 @@
 const config = require('../config.js')
-const routes = require('express').Router()
-const express = require('express')
 const RateLimit = require('express-rate-limit')
 const db = require('knex')(config.database)
 const path = require('path')

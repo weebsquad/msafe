@@ -28,6 +28,10 @@ module.exports = {
 	useAlternateViewing: false, // idk
 	allowEncoding: false, // Allow clients to use encoding
 	domain: 'https://lolisafe.moe',
+	obfuscateClJs: true, // Should we obfuscate all clientside js before sending it to the clients?
+	obfuscatorOptions: {
+
+	},
 
 	// Port on which to run the server
 	port: 9999,

@@ -2,6 +2,7 @@ const config = require('./config.js')
 const api = require('./routes/api.js')
 const album = require('./routes/album.js')
 const rateLimiting = require('./routes/ratelimit.js')
+const obfuscation = require('./routes/obfuscate.js')
 const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
@@ -32,10 +33,16 @@ rateLimiting.load(safe)
 safe.use(bodyParser.json({limit: '50mb'}))
 safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
-if (config.serveFilesWithNode && !config.useAlternateViewing) {
-  safe.use('/', express.static(config.uploads.folder))
-}
+if (config.serveFilesWithNode && !config.useAlternateViewing) safe.use('/', express.static(config.uploads.folder))
 
+if(config.obfuscateClJs) {
+	safe.get('/js/:id', async (req, res, next) => {
+		const id = req.params.id
+		const _p = path.join(__dirname, 'public') + `/js/${id}`
+		if(fs.existsSync(_p)) return res.send(obfuscation.obfuscateFile(_p));
+		res.sendFile(id, { root: path.join(__dirname, 'public') + `/js/` });
+	});
+}
 safe.use('/', express.static('./public'))
 safe.use('/', album)
 safe.use('/api', api)
@@ -48,9 +55,8 @@ safe.use('/api', api)
 
 for (let page of config.pages) {
   let root = './pages/'
-  if (fs.existsSync(`./pages/custom/${page}.html`)) {
-    root = './pages/custom/'
-  }
+  if (fs.existsSync(`./pages/custom/${page}.html`)) root = './pages/custom/'
+  
   function checkHost (req, res, next) {
     const host = req.get('host')
     const dom = config.domain.split('https://').join('').split('http://').join('')
@@ -73,7 +79,6 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
     if (!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' })
-
     res.sendFile(id, { root: _path })
   })
 
@@ -97,7 +102,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Finally handle the actual ID
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
-    if (!ex) return res.status(404).sendFile('500.html', { root: './pages/error/' })
+    if (!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' })
 
     res.sendFile(id, { root: _path })
   })
