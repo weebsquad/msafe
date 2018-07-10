@@ -23,7 +23,7 @@ obfuscation.configGen = function (options) {
 
 obfuscation.fetchOptions = function () {
   let _h = config.obfuscatorOptions
-  _h = configGen(_h)
+  _h = obfuscation.configGen(_h)
   return _h
 }
 
