@@ -103,9 +103,9 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
     if (encFile) { 
 		id = encFile['name']; 
-		const newst = (url.substring(0, url.length - req.params.id.length)) + id;
+		const newst = (url.substring(0, url.length - req.params.id.length));
 		console.log(newst);
-		res.location(newst) 
+		//res.location(newst) 
 	}
 
     // Finally handle the actual ID
