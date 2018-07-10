@@ -97,11 +97,11 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     }
 
     const _path = path.join(__dirname, config.uploads.folder)
-	const url = request.req.url;
+    const url = request.req.url
     // Check encoding
     const encFile = await db.table('files')
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
-    if (encFile) { id = encFile['name']; res.location((url.substring(0, url.length-req.params.id.length)) + id); }
+    if (encFile) { id = encFile['name']; res.location((url.substring(0, url.length - req.params.id.length)) + id) }
 
     // Finally handle the actual ID
     const file = `${_path}/${id}`
