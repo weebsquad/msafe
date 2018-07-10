@@ -97,7 +97,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     }
 
     const _path = path.join(__dirname, config.uploads.folder)
-    const url = request.req.url
+    const url = req.url
     // Check encoding
     const encFile = await db.table('files')
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
