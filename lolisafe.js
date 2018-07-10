@@ -101,10 +101,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Check encoding
     const encFile = await db.table('files')
       .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
-    if (encFile) { 
-		id = encFile['name'];
-		res.location('/');
-	}
+    if (encFile) id = encFile['name'];
 
     // Finally handle the actual ID
     const file = `${_path}/${id}`
