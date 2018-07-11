@@ -8,7 +8,7 @@ const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const RateLimit = require('express-rate-limit')
-let db
+const db = require('knex')(config.database)
 const fs = require('fs')
 const exphbs = require('express-handlebars')
 const safe = express()
@@ -16,7 +16,7 @@ const path = require('path')
 const MimeLookup = require('mime-lookup')
 const mime = new MimeLookup(require('mime-db'))
 
-require('./database/db.js')(db)
+
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
@@ -117,7 +117,7 @@ safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pag
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }))
 
 let init = async function() {
-	db = await require('knex')(config.database)
+	await require('./database/db.js')(db)
 	const _path = path.join(__dirname, config.uploads.folder)
 	// s3.initialize(_path);
 	safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
