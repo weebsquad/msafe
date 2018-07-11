@@ -13,7 +13,8 @@ let init = async function(db){
 		table.integer('zipGeneratedAt');
 	}).then(() => {});
 
-	db.schema.createTableIfNotExists('files', function (table) {
+	_ex = await db.schema.hasTable('files')
+	if(!_ex) db.schema.createTableIfNotExists('files', function (table) {
 		table.increments();
 		table.integer('userid');
 		table.string('name');
@@ -27,8 +28,9 @@ let init = async function(db){
 		table.integer('encodeVersion');
 		table.string('encodedString');
 	}).then(() => {});
-
-	db.schema.createTableIfNotExists('users', function (table) {
+	
+	_ex = await db.schema.hasTable('users')
+	if(!_ex) db.schema.createTableIfNotExists('users', function (table) {
 		table.increments();
 		table.string('username');
 		table.string('password');
