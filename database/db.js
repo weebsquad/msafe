@@ -2,7 +2,7 @@ let init = async function(db){
 
 	// Create the tables we need to store galleries and files
 	let _ex = await db.schema.hasTable('albums')
-	if(_ex) db.schema.createTable('albums', function (table) {
+	if(!_ex) db.schema.createTable('albums', function (table) {
 		table.increments();
 		table.integer('userid');
 		table.string('name');
