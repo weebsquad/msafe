@@ -36,8 +36,8 @@ s3.enabledCheck = function() {
 s3.test = function(bucket) {
 	if(!s3.enabledCheck()) return;
 	var params = {
-		Bucket: bucket,
-		bucket: bucket,
+		Bucket: 'metalruller',
+		bucket: 'metalruller',
 		maxkeys: 0,
 		MaxKeys: 0,
 	};
