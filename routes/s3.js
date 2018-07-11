@@ -39,6 +39,7 @@ s3.test = function(bucket) {
 		Bucket: bucket,
 		MaxKeys: 0,
 	};
+	console.log(_opts);
 	try {
 	s3.client.listObjects(_opts, function(err, data) {
 		if (err) console.log(err, err.stack); // an error occurred
