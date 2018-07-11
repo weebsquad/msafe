@@ -31,15 +31,31 @@ s3.enabledCheck = function() {
 };
 
 
+
+
+s3.test = function(bucket) {
+	if(!s3.enabledCheck()) return;
+	const _opts = {
+		bucket: bucket,
+		MaxKeys: 0,
+	};
+	s3.client.listObjects(_opts, function(err, data) {
+		if (err) console.log(err, err.stack); // an error occurred
+		else     console.log(data);
+	});
+};
+
+
+
+
+
+
 s3.initialize = function() {
 	if(!s3.enabledCheck()) return;
 	s3['client'] = libs3.createClient(clientOpts);
 	s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey);
 	console.log(s3);
-};
-
-s3.test = function() {
-	if(!s3.enabledCheck()) return;
+	s3.test(optionsS3.bucket);
 };
 
 module.exports = s3;
