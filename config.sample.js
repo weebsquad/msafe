@@ -28,6 +28,18 @@ module.exports = {
 	useAlternateViewing: false, // idk
 	allowEncoding: false, // Allow clients to use encoding
 	domain: 'https://lolisafe.moe',
+	
+	/*
+		S3 Options
+	*/
+	s3: {
+		use: false,
+		accessKey: '',
+		secretAccessKey: '',
+		region: 'eu-west-2',
+		bucket: 'metalruller'
+	},
+	
 	obfuscateClJs: false, // Should we obfuscate all clientside js before sending it to the clients?
 	obfuscatorOptions: {
 

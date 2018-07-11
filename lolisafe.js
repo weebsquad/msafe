@@ -3,6 +3,7 @@ const api = require('./routes/api.js')
 const album = require('./routes/album.js')
 const rateLimiting = require('./routes/ratelimit.js')
 const obfuscation = require('./routes/obfuscate.js')
+const s3 = require('./routes/s3.js');
 const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
@@ -115,4 +116,5 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }))
 
+s3.initialize();
 safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
