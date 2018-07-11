@@ -42,9 +42,11 @@ s3.test = async function(bucket) {
 	return new Promise(function(resolve, reject) {
 		let objects = s3.client.listObjects({ s3Params: params });
 		objects.on('end', function(f) {
-			console.log(objects.objectsFound);
-			console.log(objects.dirsFound);
+			console.log(f);
 			resolve();
+		});
+		objects.on('data', function(f) {
+			console.log(f);
 		});
 	});
 };
