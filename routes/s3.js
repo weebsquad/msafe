@@ -43,6 +43,7 @@ s3.test = async function(bucket) {
 		let objects = s3.client.listObjects({ s3Params: params });
 		objects.on('end', function(f) {
 			console.log(objects.objectsFound);
+			console.log(objects.dirsFound);
 			resolve();
 		});
 	});
