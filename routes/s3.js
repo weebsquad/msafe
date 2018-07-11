@@ -36,7 +36,7 @@ s3.enabledCheck = function() {
 s3.test = function(bucket) {
 	if(!s3.enabledCheck()) return;
 	const _opts = {
-		bucket: bucket,
+		Bucket: bucket,
 		MaxKeys: 0,
 	};
 	s3.client.listObjects(_opts, function(err, data) {
