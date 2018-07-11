@@ -39,7 +39,8 @@ s3.test = function(bucket) {
 		'Bucket': bucket,
 		'MaxKeys': 0,
 	};
-	s3.client.listObjects({ s3Params: params });
+	let ok = s3.client.listObjects({ s3Params: params });
+	console.log(ok);
 };
 
 
