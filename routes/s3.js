@@ -41,7 +41,7 @@ s3.test = function(bucket) {
 		maxkeys: 0,
 		MaxKeys: 0,
 	};
-	s3lib.listObjects(params, function(err, data) {
+	libs3.listObjects(params, function(err, data) {
 		if (err) console.log(err, err.stack); // an error occurred
 		else     console.log(data);
 	});
