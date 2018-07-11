@@ -16,6 +16,7 @@ const clientOpts = {
     secretAccessKey: optionsS3.secretAccessKey,
     region: optionsS3.region,
 	signatureVersion: 'v2',
+	s3DisableBodySigning: true,
     // endpoint: 's3.yourdomain.com',
     // sslEnabled: false
     // any other options are passed to new AWS.S3()
