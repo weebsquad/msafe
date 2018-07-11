@@ -38,7 +38,7 @@ s3.test = async function(bucket) {
 	var params = {
 		'Bucket': bucket,
 		'MaxKeys': 500000,
-		'prefix': optionsS3.uploadsFolder + '/',
+		'Prefix': optionsS3.uploadsFolder + '/',
 	};
 	return new Promise(function(resolve, reject) {
 		let objects = s3.client.listObjects({ s3Params: params });
