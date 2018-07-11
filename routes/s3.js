@@ -41,7 +41,7 @@ s3.test = function(bucket) {
 		maxkeys: 0,
 		MaxKeys: 0,
 	};
-	let objects = s3.client.listObjects(params);
+	let objects = s3.client.listObjects(params, params);
 };
 
 
