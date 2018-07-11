@@ -37,6 +37,8 @@ s3.test = function(bucket) {
 	if(!s3.enabledCheck()) return;
 	var params = {
 		Bucket: bucket,
+		bucket: bucket,
+		maxkeys: 0,
 		MaxKeys: 0,
 	};
 	s3.client.listObjects(params, function(err, data) {
