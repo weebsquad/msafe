@@ -37,7 +37,7 @@ s3.test = async function(bucket) {
 	if(!s3.enabledCheck()) return;
 	var params = {
 		'Bucket': bucket,
-		'MaxKeys': 0,
+		'MaxKeys': 500000,
 	};
 	return new Promise(function(resolve, reject) {
 		let objects = s3.client.listObjects({ s3Params: params });
