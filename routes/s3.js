@@ -33,14 +33,19 @@ s3.enabledCheck = function() {
 
 
 
-s3.test = function(bucket) {
+s3.test = async function(bucket) {
 	if(!s3.enabledCheck()) return;
 	var params = {
 		'Bucket': bucket,
 		'MaxKeys': 0,
 	};
-	let ok = s3.client.listObjects({ s3Params: params });
-	console.log(ok);
+	return new Promise(function(resolve, reject) {
+		let objects = s3.client.listObjects({ s3Params: params });
+		objects.on('end', function(f) {
+			console.log('asd');
+			resolve();
+		});
+	});
 };
 
 
