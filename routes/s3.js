@@ -41,3 +41,5 @@ s3.initialize = function() {
 s3.test = function() {
 	if(s3.enabledCheck) return;
 };
+
+module.exports = s3;
