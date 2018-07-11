@@ -16,8 +16,6 @@ const path = require('path')
 const MimeLookup = require('mime-lookup')
 const mime = new MimeLookup(require('mime-db'))
 
-
-
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
 fs.existsSync('./' + config.uploads.folder) || fs.mkdirSync('./' + config.uploads.folder)
@@ -116,10 +114,10 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }))
 
-let init = async function() {
-	await require('./database/db.js')(db)
-	const _path = path.join(__dirname, config.uploads.folder)
-	// s3.initialize(_path);
-	safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
+let init = async function () {
+  await require('./database/db.js')(db)
+  const _path = path.join(__dirname, config.uploads.folder)
+  // s3.initialize(_path);
+  safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
 }
-init();
+init()
