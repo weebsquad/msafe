@@ -34,7 +34,6 @@ s3.enabledCheck = function() {
 
 
 s3.getFiles = async function(bucket) {
-	if(!s3.enabledCheck()) return;
 	var params = {
 		'Bucket': bucket,
 		'MaxKeys': 999999999,
@@ -54,10 +53,44 @@ s3.getFiles = async function(bucket) {
 				flnew.push(vl);
 			});
 		});
+		objects.on('error', function(err) {
+			reject(err);
+		});
 	});
 };
 
 
+s3.uploadFile = async function(bucket, fileName, localPath ) {
+	return new Promise(function(resolve, reject) {
+		let params = {
+		  localFile: localPath,
+
+		  s3Params: {
+			Bucket: bucket,
+			Key: `${optionsS3.uploadsFolder}/${fileName}`,
+		  },
+		};
+		let uploader = client.uploadFile(params);
+		uploader.on('error', function(err) {
+		  console.error("unable to upload:", err.stack);
+		  reject(err);
+		});
+		uploader.on('end', function() {
+		  console.log("done uploading");
+		  resolve();
+		});
+	});
+};
+
+s3.convertFile = async function(bucket, localPath) {
+	return new Promise(function(resolve, reject) {
+		const fileName = localPath.split('.').reverse().splice(1).reverse().join('.');
+		s3.uploadFile(bucket, fileName, localPath).then(() => {
+			//fs.unlinkSync(localPath);
+			resolve();
+		}).catch(e => { reject(e); });
+	});
+};
 
 
 
@@ -67,7 +100,7 @@ s3.initialize = async function() {
 	s3['client'] = libs3.createClient(clientOpts);
 	s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey);
 	await s3.getFiles(optionsS3.bucket);
-	console.log(s3.files);
+	s3.uploadFile(optionsS3.bucket, 'ZyROE.png', '/opt/lolisafe/uploads/ZyROE.png');
 };
 
 module.exports = s3;
