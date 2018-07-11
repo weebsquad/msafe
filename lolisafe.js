@@ -8,7 +8,7 @@ const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const RateLimit = require('express-rate-limit')
-const db = await require('knex')(config.database)
+let db
 const fs = require('fs')
 const exphbs = require('express-handlebars')
 const safe = express()
@@ -116,6 +116,10 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
 safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }))
 
-const _path = path.join(__dirname, config.uploads.folder)
-// s3.initialize(_path);
-safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
+let init = async function() {
+	db = await require('knex')(config.database)
+	const _path = path.join(__dirname, config.uploads.folder)
+	// s3.initialize(_path);
+	safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
+}
+init();
