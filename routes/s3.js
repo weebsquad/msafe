@@ -70,7 +70,7 @@ s3.uploadFile = async function(bucket, fileName, localPath ) {
 			Key: `${optionsS3.uploadsFolder}/${fileName}`,
 		  },
 		};
-		let uploader = client.uploadFile(params);
+		let uploader = s3.client.uploadFile(params);
 		uploader.on('error', function(err) {
 		  console.error("unable to upload:", err.stack);
 		  reject(err);
