@@ -33,21 +33,26 @@ s3.enabledCheck = function() {
 
 
 
-s3.test = async function(bucket) {
+s3.getFiles = async function(bucket) {
 	if(!s3.enabledCheck()) return;
 	var params = {
 		'Bucket': bucket,
-		'MaxKeys': 500000,
+		'MaxKeys': 999999999,
 		'Prefix': optionsS3.uploadsFolder + '/',
 	};
 	return new Promise(function(resolve, reject) {
+		let flnew = new Array();
 		let objects = s3.client.listObjects({ s3Params: params });
 		objects.on('end', function(f) {
-			console.log(f);
+			s3['files'] = flnew;
 			resolve();
 		});
 		objects.on('data', function(f) {
-			console.log(f);
+			const contents = f['Contents'];
+			contents.forEach(function(vl) {
+				if(vl.Key === optionsS3.uploadsFolder + '/') return;
+				flnew.push(vl);
+			});
 		});
 	});
 };
@@ -57,12 +62,12 @@ s3.test = async function(bucket) {
 
 
 
-s3.initialize = function() {
+s3.initialize = async function() {
 	if(!s3.enabledCheck()) return;
 	s3['client'] = libs3.createClient(clientOpts);
 	s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey);
-	console.log(s3);
-	s3.test(optionsS3.bucket);
+	await s3.getFiles(optionsS3.bucket);
+	console.log(s3.files);
 };
 
 module.exports = s3;
