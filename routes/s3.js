@@ -27,6 +27,7 @@ let s3 = {};
 
 s3.enabledCheck = function() {
 	if(optionsS3.use !== true || optionsS3.accessKey === '' || optionsS3.secretAccessKey === '') return false;
+	console.log('ya');
 	return true;
 };
 
