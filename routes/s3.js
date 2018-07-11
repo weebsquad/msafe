@@ -15,7 +15,6 @@ const clientOpts = {
     accessKeyId: optionsS3.accessKey,
     secretAccessKey: optionsS3.secretAccessKey,
     region: optionsS3.region,
-	bucket: optionsS3.bucket,
     // endpoint: 's3.yourdomain.com',
     // sslEnabled: false
     // any other options are passed to new AWS.S3()
@@ -36,11 +35,11 @@ s3.enabledCheck = function() {
 
 s3.test = function(bucket) {
 	if(!s3.enabledCheck()) return;
-	const _opts = {
+	var params = {
 		Bucket: bucket,
 		MaxKeys: 0,
 	};
-	s3.client.listObjects(_opts, function(err, data) {
+	s3.client.listObjects(params, function(err, data) {
 		if (err) console.log(err, err.stack); // an error occurred
 		else console.log(data);
 	});
