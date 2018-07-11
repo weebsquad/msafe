@@ -26,21 +26,20 @@ let s3 = {};
 
 
 s3.enabledCheck = function() {
-	console.log('ya');
 	if(optionsS3.use !== true || optionsS3.accessKey === '' || optionsS3.secretAccessKey === '') return false;
 	return true;
 };
 
 
 s3.initialize = function() {
-	if(s3.enabledCheck) return;
+	if(s3.enabledCheck()) return;
 	s3['client'] = s3.createClient(clientOpts);
 	s3['url'] = s3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey);
 	console.log(s3);
 };
 
 s3.test = function() {
-	if(s3.enabledCheck) return;
+	if(s3.enabledCheck()) return;
 };
 
 module.exports = s3;
