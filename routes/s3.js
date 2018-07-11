@@ -98,13 +98,12 @@ s3.convertFile = async function(bucket, localPath) {
 
 
 
-s3.initialize = async function() {
+s3.initialize = async function(upldir) {
 	if(!s3.enabledCheck()) return;
-	const _path = path.join(__dirname, config.uploads.folder);
 	s3['client'] = libs3.createClient(clientOpts);
 	s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey);
 	await s3.getFiles(optionsS3.bucket);
-	s3.uploadFile(optionsS3.bucket, 'ZyROE.png', _path + '/ZyROE.png');
+	s3.uploadFile(optionsS3.bucket, 'ZyROE.png', upldir + '/ZyROE.png');
 };
 
 module.exports = s3;
