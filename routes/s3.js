@@ -137,10 +137,11 @@ s3.deleteFiles = async function(bucket, files) {
 		}
 	});
     let params = {
-		Delete: flnew,
+		Delete: {
+			Objects: flnew,
+			Quiet: false,
+		},
 		Bucket: bucket,
-		Objects: flnew,
-		Quiet: false,
     }
 	console.log(params);
     let deleter = s3.client.deleteObjects(params)
