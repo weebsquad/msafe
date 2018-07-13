@@ -28,6 +28,7 @@ const clientOpts = {
   }
 }
 var awsS3Client = new AWS.S3(clientOpts['s3Options']);
+console.log(awsS3Client);
 
 let s3 = {}
 
@@ -76,9 +77,6 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 			Body: fs.createReadStream(localPath),
 			ServerSideEncryption: 'AES256',
 			Expires: yearfromnow,
-			accessKeyId: optionsS3.accessKey,
-			secretAccessKey: optionsS3.secretAccessKey,
-			region: optionsS3.region,
 			//ContentType: 'application/octet-stream',
 	    }
     }
