@@ -43,12 +43,12 @@ utilsController.generateThumbs = async function (file, basedomain) {
 
   async function tryS3(_extension) {
 	  if(s3.enabledCheck()) {
-		let extt = `${_extension}`;
-		if(utilsController.videoExtensions.includes(extt)) extt = '.png';
-		let fn = file.name.split(_extension)[0]
-		console.log(fn);
+		let extt = `.${_extension}`;
 		console.log(extt);
+		if(utilsController.videoExtensions.includes(_extension)) extt = '.png';
+		let fn = file.name.split(_extension)[0]
 		fn = `${fn}${extt}`;
+		console.log(fn);
 		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
 		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
 		let tries = 0;
@@ -75,7 +75,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           })
           .on('error', error => console.log('Error - ', error.message))
 		  .on('end', function() {
-			tryS3('png');
+			tryS3('.png');
 		  });
       } else {
         let size = {
