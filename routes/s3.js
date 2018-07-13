@@ -3,7 +3,7 @@ const fs = require('fs')
 const libs3 = require('s3')
 const db = require('knex')(config.database)
 const path = require('path')
-//const AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 
 
 const optionsS3 = config.s3
