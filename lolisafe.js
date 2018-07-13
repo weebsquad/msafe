@@ -105,6 +105,8 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Finally handle the actual ID
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
+	
+	// Handle S3
 	let _s3 = false;
     if (!ex) {
 		if(s3.enabledCheck()) {
