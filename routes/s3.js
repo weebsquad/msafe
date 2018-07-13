@@ -65,7 +65,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 
 		s3Params: {
 			Bucket: bucket,
-			Key: `/${optionsS3.uploadsFolder}/${fileName}`,
+			Key: `${optionsS3.uploadsFolder}/${fileName}`,
 			ACL: 'public-read',
 			Body: fs.createReadStream(localPath),
 	    }
