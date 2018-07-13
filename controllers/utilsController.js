@@ -41,11 +41,11 @@ utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
 
-  async function tryS3(gif = false) {
+  async function tryS3(_extension) {
 	  if(s3.enabledCheck()) {
-		let extt = `${ext}`;
-		if(gif || utilsController.videoExtensions.includes(extt)) extt = '.png';
-		let fn = file.name.split(ext).join('');
+		let extt = `${_extension}`;
+		if(utilsController.videoExtensions.includes(extt)) extt = '.png';
+		let fn = file.name.split(_extension).join('');
 		console.log(fn);
 		console.log(extt);
 		fn = `${fn}${extt}`;
@@ -59,8 +59,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 			}
 			tries++;
 			if(tries > 20) clearInterval(interv);
-		}, 50);
-			
+		}, 50);	
 	}
   }
   let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
@@ -76,7 +75,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           })
           .on('error', error => console.log('Error - ', error.message))
 		  .on('end', function() {
-			tryS3(true);
+			tryS3(ext);
 		  });
       } else {
         let size = {
@@ -90,7 +89,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           .background('transparent')
           .write(thumbname, error => {
             if (error) return console.log('Error - ', error)
-			tryS3();
+			tryS3(ext);
           })
       }
     }
