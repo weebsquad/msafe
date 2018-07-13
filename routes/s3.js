@@ -16,7 +16,8 @@ const clientOpts = {
     secretAccessKey: optionsS3.secretAccessKey,
     region: optionsS3.region,
     signatureVersion: 'v4',
-    s3DisableBodySigning: true
+    s3DisableBodySigning: true,
+	s3ForcePathStyle: true,
     // endpoint: 's3.yourdomain.com',
     // sslEnabled: false
     // any other options are passed to new AWS.S3()
@@ -60,12 +61,14 @@ s3.getFiles = async function (bucket) {
 s3.uploadFile = async function (bucket, fileName, localPath) {
   return new Promise(function (resolve, reject) {
     let params = {
-		  localFile: localPath,
+		localFile: localPath,
 
-		  s3Params: {
-        Bucket: bucket,
-        Key: `/${optionsS3.uploadsFolder}/${fileName}`
-		  }
+		s3Params: {
+			Bucket: bucket,
+			Key: `/${optionsS3.uploadsFolder}/${fileName}`,
+			ACL: 'public-read',
+			Body: fs.createReadStream(localPath),
+	    }
     }
     console.log(params)
     let uploader = s3.client.uploadFile(params)
