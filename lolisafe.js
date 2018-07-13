@@ -117,7 +117,7 @@ safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pag
 let init = async function () {
   await require('./database/db.js')(db)
   const _path = path.join(__dirname, config.uploads.folder)
-  // s3.initialize(_path);
+  await s3.initialize(_path);
   safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
 }
 init()
