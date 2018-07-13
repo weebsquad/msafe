@@ -57,6 +57,7 @@ s3.getFiles = async function (bucket) {
       })
     })
     objects.on('error', function (err) {
+	  console.error(err);
       reject(err)
     })
   })
