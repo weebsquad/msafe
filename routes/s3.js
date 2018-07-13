@@ -62,7 +62,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
   return new Promise(function (resolve, reject) {
 	const yearfromnow = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
     let params = {
-		//localFile: localPath,
+		localFile: localPath,
 
 		s3Params: {
 			Bucket: bucket,
