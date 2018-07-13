@@ -7,6 +7,8 @@ const crypto = require('crypto')
 const fs = require('fs')
 const utils = require('./utilsController.js')
 const encoding = require('./encodingController')
+const s3 = require('../routes/s3.js');
+console.log(s3);
 
 const uploadsController = {}
 
@@ -222,7 +224,6 @@ uploadsController.delete = async (req, res) => {
 }
 
 uploadsController.deleteFile = function (file) {
-	console.log(file);
   const ext = path.extname(file).toLowerCase()
   return new Promise((resolve, reject) => {
     fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
