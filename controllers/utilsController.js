@@ -49,7 +49,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		let interv = setInterval(function() {
 			if(fs.existsSync(_thumbs)) {
 				clearInterval(interv);
-				setTimeout(function() { await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs); }, 200);
+				setTimeout(async function() { await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs); }, 200);
 			}
 			tries++;
 			if(tries > 20) clearInterval(interv);
