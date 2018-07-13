@@ -27,10 +27,11 @@ const clientOpts = {
     // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
   }
 }
-var awsS3Client = new AWS.S3(clientOpts['s3Options']);
-console.log(awsS3Client);
+
+
 
 let s3 = {}
+s3.awsS3Client = new AWS.S3(clientOpts['s3Options']);
 
 s3.enabledCheck = function () {
   if (optionsS3.use !== true || optionsS3.accessKey === '' || optionsS3.secretAccessKey === '') return false
@@ -106,8 +107,9 @@ s3.convertFile = async function (bucket, localPath) {
 s3.initialize = async function (upldir) {
   if (!s3.enabledCheck()) return
   delete clientOpts['s3Options'];
-  clientOpts['s3Client'] = awsS3Client;
+  clientOpts['s3Client'] = s3.awsS3Client;
   s3['client'] = libs3.createClient(clientOpts)
+  console.log(s3.client);
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey)
   await s3.getFiles(optionsS3.bucket)
   console.log('fetched files!');
