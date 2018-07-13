@@ -60,14 +60,18 @@ s3.getFiles = async function (bucket) {
 
 s3.uploadFile = async function (bucket, fileName, localPath) {
   return new Promise(function (resolve, reject) {
+	const yearfromnow = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
     let params = {
 		//localFile: localPath,
 
 		s3Params: {
 			Bucket: bucket,
-			Key: `${optionsS3.uploadsFolder}/${fileName}`,
+			Key: `${fileName}`,
 			ACL: 'public-read',
 			Body: fs.createReadStream(localPath),
+			ServerSideEncryption: 'AES256',
+			Expires: yearfromnow,
+			
 	    }
     }
     console.log(params)
