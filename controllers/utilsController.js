@@ -45,7 +45,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 	  if(s3.enabledCheck(gif = false)) {
 		let extt = ext;
 		if(gif) extt = 'png';
-		let fn = file.name.split(ext);
+		let fn = file.name.split(ext).join('');
 		console.log(fn);
 		fn = `${fn}.${extt}`;
 		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
