@@ -105,8 +105,8 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Finally handle the actual ID
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
+	let _s3 = false;
     if (!ex) {
-		let _s3 = false;
 		if(s3.enabledCheck()) {
 			let _testex = await s3.fileExists(config.s3.bucket, id);
 			if(_testex) {
@@ -117,7 +117,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		if(!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
 	}
 
-    res.sendFile(id, { root: _path })
+    if(!_s3) res.sendFile(id, { root: _path })
   })
 }
 
