@@ -42,14 +42,17 @@ utilsController.generateThumbs = async function (file, basedomain) {
   const ext = path.extname(file.name).toLowerCase()
 
   async function tryS3() {
-	  if(s3.enabledCheck()) {
-		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
+	  if(s3.enabledCheck(gif)) {
+		let extt = ext;
+		if(gif) extt = 'png';
+		let fn = file.name.split(ext).join(extt);
+		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
 		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
 		let tries = 0;
 		let interv = setInterval(function() {
 			if(fs.existsSync(_thumbs)) {
 				clearInterval(interv);
-				setTimeout(async function() { await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs); }, 200);
+				setTimeout(async function() { await s3.uploadFile(s3.options.bucket, `thumbs/${fn}`, _thumbs); }, 25);
 			}
 			tries++;
 			if(tries > 20) clearInterval(interv);
