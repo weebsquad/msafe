@@ -44,9 +44,17 @@ utilsController.generateThumbs = async function (file, basedomain) {
   async function tryS3() {
 	  if(s3.enabledCheck()) {
 		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
-		console.log(_thumbs);
 		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
-		await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs);
+		let tries = 0;
+		let interv = setInterval(function() {
+			if(fs.existsSync(_thumbs)) {
+				clearInterval(interv);
+				setTimeout(function() { await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs); }, 200);
+			}
+			tries++;
+			if(tries > 20) clearInterval(interv);
+		}, 50);
+			
 	}
   }
   let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
@@ -62,7 +70,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           })
           .on('error', error => console.log('Error - ', error.message))
 		  .on('end', function() {
-			setTimeout(function() { tryS3(); }, 500);
+			tryS3();
 		  });
       } else {
         let size = {
