@@ -716,7 +716,7 @@ panel.updateAdminPage = function (pw = '') {
 	  if (item.enabled === false) item.enabledisp = '<i class="fa fa-check fa-2x"></i>'
 	  if (item.enabled === true) item.enabledisp = '<i class="fa fa-times-circle fa-2x"></i>'
 	  let enableButton = `
-	  <a class="button is-small ${disableButtonType} is-outlined is-rounded" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
+	  <a class="button ${disableButtonType}" title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
 		<span class="icon is-small">
 		${item.enabledisp}
 		</span>
