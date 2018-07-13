@@ -71,6 +71,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
   })
   if(s3.enabledCheck()) {
 	  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs');
+	  console.log(_thumbs);
 	  //s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
 	  await s3.uploadFile(s3.options.bucket, `thumbs/${file}`, _thumbs);
   }
