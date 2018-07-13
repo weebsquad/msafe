@@ -47,6 +47,7 @@ s3.getFiles = async function (bucket) {
     'MaxKeys': 999999999,
     'Prefix': optionsS3.uploadsFolder + '/'
   }
+  params['s3Params'] = params;
   return new Promise(function (resolve, reject) {
     let flnew = new Array()
     let objects = s3.client.listObjects({ s3Params: params })
