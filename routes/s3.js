@@ -138,7 +138,8 @@ s3.proxyPipe = async function(req, res, next, fileId) {
 	setTimeout(function() {
 		ports.slice(1);
 	}, 1000*60*5);
-	const _url = `${s3.url}/${fileId}`;
+	let _url = `${s3.url}/${fileId}`;
+	_url = _url.split('https://').join('http://');
 	console.log(_url);
 	http.createServer(function(req, res) {
 		res.setHeader("content-disposition", `attachment; filename=${fileId}`);
