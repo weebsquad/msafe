@@ -40,12 +40,12 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
-
+	console.log(ext);
   async function tryS3(_extension) {
 	  if(s3.enabledCheck()) {
 		let extt = `${_extension}`;
 		console.log(extt);
-		if(utilsController.videoExtensions.includes(_extension)) extt = '.png';
+		if(utilsController.videoExtensions.indexOf(_extension) > -1) extt = '.png';
 		let fn = file.name.split(_extension)[0]
 		fn = `${fn}${extt}`;
 		console.log(fn);
@@ -89,7 +89,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           .background('transparent')
           .write(thumbname, error => {
             if (error) return console.log('Error - ', error)
-			tryS3('.png');
+			tryS3(ext);
           })
       }
     }
