@@ -83,7 +83,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 			//ContentType: 'application/octet-stream',
 	    }
     }
-    console.log(params)
+   // console.log(params)
     let uploader = s3.client.uploadFile(params)
     uploader.on('error', function (err) {
 		  console.error('unable to upload:', err.stack)
@@ -136,14 +136,15 @@ s3.deleteFiles = async function(bucket, files) {
 			flnew.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` });
 		}
 	});
-    let params = {
+    const params = {
 		Delete: {
 			Objects: flnew,
 			Quiet: false,
 		},
 		Bucket: bucket,
     }
-	console.log(params);
+	console.log(s3.files.length);
+	//console.log(params);
     let deleter = s3.client.deleteObjects(params)
     deleter.on('error', function (err) {
 		  console.error('unable to delete:', err.stack)
@@ -151,7 +152,14 @@ s3.deleteFiles = async function(bucket, files) {
     })
     deleter.on('end', function () {
 		  console.log('done deleting')
-		  
+		  //await s3.getFiles()
+		  for(var i = 0; i < s3.files.length; i++) {
+			  let vl = s3.files[i];
+			  flnew.forEach(function(vl2) {
+				  if(vl['Key'] === vl2['Key']) s3.files.splice(i);
+			  });
+		  }
+		  console.log(s3.files.length);
 		  resolve(true)
     })
   })
