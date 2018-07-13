@@ -27,7 +27,7 @@ const clientOpts = {
     // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
   }
 }
-var awsS3Client = new AWS.S3(clientOpts['s3Options']));
+var awsS3Client = new AWS.S3(clientOpts['s3Options']);
 
 let s3 = {}
 
