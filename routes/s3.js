@@ -108,8 +108,9 @@ s3.initialize = async function (upldir) {
   if (!s3.enabledCheck()) return
   delete clientOpts['s3Options'];
   clientOpts['s3Client'] = s3.awsS3Client;
+  console.log(clientOpts);
   s3['client'] = libs3.createClient(clientOpts)
-  console.log(s3.client.s3.config);
+  //console.log(s3.client.s3.config);
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.secretAccessKey)
   await s3.getFiles(optionsS3.bucket)
   console.log('fetched files!');
