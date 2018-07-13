@@ -61,7 +61,7 @@ s3.getFiles = async function (bucket) {
 s3.uploadFile = async function (bucket, fileName, localPath) {
   return new Promise(function (resolve, reject) {
     let params = {
-		localFile: localPath,
+		//localFile: localPath,
 
 		s3Params: {
 			Bucket: bucket,
