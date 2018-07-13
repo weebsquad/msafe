@@ -109,7 +109,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 		let _s3 = false;
 		if(s3.enabledCheck()) {
 			_s3 = true;
-			let _testex = s3.fileExists(config.s3.bucket, id);
+			let _testex = await s3.fileExists(config.s3.bucket, id);
 			console.log(_testex);
 		}
 		if(!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
