@@ -15,7 +15,7 @@ const clientOpts = {
     accessKeyId: optionsS3.accessKey,
     secretAccessKey: optionsS3.secretAccessKey,
     region: optionsS3.region,
-    signatureVersion: 'v3',
+    signatureVersion: 'v2',
     s3DisableBodySigning: true,
 	//s3ForcePathStyle: true,
     // endpoint: 's3.yourdomain.com',
