@@ -89,7 +89,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 		  console.error('unable to upload:', err.stack)
 		  reject(err)
     })
-    uploader.on('end', function () {
+    uploader.on('end', async function () {
 		  console.log('done uploading')
 		  await s3.getFiles();
 		  resolve(true)
@@ -145,7 +145,7 @@ s3.deleteFiles = async function(bucket, files) {
 		},
 		Bucket: bucket,
     }
-	console.log(s3.files.length);
+
 	//console.log(params);
     let deleter = s3.client.deleteObjects(params)
     deleter.on('error', function (err) {
@@ -161,7 +161,7 @@ s3.deleteFiles = async function(bucket, files) {
 				  if(vl['Key'] === vl2['Key']) s3.files.splice(i);
 			  });
 		  }
-		  console.log(s3.files.length);
+
 		  resolve(true)
     })
   })
