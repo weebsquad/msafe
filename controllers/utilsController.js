@@ -41,6 +41,14 @@ utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
 
+  async function tryS3() {
+	  if(s3.enabledCheck()) {
+		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
+		console.log(_thumbs);
+		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
+		await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs);
+	}
+  }
   let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
   fs.access(thumbname, err => {
     if (err && err.code === 'ENOENT') {
@@ -53,6 +61,9 @@ utilsController.generateThumbs = async function (file, basedomain) {
             size: '200x?'
           })
           .on('error', error => console.log('Error - ', error.message))
+		  .on('end', function() {
+			  tryS3();
+		  });
       } else {
         let size = {
           width: 200,
@@ -65,12 +76,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           .background('transparent')
           .write(thumbname, error => {
             if (error) return console.log('Error - ', error)
-			if(s3.enabledCheck()) {
-				  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
-				  console.log(_thumbs);
-				  //s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
-				  await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs);
-			  }
+			tryS3();
           })
       }
     }
