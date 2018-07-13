@@ -44,9 +44,11 @@ utilsController.generateThumbs = async function (file, basedomain) {
   async function tryS3(gif = false) {
 	  if(s3.enabledCheck()) {
 		let extt = `${ext}`;
-		if(gif || utilsController.videoExtensions.includes(extt)) extt = 'png';
-		let fn = file.name.split(ext).join(extt);
+		if(gif || utilsController.videoExtensions.includes(extt)) extt = '.png';
+		let fn = file.name.split(ext).join('');
 		console.log(fn);
+		console.log(extt);
+		fn = `${fn}${extt}`;
 		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
 		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
 		let tries = 0;
