@@ -222,6 +222,7 @@ uploadsController.delete = async (req, res) => {
 }
 
 uploadsController.deleteFile = function (file) {
+	console.log(file);
   const ext = path.extname(file).toLowerCase()
   return new Promise((resolve, reject) => {
     fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {

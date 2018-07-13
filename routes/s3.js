@@ -91,7 +91,8 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
     })
     uploader.on('end', function () {
 		  console.log('done uploading')
-		  resolve()
+		  await s3.getFiles();
+		  resolve(true)
     })
   })
 }
@@ -114,7 +115,8 @@ s3.fileExists = async function(bucket, fileName) {
 	}, function(err, data) {
 	  if (err) {
 		// file does not exist (err.statusCode == 404)
-		reject(false);
+		//reject(false);
+		resolve(false);
 	  }
 	  // file exists
 	  resolve(true);
@@ -202,7 +204,7 @@ s3.initialize = async function (upldir) {
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
   await s3.getFiles(optionsS3.bucket)
-  await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
+  //await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
 }
 
 module.exports = s3
