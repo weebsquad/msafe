@@ -3,7 +3,7 @@ const fs = require('fs')
 const libs3 = require('s3')
 const db = require('knex')(config.database)
 const path = require('path')
-const AWS = require('aws-sdk');
+//const AWS = require('aws-sdk');
 
 
 const optionsS3 = config.s3
@@ -15,16 +15,14 @@ const clientOpts = {
   multipartUploadThreshold: 20971520, // this is the default (20 MB)
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
-	credentials: {
-		accessKeyId: optionsS3.accessKey,
-		secretAccessKey: optionsS3.secretAccessKey,
-	},
+	accessKeyId: optionsS3.accessKey,
+	secretAccessKey: optionsS3.secretAccessKey,
     region: optionsS3.region,
-    signatureVersion: 'v3',
+    signatureVersion: 'v4',
     s3DisableBodySigning: true,
 	//s3ForcePathStyle: true,
     // endpoint: 's3.yourdomain.com',
-    sslEnabled: false,
+    sslEnabled: true,
     // any other options are passed to new AWS.S3()
     // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
   }
@@ -33,7 +31,7 @@ const clientOpts = {
 
 
 let s3 = {}
-s3.awsS3Client = new AWS.S3(clientOpts['s3Options']);
+//s3.awsS3Client = new AWS.S3(clientOpts['s3Options']);
 
 s3.enabledCheck = function () {
   if (optionsS3.use !== true || optionsS3.accessKey === '' || optionsS3.secretAccessKey === '') return false
@@ -108,8 +106,8 @@ s3.convertFile = async function (bucket, localPath) {
 
 s3.initialize = async function (upldir) {
   if (!s3.enabledCheck()) return
-  delete clientOpts['s3Options'];
-  clientOpts['s3Client'] = s3.awsS3Client;
+  //delete clientOpts['s3Options'];
+  //clientOpts['s3Client'] = s3.awsS3Client;
 
   s3['client'] = libs3.createClient(clientOpts)
   //console.log(s3.client.s3.config);
