@@ -109,7 +109,7 @@ s3.convertFile = async function (bucket, localPath) {
 s3.fileExists = async function(bucket, fileName) {
 	return new Promise(function (resolve, reject) {
 	s3.client.s3.headObject({
-	  Bucket: bucket
+	  Bucket: bucket,
 	  Key: `${optionsS3.uploadsFolder}/${fileName}`
 	}, function(err, data) {
 	  if (err) {
