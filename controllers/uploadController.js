@@ -8,7 +8,7 @@ const fs = require('fs')
 const utils = require('./utilsController.js')
 const encoding = require('./encodingController')
 const s3 = require('../routes/s3.js');
-console.log(s3);
+
 
 const uploadsController = {}
 
@@ -74,6 +74,9 @@ uploadsController.upload = async (req, res, next) => {
   }
   return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion)
 }
+
+
+
 
 uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersion) => {
   upload(req, res, async err => {
@@ -163,7 +166,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     let ext = path.extname(file.name).toLowerCase()
     if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
-      utils.generateThumbs(file)
+      await utils.generateThumbs(file)
     }
   }
 
@@ -225,27 +228,43 @@ uploadsController.delete = async (req, res) => {
 
 uploadsController.deleteFile = function (file) {
   const ext = path.extname(file).toLowerCase()
-  return new Promise((resolve, reject) => {
-    fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
-      if (err) { return reject(err) }
-      fs.unlink(path.join(__dirname, '..', config.uploads.folder, file), err => {
-        if (err) { return reject(err) }
-        if (!utils.imageExtensions.includes(ext) && !utils.videoExtensions.includes(ext)) {
-          return resolve()
-        }
-        file = file.substr(0, file.lastIndexOf('.')) + '.png'
-        fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
-          if (err) {
-            // console.log(err);
-            return resolve()
-          }
-          fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {
-            if (err) { return reject(err) }
-            return resolve()
-          })
-        })
-      })
-    })
+  return new Promise(async function (resolve, reject) {
+	let _s3 = false;
+	if(s3.enabledCheck()) {
+		let _ex = await s3.fileExists(s3.options.bucket, file);
+		if(_ex) _s3 = true;
+	}
+	
+	if(_s3) {
+		s3.deleteFiles(s3.options.bucket, [file, `thumbs/${file}`]).then(() => {
+			resolve();
+		}).catch(e => {
+			reject();
+		});
+	} else {
+		// Nothing from S3 found
+		
+		fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
+		  if (err) { return reject(err) }
+		  fs.unlink(path.join(__dirname, '..', config.uploads.folder, file), err => {
+			if (err) { return reject(err) }
+			if (!utils.imageExtensions.includes(ext) && !utils.videoExtensions.includes(ext)) {
+			  return resolve()
+			}
+			file = file.substr(0, file.lastIndexOf('.')) + '.png'
+			fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
+			  if (err) {
+				// console.log(err);
+				return resolve()
+			  }
+			  fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {
+				if (err) { return reject(err) }
+				return resolve()
+			  })
+			})
+		  })
+		})
+	}
   })
 }
 

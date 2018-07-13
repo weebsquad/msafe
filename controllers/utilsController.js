@@ -4,6 +4,7 @@ const fs = require('fs')
 const gm = require('gm')
 const ffmpeg = require('fluent-ffmpeg')
 const db = require('knex')(config.database)
+const s3 = require('../routes/s3.js');
 
 const utilsController = {}
 utilsController.imageExtensions = ['.jpg', '.jpeg', '.bmp', '.gif', '.png']
@@ -36,7 +37,7 @@ utilsController.authorize = async (req, res) => {
   return user
 }
 
-utilsController.generateThumbs = function (file, basedomain) {
+utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
 
@@ -68,6 +69,11 @@ utilsController.generateThumbs = function (file, basedomain) {
       }
     }
   })
+  if(s3.enabledCheck()) {
+	  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs');
+	  //s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
+	  await s3.uploadFile(s3.options.bucket, `thumbs/${file}`, _thumbs);
+  }
 }
 
 utilsController.isNumeric = function (n) {

@@ -33,6 +33,7 @@ const clientOpts = {
 
 
 let s3 = {}
+s3.options = optionsS3;
 s3.awsS3Client = new AWS.S3(clientOpts['s3Options']);
 
 s3.enabledCheck = function () {
@@ -97,10 +98,10 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
   })
 }
 
-s3.convertFile = async function (bucket, localPath) {
+s3.convertFile = async function (bucket, localPath, remotePath) {
   return new Promise(function (resolve, reject) {
-    const fileName = localPath.split('.').reverse().splice(1).reverse().join('.')
-    s3.uploadFile(bucket, fileName, localPath).then(() => {
+    //const fileName = localPath.split('.').reverse().splice(1).reverse().join('.')
+    s3.uploadFile(bucket, remotePath, localPath).then(() => {
       fs.unlinkSync(localPath);
       resolve()
     }).catch(e => { reject(e) })
