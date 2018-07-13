@@ -42,7 +42,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
   const ext = path.extname(file.name).toLowerCase()
 
   async function tryS3() {
-	  if(s3.enabledCheck(gif)) {
+	  if(s3.enabledCheck(gif = false)) {
 		let extt = ext;
 		if(gif) extt = 'png';
 		let fn = file.name.split(ext).join(extt);
@@ -73,7 +73,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           })
           .on('error', error => console.log('Error - ', error.message))
 		  .on('end', function() {
-			tryS3();
+			tryS3(true);
 		  });
       } else {
         let size = {
