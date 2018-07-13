@@ -133,7 +133,7 @@ s3.deleteFiles = async function(bucket, files) {
 			if(vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true;
 		});
 		if(_ex) {
-			flnew.push({ 'Key': vl });
+			flnew.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` });
 		}
 	});
     let params = {
