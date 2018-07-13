@@ -62,7 +62,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           })
           .on('error', error => console.log('Error - ', error.message))
 		  .on('end', function() {
-			  tryS3();
+			setTimeout(function() tryS3(); }, 500);
 		  });
       } else {
         let size = {
