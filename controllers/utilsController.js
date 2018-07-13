@@ -43,7 +43,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 
   async function tryS3(_extension) {
 	  if(s3.enabledCheck()) {
-		let extt = `.${_extension}`;
+		let extt = `${_extension}`;
 		console.log(extt);
 		if(utilsController.videoExtensions.includes(_extension)) extt = '.png';
 		let fn = file.name.split(_extension)[0]
