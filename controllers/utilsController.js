@@ -64,17 +64,17 @@ utilsController.generateThumbs = async function (file, basedomain) {
           .extent(size.width, size.height)
           .background('transparent')
           .write(thumbname, error => {
-            if (error) console.log('Error - ', error)
+            if (error) return console.log('Error - ', error)
+			if(s3.enabledCheck()) {
+				  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
+				  console.log(_thumbs);
+				  //s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
+				  await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs);
+			  }
           })
       }
     }
   })
-  if(s3.enabledCheck()) {
-	  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${file.name}`;
-	  console.log(_thumbs);
-	  //s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
-	  await s3.uploadFile(s3.options.bucket, `thumbs/${file.name}`, _thumbs);
-  }
 }
 
 utilsController.isNumeric = function (n) {
