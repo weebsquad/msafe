@@ -114,10 +114,10 @@ s3.fileExists = async function(bucket, fileName) {
 	}, function(err, data) {
 	  if (err) {
 		// file does not exist (err.statusCode == 404)
-		reject();
+		reject(false);
 	  }
 	  // file exists
-	  resolve();
+	  resolve(true);
 	});
 	});
 }
@@ -140,7 +140,7 @@ s3.proxyPipe = async function(req, res, next, fileId) {
 	}, 1000*60*5);
 	http.createServer(function(req, res) {
 		res.setHeader("content-disposition", `attachment; filename=${fileId}`);
-		request(`${s3.url}/${optionsS3.uploadsFolder}/${fileId}`).pipe(res);
+		request(`${s3.url}/${fileId}`).pipe(res);
 	}).listen(nextp);
 };
 
@@ -150,7 +150,6 @@ s3.initialize = async function (upldir) {
   clientOpts['s3Client'] = s3.awsS3Client;
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
-  console.log(s3.url);
   await s3.getFiles(optionsS3.bucket)
 }
 
