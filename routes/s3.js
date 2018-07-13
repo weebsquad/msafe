@@ -130,24 +130,20 @@ s3.deleteFiles = async function(bucket, files) {
 	files.forEach(function(vl) {
 		let _ex = false;
 		s3.files.forEach(function(vl2) {
-			console.log(vl2);
+			if(vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true;
 		});
+		if(_ex) {
+			flnew.push({ 'Key': vl });
+		}
 	});
     let params = {
 		Delete: flnew,
-		s3Params: {
-			Bucket: bucket,
-			Key: `${optionsS3.uploadsFolder}/${fileName}`,
-			ACL: 'public-read',
-			Body: fs.createReadStream(localPath),
-			ServerSideEncryption: 'AES256',
-			Expires: yearfromnow,
-			//ContentType: 'application/octet-stream',
-	    },
+		Bucket: bucket,
+		Objects: flnew,
 		Quiet: false,
     }
 	console.log(params);
-    /*let deleter = s3.client.deleteObjects(params)
+    let deleter = s3.client.deleteObjects(params)
     deleter.on('error', function (err) {
 		  console.error('unable to delete:', err.stack)
 		  reject(err)
@@ -156,7 +152,7 @@ s3.deleteFiles = async function(bucket, files) {
 		  console.log('done deleting')
 		  
 		  resolve(true)
-    })*/
+    })
   })
 }
 
@@ -197,7 +193,7 @@ s3.initialize = async function (upldir) {
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
   await s3.getFiles(optionsS3.bucket)
-  await s3.deleteFiles(optionsS3.bucket, ['KYS.png', 'pagebg.jpg']);
+  await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
 }
 
 module.exports = s3
