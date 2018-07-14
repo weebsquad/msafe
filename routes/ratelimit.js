@@ -1,5 +1,5 @@
 const config = require('../config.js')
-const RateLimit = require('../lib/express-rate-limit.js')
+const RateLimit = require('../lib/express-rate-limit')
 const db = require('knex')(config.database)
 const path = require('path')
 
