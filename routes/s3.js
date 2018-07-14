@@ -151,7 +151,7 @@ s3.deleteFiles = async function (bucket, files) {
 		  console.error('unable to delete:', err.stack)
 		  reject(err)
     })
-    deleter.on('end', function () {
+    deleter.on('end', async function () {
 		  console.log('done deleting')
 		   await s3.getFiles(bucket)
 		  for (var i = 0; i < s3.files.length; i++) {
