@@ -13,7 +13,7 @@ const clientOpts = {
   maxAsyncS3: 30, // this is the default
   s3RetryCount: 5, // this is the default
   s3RetryDelay: 200, // this is the default
-  multipartUploadThreshold: 20971520, // this is the default (20 MB)
+  multipartUploadThreshold: 104857600, // this is the default (20 MB) // 100mb
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
     accessKeyId: optionsS3.accessKey,
