@@ -77,7 +77,7 @@ module.exports = {
 	],
 	
 	imageExtensions: ['.jpg', '.jpeg', '.bmp', '.gif', '.png'],
-	videoExtensions: ['.webm', '.mp4', '.wmv', '.avi', '.mov'],
+	videoExtensions: ['.webm', '.mp4', '.wmv', '.avi', '.mov', 'webp'],
 	noThumbnail: ['.mp3'],
 
 	// Uploads config
