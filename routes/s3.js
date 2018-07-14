@@ -168,6 +168,11 @@ s3.deleteFiles = async function (bucket, files) {
 s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 	if(!s3.options.merge) return;
 	console.log(files);
+	files.forEach(function(file) {
+		const pathch = path.join(uploadsFolder, file.name);
+		let ex = fs.existsSync(pathch);
+		
+	});
 };
 
 let ports = new Array()
