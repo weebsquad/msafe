@@ -172,7 +172,7 @@ authController.register = async (req, res, next) => {
 
   const username = req.body.username
   const password = req.body.password
-  let adminpw = req.body.adminpw
+  let adminpw = req.body.adminpw || ''
 
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
@@ -218,7 +218,7 @@ authController.register = async (req, res, next) => {
 		return res.json({ success: true, token: token })
 	}
 	if(!bypassEnable) return await finalize()
-	bcrypt.compare(adminpw, user.password, async (err, result) => {
+	bcrypt.compare(adminpw, _user.password, async (err, result) => {
         if (err) {
 			  console.log(err)
 			  return res.json({ success: false, description: 'There was an error' })
