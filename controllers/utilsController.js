@@ -4,7 +4,7 @@ const fs = require('fs')
 const gm = require('gm')
 const ffmpeg = require('fluent-ffmpeg')
 const db = require('knex')(config.database)
-const s3 = require('../routes/s3.js');
+const s3 = require('../routes/s3.js')
 
 const utilsController = {}
 utilsController.imageExtensions = ['.jpg', '.jpeg', '.bmp', '.gif', '.png']
@@ -41,24 +41,24 @@ utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
 
-  async function tryS3(_extension) {
-	  if(s3.enabledCheck()) {
-		let extt = `${_extension}`;
-		if(utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png';
-		let fn = file.name.split(_extension)[0]
-		fn = `${fn}${extt}`;
+  async function tryS3 (_extension) {
+	  if (s3.enabledCheck()) {
+      let extt = `${_extension}`
+      if (utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png'
+      let fn = file.name.split(_extension)[0]
+      fn = `${fn}${extt}`
 
-		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
-		let tries = 0;
-		let interv = setInterval(function() {
-			if(fs.existsSync(_thumbs)) {
-				clearInterval(interv);
-				setTimeout(async function() { await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`); }, 25);
-			}
-			tries++;
-			if(tries > 20) clearInterval(interv);
-		}, 50);	
-	}
+      const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
+      let tries = 0
+      let interv = setInterval(function () {
+        if (fs.existsSync(_thumbs)) {
+          clearInterval(interv)
+          setTimeout(async function () { await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`) }, 25)
+        }
+        tries++
+        if (tries > 20) clearInterval(interv)
+      }, 50)
+    }
   }
   let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
   fs.access(thumbname, err => {
@@ -72,9 +72,9 @@ utilsController.generateThumbs = async function (file, basedomain) {
             size: '200x?'
           })
           .on('error', error => console.log('Error - ', error.message))
-		  .on('end', function() {
-			tryS3('.png');
-		  });
+		  .on('end', function () {
+            tryS3('.png')
+		  })
       } else {
         let size = {
           width: 200,
@@ -87,7 +87,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           .background('transparent')
           .write(thumbname, error => {
             if (error) return console.log('Error - ', error)
-			tryS3(ext);
+            tryS3(ext)
           })
       }
     }

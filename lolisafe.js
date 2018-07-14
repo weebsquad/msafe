@@ -77,25 +77,28 @@ for (let page of config.pages) {
 }
 
 if (config.serveFilesWithNode && config.useAlternateViewing) {
-  safe.get('*/thumbs/:id', async (req, res, next) => {
-    const id = req.params.id
-    const _path = path.join(__dirname, config.uploads.folder) + '/thumbs'
-    const file = `${_path}/${id}`
-    const ex = fs.existsSync(file)
-    // Handle S3
-	let _s3 = false;
-    if (!ex) {
-		if(s3.enabledCheck()) {
-			let _testex = await s3.fileExists(config.s3.bucket, id);
-			if(_testex) {
-				_s3 = true;
-				await s3.proxyPipe(req, res, next, id);
-			}
-		}
-		if(!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
-	}
+  let normalHandles = ['thumbs', 'zips']
+  normalHandles.forEach(function (vl) {
+	  safe.get(`*/${vl}/:id`, async (req, res, next) => {
+      const id = req.params.id
+      const _path = path.join(__dirname, config.uploads.folder) + '/${vl}'
+      const file = `${_path}/${id}`
+      const ex = fs.existsSync(file)
+      // Handle S3
+      let _s3 = false
+      if (!ex) {
+        if (s3.enabledCheck()) {
+          let _testex = await s3.fileExists(config.s3.bucket, id)
+          if (_testex) {
+            _s3 = true
+            await s3.proxyPipe(req, res, next, id)
+          }
+        }
+        if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
+      }
 
-    if(!_s3) res.sendFile(id, { root: _path })
+      if (!_s3) res.sendFile(id, { root: _path })
+	  })
   })
 
   safe.get('*/:id', async (req, res, next) => {
@@ -117,23 +120,22 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
     // Finally handle the actual ID
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
-	
-	// Handle S3
-	let _s3 = false;
+
+    // Handle S3
+    let _s3 = false
     if (!ex) {
-		if(s3.enabledCheck()) {
-			let _testex = await s3.fileExists(config.s3.bucket, id);
-			if(_testex) {
-				_s3 = true;
-				await s3.proxyPipe(req, res, next, id);
-			}
-		}
-		if(!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
-	}
+      if (s3.enabledCheck()) {
+        let _testex = await s3.fileExists(config.s3.bucket, id)
+        if (_testex) {
+          _s3 = true
+          await s3.proxyPipe(req, res, next, id)
+        }
+      }
+      if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
+    }
 
-    if(!_s3) res.sendFile(id, { root: _path })
+    if (!_s3) res.sendFile(id, { root: _path })
   })
-
 }
 
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
@@ -142,7 +144,7 @@ safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pag
 let init = async function () {
   await require('./database/db.js')(db)
   const _path = path.join(__dirname, config.uploads.folder)
-  await s3.initialize(_path);
+  await s3.initialize(_path)
   safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
 }
 init()

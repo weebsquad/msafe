@@ -7,8 +7,7 @@ const crypto = require('crypto')
 const fs = require('fs')
 const utils = require('./utilsController.js')
 const encoding = require('./encodingController')
-const s3 = require('../routes/s3.js');
-
+const s3 = require('../routes/s3.js')
 
 const uploadsController = {}
 
@@ -23,21 +22,21 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const access = i => {
       const name = randomstring.generate(config.uploads.fileLength) + path.extname(file.originalname)
-	  if(s3.enabledCheck()) {
-		  let _ex = false;
-		  s3.files.forEach(function(vl) {
-			  if(vl['Key'] === `${s3.options.uploadsFolder}/${name}`) _ex = true;
-		  });
-		  if(!_ex) return cb(null, name) 
+	  if (s3.enabledCheck()) {
+		  let _ex = false
+		  s3.files.forEach(function (vl) {
+			  if (vl['Key'] === `${s3.options.uploadsFolder}/${name}`) _ex = true
+		  })
+		  if (!_ex) return cb(null, name)
 		   console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
 		   if (i < maxTries) return access(i)
 		   return cb('Could not allocate a unique file name. Try again?')
 	  } else {
 		  fs.access(path.join(uploadDir, name), err => {
-			if (err) return cb(null, name)
-			console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
-			if (i < maxTries) return access(i)
-			return cb('Could not allocate a unique file name. Try again?')
+          if (err) return cb(null, name)
+          console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
+          if (i < maxTries) return access(i)
+          return cb('Could not allocate a unique file name. Try again?')
 		  })
 	  }
     }
@@ -85,9 +84,6 @@ uploadsController.upload = async (req, res, next) => {
   }
   return uploadsController.actuallyUpload(req, res, user, albumid, encodeVersion)
 }
-
-
-
 
 uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersion) => {
   upload(req, res, async err => {
@@ -178,8 +174,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
-	  const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.name);
-	  await s3.convertFile(s3.options.bucket, pathUploads, file.name);
+	  const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.name)
+	  await s3.convertFile(s3.options.bucket, pathUploads, file.name)
     }
   }
 
@@ -242,42 +238,42 @@ uploadsController.delete = async (req, res) => {
 uploadsController.deleteFile = function (file) {
   const ext = path.extname(file).toLowerCase()
   return new Promise(async function (resolve, reject) {
-	let _s3 = false;
-	if(s3.enabledCheck()) {
-		let _ex = await s3.fileExists(s3.options.bucket, file);
-		if(_ex) _s3 = true;
-	}
-	
-	if(_s3) {
-		s3.deleteFiles(s3.options.bucket, [file, `thumbs/${file}`]).then(() => {
-			resolve();
-		}).catch(e => {
-			reject();
-		});
-	} else {
-		// Nothing from S3 found
-		
-		fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
+    let _s3 = false
+    if (s3.enabledCheck()) {
+      let _ex = await s3.fileExists(s3.options.bucket, file)
+      if (_ex) _s3 = true
+    }
+
+    if (_s3) {
+      s3.deleteFiles(s3.options.bucket, [file, `thumbs/${file}`]).then(() => {
+        resolve()
+      }).catch(e => {
+        reject()
+      })
+    } else {
+      // Nothing from S3 found
+
+      fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
 		  if (err) { return reject(err) }
 		  fs.unlink(path.join(__dirname, '..', config.uploads.folder, file), err => {
-			if (err) { return reject(err) }
-			if (!utils.imageExtensions.includes(ext) && !utils.videoExtensions.includes(ext)) {
+          if (err) { return reject(err) }
+          if (!utils.imageExtensions.includes(ext) && !utils.videoExtensions.includes(ext)) {
 			  return resolve()
-			}
-			file = file.substr(0, file.lastIndexOf('.')) + '.png'
-			fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
+          }
+          file = file.substr(0, file.lastIndexOf('.')) + '.png'
+          fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
 			  if (err) {
-				// console.log(err);
-				return resolve()
+              // console.log(err);
+              return resolve()
 			  }
 			  fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {
-				if (err) { return reject(err) }
-				return resolve()
+              if (err) { return reject(err) }
+              return resolve()
 			  })
-			})
+          })
 		  })
-		})
-	}
+      })
+    }
   })
 }
 
