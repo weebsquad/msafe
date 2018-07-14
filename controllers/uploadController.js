@@ -139,9 +139,8 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err))
           existingFiles.push(dbFile)
         }
-		const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.name)
-		let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
-		
+        const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.name)
+        let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
 
         if (iteration === req.files.length) {
           return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString)
