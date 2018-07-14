@@ -9,15 +9,15 @@ function check (req, res, next) {
   return res.json({
     private: config.private,
     maxFileSize: config.uploads.maxSize,
-    register: config.enableUserAccounts
-	encoding: config.allowEncoding,
-	usingS3: config.s3.use,
-	blockedExtensions: config.blockedExtensions,
+    register: config.enableUserAccounts,
+    encoding: config.allowEncoding,
+    usingS3: config.s3.use,
+    blockedExtensions: config.blockedExtensions
   })
 }
 
-function nothingFunc(req, res, next) {
-	return res.send('Nothing here!')
+function nothingFunc (req, res, next) {
+  return res.send('Nothing here!')
 }
 
 const map = {
@@ -35,7 +35,7 @@ const map = {
     'albums/:sidebar': albumsController.list,
     //		'albums/test': albumsController.test,
     'tokens': tokenController.list,
-	'': nothingFunc,
+    '': nothingFunc
   },
   'post': {
     'login': authController.verify,
@@ -60,6 +60,5 @@ for (let type in map) {
     routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
   }
 }
-
 
 module.exports = routes
