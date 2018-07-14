@@ -174,6 +174,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
+	  console.log('hhh');
 	  const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
       let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
 	  console.log('hi');
