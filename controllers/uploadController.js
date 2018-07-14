@@ -172,16 +172,12 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
   for (let file of files) {
     let ext = path.extname(file.name).toLowerCase()
 	console.log(ext)
-    if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
+    if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
-	  console.log('hhh1');
       await utils.generateThumbs(file)
-	  console.log('hhh2');
-	  const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
-      let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
-	  console.log('hi3');
-	  console.log(file.name);
     }
+	const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
+    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
   }
 
   let albumSuccess = true

@@ -11,6 +11,7 @@ let s3 = {}
 const optionsS3 = config.s3
 s3.imageExtensions = config.imageExtensions
 s3.videoExtensions = config.videoExtensions
+s3.noThumbnail = config.noThumbnail
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default
@@ -193,10 +194,10 @@ s3.mergeFiles = async function (bucket, files, uploadsFolder) {
     fid = `${fid}.png` // Apparently thumbnails are always png? ok
     const paththumb = path.join(uploadsFolder, 'thumbs', fid)
     if (ex) ex = fs.existsSync(paththumb)
-    if (ex || s3.videoExtensions.includes(ext)) {
+    if (ex || s3.noThumbnail.includes(ext)) {
       await s3.convertFile(bucket, pathch, file.name) // Convert normal
       const thumb = `thumbs/${fid}`
-      if(!s3.videoExtensions.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
+      if(!s3.noThumbnail.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
     }
   })
 }
