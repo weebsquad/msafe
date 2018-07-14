@@ -14,7 +14,7 @@ rateLimiting.keyGen = async function (req, res) {
     if (user && (!config.enableUserAccounts && config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
   }
 
-  return key.toString()
+  return key
 }
 
 rateLimiting.updateCache = async function (token) {
@@ -68,6 +68,7 @@ rateLimiting.load = function (safe) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
+	  console.log(`Loaded ${key}`);
   }
   console.log('Loaded ratelimits!')
 }
