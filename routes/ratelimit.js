@@ -1,5 +1,5 @@
 const config = require('../config.js')
-const RateLimit = require('express-rate-limit')
+const RateLimit = require('../lib/express-rate-limit.js')
 const db = require('knex')(config.database)
 const path = require('path')
 
@@ -14,8 +14,7 @@ rateLimiting.keyGen = async function (req, res) {
     if (user && (!config.enableUserAccounts && config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
   }
 
-  //return key.toString()
-  return Math.random(0,1)*100;
+  return key.toString()
 }
 
 rateLimiting.updateCache = async function (token) {
@@ -57,7 +56,7 @@ rateLimiting.load = function (safe) {
       rateLimiting.limitedHandler(obj, req, res, next)
 	  }
 	  obj['handler'] = _a
-	  //obj['keyGenerator'] = rateLimiting.keyGen
+	  obj['keyGenerator'] = rateLimiting.keyGen
 	  obj['skip'] = rateLimiting.skipHandler
 	  obj['skipFailedRequests'] = config.skipFails
 	  if (obj['autoDelays'] === true) {
