@@ -40,21 +40,20 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
-	console.log(ext);
+
   async function tryS3(_extension) {
 	  if(s3.enabledCheck()) {
 		let extt = `${_extension}`;
 		if(utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png';
 		let fn = file.name.split(_extension)[0]
 		fn = `${fn}${extt}`;
-		console.log(fn);
+
 		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
-		//s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`);
 		let tries = 0;
 		let interv = setInterval(function() {
 			if(fs.existsSync(_thumbs)) {
 				clearInterval(interv);
-				setTimeout(async function() { await s3.uploadFile(s3.options.bucket, `thumbs/${fn}`, _thumbs); }, 25);
+				setTimeout(async function() { await s3.convertFile(s3.options.bucket, `${_thumbs}/${file}`); }, 25);
 			}
 			tries++;
 			if(tries > 20) clearInterval(interv);
