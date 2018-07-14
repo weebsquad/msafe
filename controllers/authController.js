@@ -207,7 +207,7 @@ authController.register = async (req, res, next) => {
       console.log(err)
       return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' })
     }
-	function finalize() {
+	async function finalize() {
 		const token = randomstring.generate(64)
 		await db.table('users').insert({
 		  username: username,
@@ -217,14 +217,14 @@ authController.register = async (req, res, next) => {
 		})
 		return res.json({ success: true, token: token })
 	}
-	if(!bypassEnable) return finalize()
+	if(!bypassEnable) return await finalize()
 	bcrypt.compare(adminpw, user.password, async (err, result) => {
         if (err) {
 			  console.log(err)
 			  return res.json({ success: false, description: 'There was an error' })
         }
         if (result === false) return res.json({ success: false, description: 'Wrong password' })
-		return finalize();
+		return await finalize();
 	});
   })
 }
