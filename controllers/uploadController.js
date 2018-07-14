@@ -88,7 +88,7 @@ uploadsController.upload = async (req, res, next) => {
 uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersion) => {
   upload(req, res, async err => {
     if (err) {
-      console.error(err)
+      //console.error(err)
       return res.json({ success: false, description: err })
     }
 
@@ -120,7 +120,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           .first()
         let encodeString = ''
         if (encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion)
-        // console.log(encodeString);
+
         if (!dbFile) {
           files.push({
             name: file.filename,
@@ -263,7 +263,7 @@ uploadsController.deleteFile = function (file) {
           file = file.substr(0, file.lastIndexOf('.')) + '.png'
           fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
 			  if (err) {
-              // console.log(err);
+
               return resolve()
 			  }
 			  fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {
