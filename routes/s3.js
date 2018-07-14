@@ -153,7 +153,7 @@ s3.deleteFiles = async function (bucket, files) {
     })
     deleter.on('end', function () {
 		  console.log('done deleting')
-		  // await s3.getFiles()
+		   await s3.getFiles(bucket)
 		  for (var i = 0; i < s3.files.length; i++) {
 			  let vl = s3.files[i]
 			  flnew.forEach(function (vl2) {
