@@ -229,6 +229,11 @@ upload.prepareDropzone = function () {
       file.previewTemplate.querySelector('.progress').style.display = 'none'
     }
   })
+  
+  dropzone.on('error', function(file, error) {
+	  console.log(error);
+	  
+  });
 
   upload.prepareShareX()
 }

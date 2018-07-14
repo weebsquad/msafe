@@ -196,7 +196,7 @@ s3.mergeFiles = async function (bucket, files, uploadsFolder) {
     if (ex) {
       await s3.convertFile(bucket, pathch, file.name) // Convert normal
       const thumb = `thumbs/${fid}`
-      await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
+      if(!s3.videoExtensions.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
     }
   })
 }
