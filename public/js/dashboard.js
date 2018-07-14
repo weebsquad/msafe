@@ -789,7 +789,7 @@ panel.updateAdminPage = function (pw = '') {
 	  },
 	  'sendNewAccount': function (key, obj) {
 		  document.getElementById(key).addEventListener('click', function () {
-        panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value)
+        panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value, document.getElementById('passwordRoot').value)
 		  })
 	  }
   }
@@ -865,8 +865,8 @@ panel.resetUserPw = function (mem) {
   let pw = _x[1]
   panel.sendNewPassword('', user, true, pw)
 }
-panel.registerNewUser = function (username, pass) {
-  axios.post('/api/register', {username: username, password: pass})
+panel.registerNewUser = function (username, pass, adminpw = '') {
+  axios.post('/api/register', {username: username, password: pass, adminpw: adminpw})
     .then(function (response) {
       if (response.data.success === false) {
         return swal('An error ocurred', response.data.description, 'error')
