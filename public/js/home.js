@@ -210,7 +210,7 @@ upload.prepareDropzone = function () {
 
   dropzone.on('success', function (file, response) {
     // Handle the responseText here. For example, add the text to the preview element:
-    console.log(response.description)
+
     if (response.success === false) {
       var p = document.createElement('p')
       p.innerHTML = response.description
