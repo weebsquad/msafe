@@ -53,7 +53,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		let interv = setInterval(function() {
 			if(fs.existsSync(_thumbs)) {
 				clearInterval(interv);
-				setTimeout(async function() { await s3.convertFile(s3.options.bucket, _thumbs); }, 25);
+				setTimeout(async function() { await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`); }, 25);
 			}
 			tries++;
 			if(tries > 20) clearInterval(interv);
