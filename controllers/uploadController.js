@@ -139,7 +139,6 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err))
           existingFiles.push(dbFile)
         }
-		
 
         if (iteration === req.files.length) {
           return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString)
@@ -176,7 +175,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
 	  const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.filename)
-      let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
+      let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.filename)
     }
   }
 
