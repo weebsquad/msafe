@@ -92,7 +92,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 		  reject(err)
     })
     uploader.on('end', async function () {
-		  console.log('done uploading')
+		  //console.log('done uploading')
 		  await s3.getFiles(s3.options.bucket)
 		  resolve(true)
     })
@@ -153,7 +153,7 @@ s3.deleteFiles = async function (bucket, files) {
 		  reject(err)
     })
     deleter.on('end', function () {
-		  console.log('done deleting')
+		  //console.log('done deleting')
 		  // await s3.getFiles()
 		  for (var i = 0; i < s3.files.length; i++) {
 			  let vl = s3.files[i]
