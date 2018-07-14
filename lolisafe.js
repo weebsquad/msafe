@@ -28,7 +28,7 @@ safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 safe.set('view engine', 'handlebars')
 safe.enable('view cache')
 
-rateLimiting.load(safe)
+rateLimiting.load(safe) // Initialize ratelimits
 
 safe.use(bodyParser.json({limit: '50mb'}))
 safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
