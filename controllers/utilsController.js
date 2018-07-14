@@ -7,8 +7,8 @@ const db = require('knex')(config.database)
 const s3 = require('../routes/s3.js')
 
 const utilsController = {}
-utilsController.imageExtensions = ['.jpg', '.jpeg', '.bmp', '.gif', '.png']
-utilsController.videoExtensions = ['.webm', '.mp4', '.wmv', '.avi', '.mov']
+utilsController.imageExtensions = config.imageExtensions;
+utilsController.videoExtensions = config.videoExtensions;
 
 utilsController.getPrettyDate = function (date) {
   return date.getFullYear() + '-' +

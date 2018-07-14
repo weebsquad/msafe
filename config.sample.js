@@ -74,6 +74,9 @@ module.exports = {
 		'.bashrc',
 		'.profile'
 	],
+	
+	imageExtensions: ['.jpg', '.jpeg', '.bmp', '.gif', '.png'],
+	videoExtensions: ['.webm', '.mp4', '.wmv', '.avi', '.mov'],
 
 	// Uploads config
 	uploads: {

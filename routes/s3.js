@@ -6,10 +6,11 @@ const path = require('path')
 const AWS = require('aws-sdk')
 const request = require('request')
 const http = require('http')
-const utils = require('../controllers/utilsController.js')
-console.log(utils);
 
+let s3 = {}
 const optionsS3 = config.s3
+s3.imageExtensions = config.imageExtensions;
+s3.videoExtensions = config.videoExtensions;
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default
@@ -31,7 +32,7 @@ const clientOpts = {
   }
 }
 
-let s3 = {}
+
 s3.options = optionsS3
 s3.awsS3Client = new AWS.S3(clientOpts['s3Options'])
 
@@ -175,7 +176,7 @@ s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 		let ext = path.extname(file.name).toLowerCase()
 		let fid = file.name.split(ext).join('');
 		fid = `${fid}${ext}`;
-		if(utils.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
+		if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
 		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
 		console.log(paththumb);
 		if(ex) ex = fs.existsSync(paththumb);
