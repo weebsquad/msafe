@@ -170,7 +170,7 @@ s3.deleteFiles = async function (bucket, files) {
 
 s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 	if(!s3.options.merge) return;
-	files.forEach(function(file) {
+	files.forEach(async function(file) {
 		const pathch = path.join(uploadsFolder, file.name);
 		let ex = fs.existsSync(pathch);
 		let ext = path.extname(file.name).toLowerCase()
@@ -179,7 +179,11 @@ s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 		fid = `${fid}${ext}`;
 		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
 		if(ex) ex = fs.existsSync(paththumb);
-		if(ex) console.log('have both!');
+		if(ex) {
+			await s3.convertFile(bucket, pathch, file.name); // Convert normal
+			const thumb = `thumbs/${fid}`;
+			await s3.convertFile(bucket, paththumb, thumb); // Convert thumbnail
+		}
 	});
 };
 
