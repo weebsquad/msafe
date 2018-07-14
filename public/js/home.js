@@ -232,6 +232,7 @@ upload.prepareDropzone = function () {
 
   dropzone.on('error', function (file, error) {
 	  console.log(error)
+	  console.log(file);
   })
 
   upload.prepareShareX()
