@@ -175,8 +175,9 @@ s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 		let ex = fs.existsSync(pathch);
 		let ext = path.extname(file.name).toLowerCase()
 		let fid = file.name.split(ext).join('');
-		if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
-		fid = `${fid}${ext}`;
+		//if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
+		//fid = `${fid}${ext}`;
+		fid = `${fid}.png`; // Apparently thumbnails are always png? ok
 		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
 		if(ex) ex = fs.existsSync(paththumb);
 		if(ex) {
