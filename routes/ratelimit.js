@@ -89,9 +89,9 @@ rateLimiting.load = function (safe) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	  console.log(`Loaded ${key}`)
+	  console.log(`Loaded ratelimit for ${key}`)
   }
-  console.log('Loaded ratelimits!')
+  console.log('Loaded all ratelimits!')
 }
 
 module.exports = rateLimiting
