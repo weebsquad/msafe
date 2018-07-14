@@ -178,12 +178,12 @@ upload.prepareDropzone = function () {
     url: '/api/upload',
     paramName: 'files[]',
     maxFilesize: upload.maxFileSize.slice(0, -2),
-    parallelUploads: 2,
+    parallelUploads: 1,
     uploadMultiple: false,
     previewsContainer: 'div#uploads',
     previewTemplate: previewTemplate,
     createImageThumbnails: false,
-    maxFiles: 1000,
+    maxFiles: 100,
     autoProcessQueue: true,
     headers: {
       'token': upload.token
@@ -210,10 +210,10 @@ upload.prepareDropzone = function () {
 
   dropzone.on('success', function (file, response) {
     // Handle the responseText here. For example, add the text to the preview element:
-
+	console.log(response.data);
     if (response.success === false) {
       var p = document.createElement('p')
-      p.innerHTML = response.description
+      p.innerHTML = response.data.description
       file.previewTemplate.querySelector('.link').appendChild(p)
     }
 
