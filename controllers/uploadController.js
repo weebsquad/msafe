@@ -171,7 +171,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 
   for (let file of files) {
     let ext = path.extname(file.name).toLowerCase()
-	console.log(ext)
+
     if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
