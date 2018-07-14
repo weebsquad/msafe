@@ -47,7 +47,12 @@ rateLimiting.skipHandler = async function (req, res) {
 
 rateLimiting.limitedHandler = function (options, req, res, next) {
   let retrya = Math.ceil(options.windowMs / 1000)
-  console.log(req.rateLimit);
+  if(req.rateLimit) {
+	  let diff = new Date(req.rateLimit.lastReset + options.windowMs)
+	  retrya = diff/1000;
+	  console.log(retrya);
+	  console.log(diff);
+  }
   //if(req.rateLimit) retrya = Math.max(options.max - req.rateLimit.current, 0)
   if (options.headers) {
     res.setHeader('Retry-After', retrya)
