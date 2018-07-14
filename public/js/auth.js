@@ -118,6 +118,7 @@ page.getPublicVars = function () {
 }
 
 page.verify = function () {
+  page.getPublicVars()
   page.token = localStorage.token
   if (page.token === undefined) return
 
