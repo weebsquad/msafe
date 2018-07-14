@@ -168,6 +168,21 @@ s3.deleteFiles = async function (bucket, files) {
 }
 
 
+s3.fixDb = async function() {
+	let files = await db.table('files').select('name', 'id', 'userid', 'original');
+	if(s3.enabledCheck()) {
+		// Check S3 files
+		files.forEach(function(file) {
+			let inS3 = false;
+			s3.files.forEach(function(fl) { if(fl.Key === `${optionsS3.uploadsFolder}/${file.name}`) inS3 = true; });
+			if(!inS3) await db.table('files').where('id', file.id).del()
+		});
+	} else {
+		// Check files
+		// todo
+	}
+}
+
 s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 	if(!s3.options.merge) return;
 	files.forEach(async function(file) {
@@ -231,6 +246,7 @@ s3.initialize = async function (upldir, files) {
   await s3.getFiles(optionsS3.bucket)
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
   await s3.mergeFiles(s3.options.bucket, files, upldir);
+  await s3.fixDb();
 }
 
 module.exports = s3
