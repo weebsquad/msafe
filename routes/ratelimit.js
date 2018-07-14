@@ -56,8 +56,8 @@ rateLimiting.load = function (safe) {
       rateLimiting.limitedHandler(obj, req, res, next)
 	  }
 	  obj['handler'] = _a
-	  //obj['keyGenerator'] = rateLimiting.keyGen
-	  //obj['skip'] = rateLimiting.skipHandler
+	  obj['keyGenerator'] = rateLimiting.keyGen
+	  obj['skip'] = rateLimiting.skipHandler
 	  obj['skipFailedRequests'] = config.skipFails
 	  if (obj['autoDelays'] === true) {
 		  delete obj['autoDelays']
