@@ -172,7 +172,7 @@ s3.fixDb = async function() {
 	let files = await db.table('files').select('name', 'id', 'userid', 'original');
 	if(s3.enabledCheck()) {
 		// Check S3 files
-		files.forEach(function(file) {
+		files.forEach(async function(file) {
 			let inS3 = false;
 			s3.files.forEach(function(fl) { if(fl.Key === `${optionsS3.uploadsFolder}/${file.name}`) inS3 = true; });
 			if(!inS3) await db.table('files').where('id', file.id).del()
