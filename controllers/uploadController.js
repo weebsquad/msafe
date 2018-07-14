@@ -178,6 +178,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
     }
   }
+  console.log('hi');
+  console.log(file.name);
 
   let albumSuccess = true
   if (albumid) {
