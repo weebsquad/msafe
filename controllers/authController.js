@@ -218,6 +218,7 @@ authController.register = async (req, res, next) => {
 		return res.json({ success: true, token: token })
 	}
 	if(!bypassEnable) return await finalize()
+		console.log(_user);
 	bcrypt.compare(adminpw, _user.password, async (err, result) => {
         if (err) {
 			  console.log(err)
