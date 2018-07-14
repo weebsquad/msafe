@@ -13,6 +13,7 @@ rateLimiting.keyGen = async function (req, res) {
     const user = await db.table('users').where('token', token).first()
     if (user && (!config.enableUserAccounts && config.private)) key = user.id // Should probably store ips/ids on a array and compare them, make a matching key for them and match it here but too fucking lazy lmao
   }
+  console.log(key);
   return key
 }
 
