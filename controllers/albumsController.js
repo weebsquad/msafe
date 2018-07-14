@@ -131,6 +131,7 @@ albumsController.get = async (req, res, next) => {
 }
 
 albumsController.generateZip = async (req, res, next) => {
+  if(config.s3.use) return res.status(401).json({ success: false, description: 'Temporarily disabled');
   const identifier = req.params.identifier
   if (identifier === undefined) return res.status(401).json({ success: false, description: 'No identifier provided' })
   if (!config.uploads.generateZips) return res.status(401).json({ success: false, description: 'Zip generation disabled' })
