@@ -47,14 +47,14 @@ rateLimiting.skipHandler = async function (req, res) {
 
 rateLimiting.limitedHandler = function (options, req, res, next) {
   let retrya = Math.ceil(options.windowMs / 1000)
-  if(req.rateLimit) {
+  if (req.rateLimit) {
 	  let diff = new Date(req.rateLimit.lastReset)
 	  retrya = req.rateLimit.lastReset - new Date()
-	  retrya = options.windowMs + retrya;
-	  retrya = Math.floor(retrya/1000);
+	  retrya = options.windowMs + retrya
+	  retrya = Math.floor(retrya / 1000)
 	  retrya = Math.max(retrya, 0)
   }
-  //if(req.rateLimit) retrya = Math.max(options.max - req.rateLimit.current, 0)
+  // if(req.rateLimit) retrya = Math.max(options.max - req.rateLimit.current, 0)
   if (options.headers) {
     res.setHeader('Retry-After', retrya)
   }
@@ -89,7 +89,7 @@ rateLimiting.load = function (safe) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	  console.log(`Loaded ${key}`);
+	  console.log(`Loaded ${key}`)
   }
   console.log('Loaded ratelimits!')
 }
