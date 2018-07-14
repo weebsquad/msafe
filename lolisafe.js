@@ -88,7 +88,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
       let _s3 = false
       if (!ex) {
         if (s3.enabledCheck()) {
-          let _testex = await s3.fileExists(config.s3.bucket, id)
+          let _testex = await s3.fileExists(config.s3.bucket, `${vl}/${id}`)
           if (_testex) {
             _s3 = true
             await s3.proxyPipe(req, res, next, id)
