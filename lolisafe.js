@@ -77,13 +77,25 @@ for (let page of config.pages) {
 }
 
 if (config.serveFilesWithNode && config.useAlternateViewing) {
-  safe.get('/thumbs/:id', async (req, res, next) => {
+  safe.get('*/thumbs/:id', async (req, res, next) => {
     const id = req.params.id
     const _path = path.join(__dirname, config.uploads.folder) + '/thumbs'
     const file = `${_path}/${id}`
     const ex = fs.existsSync(file)
-    if (!ex) return res.status(404).sendFile('404.html', { root: './pages/error/' })
-    res.sendFile(id, { root: _path })
+    // Handle S3
+	let _s3 = false;
+    if (!ex) {
+		if(s3.enabledCheck()) {
+			let _testex = await s3.fileExists(config.s3.bucket, id);
+			if(_testex) {
+				_s3 = true;
+				await s3.proxyPipe(req, res, next, id);
+			}
+		}
+		if(!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
+	}
+
+    if(!_s3) res.sendFile(id, { root: _path })
   })
 
   safe.get('*/:id', async (req, res, next) => {
@@ -121,6 +133,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
 
     if(!_s3) res.sendFile(id, { root: _path })
   })
+
 }
 
 safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
