@@ -50,6 +50,7 @@ rateLimiting.limitedHandler = function (options, req, res, next) {
   if(req.rateLimit) {
 	  let diff = new Date(req.rateLimit.lastReset + options.windowMs)
 	  retrya = diff - new Date()
+	  retrya = options.windowMs - retrya;
 	  retrya = retrya/1000;
 	  console.log(retrya);
 	  console.log(diff);
