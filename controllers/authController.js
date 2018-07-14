@@ -236,10 +236,10 @@ authController.changePassword = async (req, res, next) => {
 
   if (!random) {
   // Check password chars
-    let valid = false
+    let valid = true
     const _checkpw = password.split('')
     _checkpw.forEach(function (ch) {
-	  if (!(pwchars.indexOf(ch) > -1)) valid = false
+	  if (pwchars.indexOf(ch) < 0) valid = false
     })
     if (!valid) return res.json({ success: false, description: `Password contains illegal characters. Only alphanumeric characters and " ${symbols} " may be used` })
   }
