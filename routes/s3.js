@@ -193,8 +193,8 @@ s3.mergeFiles = async function (bucket, files, uploadsFolder) {
     // fid = `${fid}${ext}`;
     fid = `${fid}.png` // Apparently thumbnails are always png? ok
     const paththumb = path.join(uploadsFolder, 'thumbs', fid)
-    if (ex) ex = fs.existsSync(paththumb)
-    if (ex || s3.noThumbnail.includes(ext)) {
+    if (ex && !s3.noThumbnail.includes(ext)) ex = fs.existsSync(paththumb)
+    if (ex) {
       await s3.convertFile(bucket, pathch, file.name) // Convert normal
       const thumb = `thumbs/${fid}`
       if(!s3.noThumbnail.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
