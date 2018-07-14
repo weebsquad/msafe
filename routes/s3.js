@@ -169,7 +169,11 @@ s3.proxyPipe = async function (req, res, next, fileId) {
   let _url = `${s3.url}/${fileId}`
   _url = _url.split('https://').join('http://')
   try {
-    request(_url).pipe(res)
+	if(s3.options.proxyFiles) {
+		request(_url).pipe(res)
+	} else {
+		res.redirect(_url);
+	}
   } catch (e) { /* */ }
 
   /*

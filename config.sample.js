@@ -37,7 +37,9 @@ module.exports = {
 		accessKey: '',
 		secretAccessKey: '',
 		region: 'eu-west-2',
-		bucket: 'metalruller'
+		bucket: 'metalruller',
+		uploadsFolder: 'uploads'
+		proxyFiles: false, // acts as a middleman proxy between s3 and the client, so that we can serve files on our own domain. otherwise redirects to s3
 	},
 	
 	obfuscateClJs: false, // Should we obfuscate all clientside js before sending it to the clients?
