@@ -175,8 +175,8 @@ s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 		let ex = fs.existsSync(pathch);
 		let ext = path.extname(file.name).toLowerCase()
 		let fid = file.name.split(ext).join('');
-		fid = `${fid}${ext}`;
 		if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
+		fid = `${fid}${ext}`;
 		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
 		console.log(paththumb);
 		if(ex) ex = fs.existsSync(paththumb);
