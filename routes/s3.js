@@ -164,6 +164,12 @@ s3.deleteFiles = async function (bucket, files) {
   })
 }
 
+
+s3.mergeFiles = async function(bucket, files, uploadsFolder) {
+	if(!s3.options.merge) return;
+	console.log(files);
+};
+
 let ports = new Array()
 s3.proxyPipe = async function (req, res, next, fileId) {
   let _url = `${s3.url}/${fileId}`
