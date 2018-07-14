@@ -81,7 +81,7 @@ if (config.serveFilesWithNode && config.useAlternateViewing) {
   normalHandles.forEach(function (vl) {
 	  safe.get(`*/${vl}/:id`, async (req, res, next) => {
       const id = req.params.id
-      const _path = path.join(__dirname, config.uploads.folder) + `/${vl}`
+      const _path = `${path.join(__dirname, config.uploads.folder)}/${vl}`
       const file = `${_path}/${id}`
       const ex = fs.existsSync(file)
       // Handle S3
