@@ -215,6 +215,7 @@ upload.prepareDropzone = function () {
       var p = document.createElement('p')
       p.innerHTML = response.description
       file.previewTemplate.querySelector('.link').appendChild(p)
+	  file.previewTemplate.querySelector('.progress').style.display = 'none'
 	  return
     }
 
