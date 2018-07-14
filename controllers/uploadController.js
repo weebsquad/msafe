@@ -23,12 +23,23 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const access = i => {
       const name = randomstring.generate(config.uploads.fileLength) + path.extname(file.originalname)
-      fs.access(path.join(uploadDir, name), err => {
-        if (err) return cb(null, name)
-        console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
-        if (i < maxTries) return access(i)
-        return cb('Could not allocate a unique file name. Try again?')
-      })
+	  if(s3.enabledCheck()) {
+		  let _ex = false;
+		  s3.files.forEach(function(vl) {
+			  if(vl['Key'] === `${s3.options.uploadsFolder}/${name}`) _ex = true;
+		  });
+		  if(!_ex) return cb(null, name) 
+		   console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
+		   if (i < maxTries) return access(i)
+		   return cb('Could not allocate a unique file name. Try again?')
+	  } else {
+		  fs.access(path.join(uploadDir, name), err => {
+			if (err) return cb(null, name)
+			console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
+			if (i < maxTries) return access(i)
+			return cb('Could not allocate a unique file name. Try again?')
+		  })
+	  }
     }
     access(0)
   }
@@ -167,6 +178,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     if (utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) {
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
+	  const pathUploads = path.join(__dirname, '..', config.uploads.folder, file.name);
+	  await s3.convertFile(s3.options.bucket, pathUploads, file.name);
     }
   }
 
