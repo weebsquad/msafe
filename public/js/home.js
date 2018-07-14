@@ -215,6 +215,7 @@ upload.prepareDropzone = function () {
       var p = document.createElement('p')
       p.innerHTML = response.description
       file.previewTemplate.querySelector('.link').appendChild(p)
+	  return
     }
 
     if (response.files[0].url) {
