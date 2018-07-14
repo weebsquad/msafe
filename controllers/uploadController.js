@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const access = i => {
-      const name = randomstring.generate(config.uploads.fileLength) + path.extname(file.originalname)
+      const name = randomstring.generate(config.uploads.fileLength) + path.extname(file.originalname).toLowerCase()
 	  if (s3.enabledCheck()) {
 		  let _ex = false
 		  s3.files.forEach(function (vl) {
