@@ -153,7 +153,7 @@ s3.deleteFiles = async function (bucket, files) {
 		  reject(err)
     })
     deleter.on('end', async function () {
-		  //console.log('done deleting')
+		  // console.log('done deleting')
 		   await s3.getFiles(bucket)
 		  for (var i = 0; i < s3.files.length; i++) {
 			  let vl = s3.files[i]
@@ -197,7 +197,7 @@ s3.mergeFiles = async function (bucket, files, uploadsFolder) {
     if (ex) {
       await s3.convertFile(bucket, pathch, file.name) // Convert normal
       const thumb = `thumbs/${fid}`
-      if(!s3.noThumbnail.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
+      if (!s3.noThumbnail.includes(ext)) await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
     }
   })
 }

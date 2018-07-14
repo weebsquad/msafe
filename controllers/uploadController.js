@@ -88,7 +88,7 @@ uploadsController.upload = async (req, res, next) => {
 uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersion) => {
   upload(req, res, async err => {
     if (err) {
-      //console.error(err)
+      // console.error(err)
       return res.json({ success: false, description: err })
     }
 
@@ -176,7 +176,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
       await utils.generateThumbs(file)
     }
-	const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
+    const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
     let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name)
   }
 
@@ -264,7 +264,6 @@ uploadsController.deleteFile = function (file) {
           file = file.substr(0, file.lastIndexOf('.')) + '.png'
           fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
 			  if (err) {
-
               return resolve()
 			  }
 			  fs.unlink(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), err => {

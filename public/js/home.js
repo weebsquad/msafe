@@ -210,7 +210,7 @@ upload.prepareDropzone = function () {
 
   dropzone.on('success', function (file, response) {
     // Handle the responseText here. For example, add the text to the preview element:
-	console.log(response.description);
+    console.log(response.description)
     if (response.success === false) {
       var p = document.createElement('p')
       p.innerHTML = response.description
@@ -229,11 +229,10 @@ upload.prepareDropzone = function () {
       file.previewTemplate.querySelector('.progress').style.display = 'none'
     }
   })
-  
-  dropzone.on('error', function(file, error) {
-	  console.log(error);
-	  
-  });
+
+  dropzone.on('error', function (file, error) {
+	  console.log(error)
+  })
 
   upload.prepareShareX()
 }
