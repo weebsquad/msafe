@@ -60,8 +60,8 @@ rateLimiting.load = function (safe) {
 	  obj['skipFailedRequests'] = config.skipFails
 	  if (obj['autoDelays'] === true) {
 		  delete obj['autoDelays']
-		  let delayAft = Math.round((obj['max']) * 0.75)
-		  let delayMs = Math.round((obj['windowMs'] / delayAft) * 0.65)
+		  let delayAft = Math.round((obj['max']) * 0.85)
+		  let delayMs = Math.round((obj['windowMs'] / delayAft) * 0.75)
 		  obj['delayMs'] = delayMs
 		  obj['delayAfter'] = delayAft
 	  }
