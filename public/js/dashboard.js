@@ -594,7 +594,11 @@ panel.changePassword = function () {
   container.className = 'container'
   container.innerHTML = `
 		<h2 class="subtitle">Change your password</h2>
-
+		<br>
+		<label class="label">Current password:</label>
+		<p class="control has-addons">
+			<input id="passwordOld" class="input is-expanded" type="password" placeholder="Your current password">
+		</p>
 		<label class="label">New password:</label>
 		<p class="control has-addons">
 			<input id="password" class="input is-expanded" type="password" placeholder="Your new password">
@@ -609,8 +613,8 @@ panel.changePassword = function () {
   panel.page.appendChild(container)
 
   document.getElementById('sendChangePassword').addEventListener('click', function () {
-    if (document.getElementById('password').value === document.getElementById('passwordConfirm').value) {
-      panel.sendNewPassword(document.getElementById('password').value)
+    if (document.getElementById('passwordOld').value.length > 1 && document.getElementById('password').value === document.getElementById('passwordConfirm').value) {
+      panel.sendNewPassword(document.getElementById('password').value, panel.username, false, '', document.getElementById('passwordOld').value)
     } else {
       swal({
         title: 'Password mismatch!',
@@ -623,8 +627,8 @@ panel.changePassword = function () {
   })
 }
 
-panel.sendNewPassword = function (pass, username = panel.username, random = false, adminpw = '') {
-  axios.post('/api/password/change', {username: username, password: pass, random: random, adminpw: adminpw})
+panel.sendNewPassword = function (pass, username = panel.username, random = false, adminpw = '', currpw = '') {
+  axios.post('/api/password/change', {username: username, password: pass, random: random, adminpw: adminpw, currpw: currpw})
     .then(function (response) {
       if (response.data.success === false) {
         if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)

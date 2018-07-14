@@ -225,6 +225,7 @@ authController.changePassword = async (req, res, next) => {
   let password = req.body.password
   let adminpw = req.body.adminpw || ''
   let random = req.body.random || false
+  let currpw = req.body.currpw || ''
   if (random === 0) random = false
   if (random === 1) random = true
   if (password === undefined && random === false) return res.json({ success: false, description: 'No password provided' })
@@ -269,10 +270,17 @@ authController.changePassword = async (req, res, next) => {
         return res.json(ret)
       })
     } else {
-      await db.table('users').where('id', targ.id).update({ password: hash })
-      let ret = { success: true }
-      if (random) ret['newpw'] = password
-      return res.json(ret)
+	  bcrypt.compare(currpw, targ.password, async (err, result) => {
+      if (err) {
+		console.log(err)
+		return res.json({ success: false, description: 'There was an error' })
+       }
+        if (result === false) return res.json({ success: false, description: 'Wrong password' })
+		  await db.table('users').where('id', targ.id).update({ password: hash })
+		  let ret = { success: true }
+		  if (random) ret['newpw'] = password
+		  return res.json(ret)
+	  });
     }
   })
 }
