@@ -58,7 +58,7 @@ for (let type in map) {
   for (let key in map[type]) {
     let obj = map[type][key]
     routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
-	console.log(`Loaded API route ${key}`);
+	console.log(`Loaded API route '/${key}'`);
   }
 }
 
