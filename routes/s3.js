@@ -6,6 +6,7 @@ const path = require('path')
 const AWS = require('aws-sdk')
 const request = require('request')
 const http = require('http')
+const utils = require('../controllers/utilsController.js')
 
 const optionsS3 = config.s3
 
@@ -167,11 +168,17 @@ s3.deleteFiles = async function (bucket, files) {
 
 s3.mergeFiles = async function(bucket, files, uploadsFolder) {
 	if(!s3.options.merge) return;
-	console.log(files);
 	files.forEach(function(file) {
 		const pathch = path.join(uploadsFolder, file.name);
 		let ex = fs.existsSync(pathch);
-		
+		let ext = path.extname(file.name).toLowerCase()
+		let fid = file.name.split(ext).join('');
+		fid = `${fid}${ext}`;
+		if(utils.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
+		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
+		console.log(paththumb);
+		if(ex) ex = fs.existsSync(paththumb);
+		if(ex) console.log('have both!');
 	});
 };
 
