@@ -207,26 +207,26 @@ authController.register = async (req, res, next) => {
       console.log(err)
       return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' })
     }
-	async function finalize() {
-		const token = randomstring.generate(64)
-		await db.table('users').insert({
+    async function finalize () {
+      const token = randomstring.generate(64)
+      await db.table('users').insert({
 		  username: username,
 		  password: hash,
 		  token: token,
 		  enabled: 1
-		})
-		return res.json({ success: true, token: token })
-	}
-	if(!bypassEnable) return await finalize()
-	console.log(_user);
-	bcrypt.compare(adminpw, _user.password, async (err, result) => {
-        if (err) {
+      })
+      return res.json({ success: true, token: token })
+    }
+    if (!bypassEnable) return await finalize()
+
+    bcrypt.compare(adminpw, _user.password, async (err, result) => {
+      if (err) {
 			  console.log(err)
 			  return res.json({ success: false, description: 'There was an error' })
-        }
-        if (result === false) return res.json({ success: false, description: 'Wrong password' })
-		return await finalize();
-	});
+      }
+      if (result === false) return res.json({ success: false, description: 'Wrong password' })
+      return await finalize()
+    })
   })
 }
 
@@ -284,16 +284,16 @@ authController.changePassword = async (req, res, next) => {
       })
     } else {
 	  bcrypt.compare(currpw, targ.password, async (err, result) => {
-      if (err) {
-		console.log(err)
-		return res.json({ success: false, description: 'There was an error' })
-       }
+        if (err) {
+          console.log(err)
+          return res.json({ success: false, description: 'There was an error' })
+        }
         if (result === false) return res.json({ success: false, description: 'Old password is wrong' })
 		  await db.table('users').where('id', targ.id).update({ password: hash })
 		  let ret = { success: true }
 		  if (random) ret['newpw'] = password
 		  return res.json(ret)
-	  });
+	  })
     }
   })
 }
