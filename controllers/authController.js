@@ -275,7 +275,7 @@ authController.changePassword = async (req, res, next) => {
 		console.log(err)
 		return res.json({ success: false, description: 'There was an error' })
        }
-        if (result === false) return res.json({ success: false, description: 'Wrong password' })
+        if (result === false) return res.json({ success: false, description: 'Old password is wrong' })
 		  await db.table('users').where('id', targ.id).update({ password: hash })
 		  let ret = { success: true }
 		  if (random) ret['newpw'] = password
