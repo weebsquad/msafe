@@ -243,6 +243,7 @@ upload.prepareDropzone = function () {
 	  setTimeout(function() { 
 		dropzone.addFile(file) 
 		file.previewTemplate.querySelector('.link').style.display = 'none'
+		file.previewTemplate.style.display = 'none'
 	  }, (response.retryAfter)*1000);
   })
 
