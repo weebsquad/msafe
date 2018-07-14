@@ -204,7 +204,7 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 	*/
 }
 
-s3.initialize = async function (upldir) {
+s3.initialize = async function (upldir, files) {
   if (!s3.enabledCheck()) return
   delete clientOpts['s3Options']
   clientOpts['s3Client'] = s3.awsS3Client
@@ -212,6 +212,7 @@ s3.initialize = async function (upldir) {
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
   await s3.getFiles(optionsS3.bucket)
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
+  await s3.mergeFiles(s3.options.bucket, files, upldir);
 }
 
 module.exports = s3
