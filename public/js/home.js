@@ -233,6 +233,16 @@ upload.prepareDropzone = function () {
   dropzone.on('error', function (file, error) {
 	  console.log(error)
 	  console.log(file);
+	  file.previewTemplate.querySelector('.progress').style.display = 'none'
+	  let _d = response.description;
+	  if(_d === 'Too many requests, please try again later.') _d = 'Ratelimited, retrying';
+	  var p = document.createElement('p')
+      p.innerHTML = _d
+      file.previewTemplate.querySelector('.link').appendChild(p)
+	  setTimeout(function() { 
+		dropzone.addFile(file) 
+		file.previewTemplate.querySelector('.link').style.display = 'none'
+	  }, (response.retryAfter)*1000);
   })
 
   upload.prepareShareX()
