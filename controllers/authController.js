@@ -172,6 +172,7 @@ authController.register = async (req, res, next) => {
 
   const username = req.body.username
   const password = req.body.password
+  let adminpw = req.body.adminpw
 
   if (username === undefined) return res.json({ success: false, description: 'No username provided' })
   if (password === undefined) return res.json({ success: false, description: 'No password provided' })
@@ -206,14 +207,25 @@ authController.register = async (req, res, next) => {
       console.log(err)
       return res.json({ success: false, description: 'Error generating password hash (╯°□°）╯︵ ┻━┻' })
     }
-    const token = randomstring.generate(64)
-    await db.table('users').insert({
-      username: username,
-      password: hash,
-      token: token,
-      enabled: 1
-    })
-    return res.json({ success: true, token: token })
+	function finalize() {
+		const token = randomstring.generate(64)
+		await db.table('users').insert({
+		  username: username,
+		  password: hash,
+		  token: token,
+		  enabled: 1
+		})
+		return res.json({ success: true, token: token })
+	}
+	if(!bypassEnable) return finalize()
+	bcrypt.compare(adminpw, user.password, async (err, result) => {
+        if (err) {
+			  console.log(err)
+			  return res.json({ success: false, description: 'There was an error' })
+        }
+        if (result === false) return res.json({ success: false, description: 'Wrong password' })
+		return finalize();
+	});
   })
 }
 
