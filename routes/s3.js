@@ -99,9 +99,9 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 s3.convertFile = async function (bucket, localPath, remotePath) {
   return new Promise(function (resolve, reject) {
     // const fileName = localPath.split('.').reverse().splice(1).reverse().join('.')
-    s3.uploadFile(bucket, remotePath, localPath).then(() => {
+    s3.uploadFile(bucket, remotePath, localPath).then(r => {
       fs.unlinkSync(localPath)
-      resolve()
+      resolve(r)
     }).catch(e => { reject(e) })
   })
 }
