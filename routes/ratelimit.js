@@ -17,17 +17,30 @@ rateLimiting.keyGen = async function (req, res) {
   return key
 }
 
+/*
 rateLimiting.updateCache = async function (token) {
   const usr = await db.table('users').where('token', token).first()
   if (userCache[token] !== usr) userCache[token] = usr
 }
+*/
 
+/*
 rateLimiting.skipHandler = function (req, res) {
   const token = req.headers.token
   if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
     const user = userCache[token]
     if (user !== undefined && (config.usersBypassRateLimiting.indexOf(user.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(user.username) > -1))) return true
     rateLimiting.updateCache(token)
+  }
+  return false
+}
+*/
+
+rateLimiting.skipHandler = async function (req, res) {
+  const token = req.headers.token
+  if (token && (config.adminsBypassRatelimiting === true || config.usersBypassRateLimiting.length > 0)) {
+    const usr = await db.table('users').where('token', token).first()
+    if (usr !== undefined && (config.usersBypassRateLimiting.indexOf(usr.username) > -1 || (config.adminsBypassRatelimiting === true && config.admins.indexOf(usr.username) > -1))) return true
   }
   return false
 }
