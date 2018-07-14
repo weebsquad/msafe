@@ -72,7 +72,8 @@ module.exports = {
 		'.csh',
 		'.bash_profile',
 		'.bashrc',
-		'.profile'
+		'.profile',
+		'.jpg_large'
 	],
 	
 	imageExtensions: ['.jpg', '.jpeg', '.bmp', '.gif', '.png'],
