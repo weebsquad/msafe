@@ -9,8 +9,8 @@ const http = require('http')
 
 let s3 = {}
 const optionsS3 = config.s3
-s3.imageExtensions = config.imageExtensions;
-s3.videoExtensions = config.videoExtensions;
+s3.imageExtensions = config.imageExtensions
+s3.videoExtensions = config.videoExtensions
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default
@@ -31,7 +31,6 @@ const clientOpts = {
     // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
   }
 }
-
 
 s3.options = optionsS3
 s3.awsS3Client = new AWS.S3(clientOpts['s3Options'])
@@ -92,7 +91,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
 		  reject(err)
     })
     uploader.on('end', async function () {
-		  //console.log('done uploading')
+		  // console.log('done uploading')
 		  await s3.getFiles(s3.options.bucket)
 		  resolve(true)
     })
@@ -153,7 +152,7 @@ s3.deleteFiles = async function (bucket, files) {
 		  reject(err)
     })
     deleter.on('end', function () {
-		  //console.log('done deleting')
+		  // console.log('done deleting')
 		  // await s3.getFiles()
 		  for (var i = 0; i < s3.files.length; i++) {
 			  let vl = s3.files[i]
@@ -167,52 +166,51 @@ s3.deleteFiles = async function (bucket, files) {
   })
 }
 
-
-s3.fixDb = async function() {
-	let files = await db.table('files').select('name', 'id', 'userid', 'original');
-	if(s3.enabledCheck()) {
-		// Check S3 files
-		files.forEach(async function(file) {
-			let inS3 = false;
-			s3.files.forEach(function(fl) { if(fl.Key === `${optionsS3.uploadsFolder}/${file.name}`) inS3 = true; });
-			if(!inS3) await db.table('files').where('id', file.id).del()
-		});
-	} else {
-		// Check files
-		// todo
-	}
+s3.fixDb = async function () {
+  let files = await db.table('files').select('name', 'id', 'userid', 'original')
+  if (s3.enabledCheck()) {
+    // Check S3 files
+    files.forEach(async function (file) {
+      let inS3 = false
+      s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${file.name}`) inS3 = true })
+      if (!inS3) await db.table('files').where('id', file.id).del()
+    })
+  } else {
+    // Check files
+    // todo
+  }
 }
 
-s3.mergeFiles = async function(bucket, files, uploadsFolder) {
-	if(!s3.options.merge) return;
-	files.forEach(async function(file) {
-		const pathch = path.join(uploadsFolder, file.name);
-		let ex = fs.existsSync(pathch);
-		let ext = path.extname(file.name).toLowerCase()
-		let fid = file.name.split(ext).join('');
-		//if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
-		//fid = `${fid}${ext}`;
-		fid = `${fid}.png`; // Apparently thumbnails are always png? ok
-		const paththumb = path.join(uploadsFolder, 'thumbs', fid);
-		if(ex) ex = fs.existsSync(paththumb);
-		if(ex) {
-			await s3.convertFile(bucket, pathch, file.name); // Convert normal
-			const thumb = `thumbs/${fid}`;
-			await s3.convertFile(bucket, paththumb, thumb); // Convert thumbnail
-		}
-	});
-};
+s3.mergeFiles = async function (bucket, files, uploadsFolder) {
+  if (!s3.options.merge) return
+  files.forEach(async function (file) {
+    const pathch = path.join(uploadsFolder, file.name)
+    let ex = fs.existsSync(pathch)
+    let ext = path.extname(file.name).toLowerCase()
+    let fid = file.name.split(ext).join('')
+    // if(s3.videoExtensions.includes(ext) || ext === '.gif') ext = '.png'
+    // fid = `${fid}${ext}`;
+    fid = `${fid}.png` // Apparently thumbnails are always png? ok
+    const paththumb = path.join(uploadsFolder, 'thumbs', fid)
+    if (ex) ex = fs.existsSync(paththumb)
+    if (ex) {
+      await s3.convertFile(bucket, pathch, file.name) // Convert normal
+      const thumb = `thumbs/${fid}`
+      await s3.convertFile(bucket, paththumb, thumb) // Convert thumbnail
+    }
+  })
+}
 
 let ports = new Array()
 s3.proxyPipe = async function (req, res, next, fileId) {
   let _url = `${s3.url}/${fileId}`
   _url = _url.split('https://').join('http://')
   try {
-	if(s3.options.proxyFiles) {
-		request(_url).pipe(res)
-	} else {
-		res.redirect(_url);
-	}
+    if (s3.options.proxyFiles) {
+      request(_url).pipe(res)
+    } else {
+      res.redirect(_url)
+    }
   } catch (e) { /* */ }
 
   /*
@@ -245,8 +243,8 @@ s3.initialize = async function (upldir, files) {
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
   await s3.getFiles(optionsS3.bucket)
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
-  await s3.mergeFiles(s3.options.bucket, files, upldir);
-  await s3.fixDb();
+  await s3.mergeFiles(s3.options.bucket, files, upldir)
+  await s3.fixDb()
 }
 
 module.exports = s3
