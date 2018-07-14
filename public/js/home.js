@@ -233,6 +233,7 @@ upload.prepareDropzone = function () {
   dropzone.on('error', function (file, error) {
 	  console.log(error)
 	  console.log(file);
+	  let response = error;
 	  file.previewTemplate.querySelector('.progress').style.display = 'none'
 	  let _d = response.description;
 	  if(_d === 'Too many requests, please try again later.') _d = 'Ratelimited, retrying';
