@@ -6,7 +6,8 @@ const path = require('path')
 const AWS = require('aws-sdk')
 const request = require('request')
 const http = require('http')
-const utils = require('../controllers/utilsController.js')
+const utils = require('../controllers/utilsController')
+console.log(utils);
 
 const optionsS3 = config.s3
 
