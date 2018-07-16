@@ -53,7 +53,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 
       const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
       let tries = 0
-      let interv = setInterval(function () {
+      let interv = setInterval(async function () {
         if (fs.existsSync(_thumbs)) {
           clearInterval(interv)
           await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
