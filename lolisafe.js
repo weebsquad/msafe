@@ -8,7 +8,7 @@ let db = require('knex')(config.database)
 const fs = require('fs')
 const exphbs = require('express-handlebars')
 const express = require('express')
-let safe = express()
+let safeog = express()
 const path = require('path')
 const MimeLookup = require('mime-lookup')
 const mime = new MimeLookup(require('mime-db'))
@@ -156,8 +156,7 @@ let reloadModules = function() {
 };
 
 let init = async function (reload = false) {
-  delete safe;
-  safe = express();
+  let _safenew = express();
   if(!reload) {
 	  if(config.autoReload > 0) setInterval(reloadModules, config.autoReload);
 	  await require('./database/db.js')(db)
@@ -165,7 +164,9 @@ let init = async function (reload = false) {
 	  let fl = await db.table('files').select('name')
 	  await s3.initialize(_path, fl)
   }
-  setupExpress(safe);
-  safe.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
+  setupExpress(_safenew);
+  delete safeog;
+  safeog = _safenew
+  safeog.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
 }
 init()
