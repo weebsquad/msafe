@@ -162,10 +162,10 @@ let init = async function (reload = false) {
   let _safenew = express();
   if(!reload) {
 	  if(config.autoReload > 0) setInterval(reloadModules, config.autoReload);
-	  await require('./database/db.js')(db)
-	  const _path = path.join(__dirname, config.uploads.folder)
-	  let fl = await db.table('files').select('name')
   }
+  await require('./database/db.js')(db)
+  const _path = path.join(__dirname, config.uploads.folder)
+  let fl = await db.table('files').select('name')
   await s3.initialize(_path, fl)
   setupExpress(_safenew);
   if(reload) safeog.close();
