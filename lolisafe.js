@@ -145,7 +145,6 @@ let setupExpress = function(safe, reload = false) {
 }
 
 let reloadModules = function() {
-	console.log('Reloading!');
 	require.cache = new Array();
 	config = require('./config.js')
 	api = require('./routes/api.js')

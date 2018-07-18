@@ -68,7 +68,6 @@ function setRoutes (routes, log = true) {
 }
 
 api.reloadModules = function () {
-  console.log('Reloading API')
   require.cache = new Array()
   config = require('../config.js')
   uploadController = require('../controllers/uploadController')
@@ -81,7 +80,7 @@ api.reloadModules = function () {
   authController.reloadModules()
   route = require('express').Router()
   setRoutes(route, false)
-  console.log('Done!')
+  console.log('Reloaded')
 }
 
 setRoutes(route, false)
