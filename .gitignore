@@ -16,3 +16,4 @@ charmap.js
 start.sh
 restart.sh
 stop.sh
+loop.sh

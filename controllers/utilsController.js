@@ -1,15 +1,21 @@
+let config = require('../config.js')
+let db = require('knex')(config.database)
+let s3 = require('../routes/s3.js')
 const path = require('path')
-const config = require('../config.js')
 const fs = require('fs')
 const gm = require('gm')
 const ffmpeg = require('fluent-ffmpeg')
-const db = require('knex')(config.database)
-const s3 = require('../routes/s3.js')
 
 const utilsController = {}
 utilsController.imageExtensions = config.imageExtensions
 utilsController.videoExtensions = config.videoExtensions
 utilsController.noThumbnail = config.noThumbnail
+
+utilsController.reloadModules = function (requireUncached) {
+  config = requireUncached('../config.js')
+  s3 = requireUncached('../routes/s3.js')
+  db = requireUncached('knex')(config.database)
+}
 
 utilsController.getPrettyDate = function (date) {
   return date.getFullYear() + '-' +

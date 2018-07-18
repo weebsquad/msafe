@@ -1,9 +1,11 @@
-const config = require('../config.js')
-const routes = require('express').Router()
-const uploadController = require('../controllers/uploadController')
-const albumsController = require('../controllers/albumsController')
-const tokenController = require('../controllers/tokenController')
-const authController = require('../controllers/authController')
+let config = require('../config.js')
+let uploadController = require('../controllers/uploadController')
+let albumsController = require('../controllers/albumsController')
+let tokenController = require('../controllers/tokenController')
+let authController = require('../controllers/authController')
+let route = require('express').Router()
+
+let api = {}
 
 function check (req, res, next) {
   return res.json({
@@ -54,12 +56,30 @@ const map = {
   }
 }
 
-for (let type in map) {
-  for (let key in map[type]) {
-    let obj = map[type][key]
-    routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
-    console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+function setRoutes (routes) {
+  for (let type in map) {
+	  for (let key in map[type]) {
+      let obj = map[type][key]
+      routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
+      console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+	  }
   }
+  api.routes = routes
 }
 
-module.exports = routes
+api.reloadModules = function (requireUncached) {
+  config = requireUncached('../config.js')
+  uploadController = requireUncached('../controllers/uploadController')
+  uploadController.reloadModules(requireUncached)
+  albumsController = requireUncached('../controllers/albumsController')
+  albumsController.reloadModules(requireUncached)
+  tokenController = requireUncached('../controllers/tokenController')
+  tokenController.reloadModules(requireUncached)
+  authController = requireUncached('../controllers/authController')
+  authController.reloadModules(authController)
+  route = require('express').Router()
+  setRoutes(route)
+}
+
+setRoutes(route)
+module.exports = api

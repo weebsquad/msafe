@@ -1,9 +1,9 @@
-const config = require('../config.js')
-const db = require('knex')(config.database)
+let config = require('../config.js')
+let db = require('knex')(config.database)
+let utils = require('./utilsController.js')
+let uploadController = require('./uploadController.js')
 const bcrypt = require('bcrypt')
 const randomstring = require('randomstring')
-const utils = require('./utilsController.js')
-const uploadController = require('./uploadController.js')
 
 let alpha = 'qwertyuiopasdfghjklzxcvbnm'
 alpha = alpha + alpha.toUpperCase()
@@ -13,6 +13,13 @@ const pwchars = (alpha + num + symbols).split('')
 const usrchars = (alpha + num).split('')
 
 let authController = {}
+
+authController.reloadModules = function (requireUncached) {
+  config = requireUncached('../config.js')
+  utils = requireUncached('./utilsController.js')
+  uploadController = requireUncached('./uploadController.js')
+  db = requireUncached('knex')(config.database)
+}
 
 authController.listAdmins = async (req, res, next) => {
   const user = await utils.authorize(req, res)

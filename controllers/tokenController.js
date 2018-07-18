@@ -1,9 +1,14 @@
-const config = require('../config.js')
-const db = require('knex')(config.database)
+let config = require('../config.js')
+let db = require('knex')(config.database)
+let utils = require('./utilsController.js')
 const randomstring = require('randomstring')
-const utils = require('./utilsController.js')
 
 const tokenController = {}
+tokenController.reloadModules = function (requireUncached) {
+  config = requireUncached('../config.js')
+  db = requireUncached('knex')(config.database)
+  utils = requireUncached('./utilsController.js')
+}
 
 tokenController.verify = async (req, res, next) => {
   const token = req.body.token
