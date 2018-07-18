@@ -68,6 +68,7 @@ function setRoutes (routes) {
 }
 
 api.reloadModules = function (requireUncached) {
+  console.log('Reloading API');
   config = requireUncached('../config.js')
   uploadController = requireUncached('../controllers/uploadController')
   uploadController.reloadModules(requireUncached)
@@ -79,6 +80,7 @@ api.reloadModules = function (requireUncached) {
   authController.reloadModules(authController)
   route = require('express').Router()
   setRoutes(route)
+  console.log('Done!');
 }
 
 setRoutes(route)

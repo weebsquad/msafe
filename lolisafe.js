@@ -144,6 +144,7 @@ let setupExpress = function(safe) {
 }
 
 let reloadModules = function() {
+	console.log('Reloading!');
 	config = requireUncached('./config.js')
 	api = requireUncached('./routes/api.js')
 	album = requireUncached('./routes/album.js')
