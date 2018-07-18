@@ -91,7 +91,7 @@ rateLimiting.load = function (safe, nolog = false) {
 	  safe.use(key, rl)
 	  if(!nolog) console.log(`Loaded ratelimit for ${key}`)
   }
-  console.log('Loaded all ratelimits!')
+  if(!nolog) console.log('Loaded all ratelimits!')
 }
 
 module.exports = rateLimiting
