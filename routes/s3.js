@@ -7,7 +7,7 @@ const AWS = require('aws-sdk')
 const request = require('request')
 const http = require('http')
 
-let initialized = false;
+let initialized = false
 let s3 = {}
 const optionsS3 = config.s3
 s3.imageExtensions = config.imageExtensions

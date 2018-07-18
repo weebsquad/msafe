@@ -12,7 +12,7 @@ utilsController.videoExtensions = config.videoExtensions
 utilsController.noThumbnail = config.noThumbnail
 
 utilsController.reloadModules = function (require) {
-  require.cache = new Array();
+  require.cache = new Array()
   config = require('../config.js')
   db = require('knex')(config.database)
 }

@@ -168,9 +168,8 @@ let init = async function (reload = false) {
   let fl = await db.table('files').select('name')
   await s3.initialize(_path, fl)
   setupExpress(_safenew);
-  if(reload) safeog.close();
-  delete safeog;
+  if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
-  safeog.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
+  serv = safeog.listen(config.port, () => { if(!reload) console.log(`uploader started on port ${config.port}`) })
 }
 init()

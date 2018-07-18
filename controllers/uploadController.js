@@ -16,7 +16,7 @@ const maxTries = config.uploads.maxTries || 1
 const uploadDir = path.join(__dirname, '..', config.uploads.folder)
 
 uploadsController.reloadModules = function () {
-  require.cache = new Array();
+  require.cache = new Array()
   config = require('../config.js')
   db = require('knex')(config.database)
   utils = require('./utilsController.js')

@@ -7,12 +7,11 @@ const fs = require('fs')
 const Zip = require('jszip')
 const albumsController = {}
 
-
-albumsController.reloadModules = function() {
-	require.cache = new Array();
-	config = require('../config.js')
-	db = require('knex')(config.database)
-	utils = require('./utilsController.js')
+albumsController.reloadModules = function () {
+  require.cache = new Array()
+  config = require('../config.js')
+  db = require('knex')(config.database)
+  utils = require('./utilsController.js')
 }
 
 albumsController.list = async (req, res, next) => {

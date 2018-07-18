@@ -15,7 +15,7 @@ const usrchars = (alpha + num).split('')
 let authController = {}
 
 authController.reloadModules = function () {
-  require.cache = new Array();
+  require.cache = new Array()
   config = require('../config.js')
   utils = require('./utilsController.js')
   uploadController = require('./uploadController.js')

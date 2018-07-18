@@ -61,17 +61,15 @@ function setRoutes (routes, log = true) {
 	  for (let key in map[type]) {
       let obj = map[type][key]
       routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
-      if(log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+      if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 	  }
   }
   api.routes = routes
 }
 
-
-
 api.reloadModules = function () {
-	console.log('Reloading API');
-  require.cache = new Array();
+  console.log('Reloading API')
+  require.cache = new Array()
   config = require('../config.js')
   uploadController = require('../controllers/uploadController')
   uploadController.reloadModules()
@@ -83,7 +81,7 @@ api.reloadModules = function () {
   authController.reloadModules()
   route = require('express').Router()
   setRoutes(route, false)
-  console.log('Done!');
+  console.log('Done!')
 }
 
 setRoutes(route, false)
