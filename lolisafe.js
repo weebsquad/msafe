@@ -145,7 +145,9 @@ let setupExpress = function(safe, reload = false) {
 }
 
 let reloadModules = function() {
+	console.log(require.cache);
 	require.cache = new Array();
+	console.log(require.cache);
 	config = require('./config.js')
 	api = require('./routes/api.js')
 	album = require('./routes/album.js')
