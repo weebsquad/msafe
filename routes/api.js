@@ -67,17 +67,20 @@ function setRoutes (routes, log = true) {
   api.routes = routes
 }
 
-api.reloadModules = function (requireUncached) {
-  console.log('Reloading API');
-  config = requireUncached('../config.js')
-  uploadController = requireUncached('../controllers/uploadController')
-  uploadController.reloadModules(requireUncached)
-  albumsController = requireUncached('../controllers/albumsController')
-  albumsController.reloadModules(requireUncached)
-  tokenController = requireUncached('../controllers/tokenController')
-  tokenController.reloadModules(requireUncached)
-  authController = requireUncached('../controllers/authController')
-  authController.reloadModules(authController)
+
+
+api.reloadModules = function () {
+	console.log('Reloading API');
+  require.cache = new Array();
+  config = require('../config.js')
+  uploadController = require('../controllers/uploadController')
+  uploadController.reloadModules()
+  albumsController = require('../controllers/albumsController')
+  albumsController.reloadModules()
+  tokenController = require('../controllers/tokenController')
+  tokenController.reloadModules()
+  authController = require('../controllers/authController')
+  authController.reloadModules()
   route = require('express').Router()
   setRoutes(route, false)
   console.log('Done!');

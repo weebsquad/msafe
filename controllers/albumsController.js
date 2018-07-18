@@ -1,11 +1,19 @@
-const config = require('../config.js')
-const db = require('knex')(config.database)
+let config = require('../config.js')
+let db = require('knex')(config.database)
+let utils = require('./utilsController.js')
 const randomstring = require('randomstring')
-const utils = require('./utilsController.js')
 const path = require('path')
 const fs = require('fs')
 const Zip = require('jszip')
 const albumsController = {}
+
+
+albumsController.reloadModules = function() {
+	require.cache = new Array();
+	config = require('../config.js')
+	db = require('knex')(config.database)
+	utils = require('./utilsController.js')
+}
 
 albumsController.list = async (req, res, next) => {
   const user = await utils.authorize(req, res)

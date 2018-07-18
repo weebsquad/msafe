@@ -14,11 +14,12 @@ const usrchars = (alpha + num).split('')
 
 let authController = {}
 
-authController.reloadModules = function (requireUncached) {
-  config = requireUncached('../config.js')
-  utils = requireUncached('./utilsController.js')
-  uploadController = requireUncached('./uploadController.js')
-  db = requireUncached('knex')(config.database)
+authController.reloadModules = function () {
+  require.cache = new Array();
+  config = require('../config.js')
+  utils = require('./utilsController.js')
+  uploadController = require('./uploadController.js')
+  db = require('knex')(config.database)
 }
 
 authController.listAdmins = async (req, res, next) => {

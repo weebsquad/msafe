@@ -7,6 +7,7 @@ const AWS = require('aws-sdk')
 const request = require('request')
 const http = require('http')
 
+let initialized = false;
 let s3 = {}
 const optionsS3 = config.s3
 s3.imageExtensions = config.imageExtensions
@@ -237,7 +238,8 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 }
 
 s3.initialize = async function (upldir, files) {
-  if (!s3.enabledCheck()) return
+  if (!s3.enabledCheck() || initialized === true) return
+  initialized = true
   delete clientOpts['s3Options']
   clientOpts['s3Client'] = s3.awsS3Client
   s3['client'] = libs3.createClient(clientOpts)

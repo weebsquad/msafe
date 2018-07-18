@@ -1,6 +1,6 @@
 let config = require('../config.js')
 let db = require('knex')(config.database)
-let s3 = require('../routes/s3.js')
+const s3 = require('../routes/s3.js')
 const path = require('path')
 const fs = require('fs')
 const gm = require('gm')
@@ -11,10 +11,10 @@ utilsController.imageExtensions = config.imageExtensions
 utilsController.videoExtensions = config.videoExtensions
 utilsController.noThumbnail = config.noThumbnail
 
-utilsController.reloadModules = function (requireUncached) {
-  config = requireUncached('../config.js')
-  s3 = requireUncached('../routes/s3.js')
-  db = requireUncached('knex')(config.database)
+utilsController.reloadModules = function (require) {
+  require.cache = new Array();
+  config = require('../config.js')
+  db = require('knex')(config.database)
 }
 
 utilsController.getPrettyDate = function (date) {

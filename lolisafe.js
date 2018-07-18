@@ -146,13 +146,15 @@ let setupExpress = function(safe) {
 
 let reloadModules = function() {
 	console.log('Reloading!');
-	config = requireUncached('./config.js')
-	api = requireUncached('./routes/api.js')
-	album = requireUncached('./routes/album.js')
-	rateLimiting = requireUncached('./routes/ratelimit.js')
-	obfuscation = requireUncached('./routes/obfuscate.js')
-	s3 = requireUncached('./routes/s3.js')
+	require.cache = new Array();
+	config = require('./config.js')
+	api = require('./routes/api.js')
+	album = require('./routes/album.js')
+	rateLimiting = require('./routes/ratelimit.js')
+	obfuscation = require('./routes/obfuscate.js')
+	//s3 = requireUncached('./routes/s3.js')
 	db = requireUncached('knex')(config.database)
+	api.reloadModules();
 	init(true);
 };
 

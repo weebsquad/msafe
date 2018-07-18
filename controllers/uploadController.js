@@ -2,7 +2,7 @@ let config = require('../config.js')
 let db = require('knex')(config.database)
 let utils = require('./utilsController.js')
 let encoding = require('./encodingController')
-let s3 = require('../routes/s3.js')
+const s3 = require('../routes/s3.js')
 const path = require('path')
 const multer = require('multer')
 const randomstring = require('randomstring')
@@ -15,12 +15,12 @@ const uploadsController = {}
 const maxTries = config.uploads.maxTries || 1
 const uploadDir = path.join(__dirname, '..', config.uploads.folder)
 
-uploadsController.reloadModules = function (requireUncached) {
-  config = requireUncached('../config.js')
-  db = requireUncached('knex')(config.database)
-  utils = requireUncached('./utilsController.js')
-  encoding = requireUncached('./encodingController')
-  s3 = requireUncached('../routes/s3.js')
+uploadsController.reloadModules = function () {
+  require.cache = new Array();
+  config = require('../config.js')
+  db = require('knex')(config.database)
+  utils = require('./utilsController.js')
+  encoding = require('./encodingController')
 }
 
 const storage = multer.diskStorage({
