@@ -15,6 +15,7 @@ const mime = new MimeLookup(require('mime-db'))
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const requireUncached = require('require-uncached');
+let serv;
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
@@ -165,6 +166,7 @@ let init = async function (reload = false) {
 	  await s3.initialize(_path, fl)
   }
   setupExpress(_safenew);
+  safeog.close();
   delete safeog;
   safeog = _safenew
   safeog.listen(config.port, () => console.log(`uploader started on port ${config.port}`))
