@@ -168,16 +168,17 @@ let restart = function() {
 	}, 2000);
 }
 
-let crons = new Array();
+
 function doCrons() {
 	if(config.autoRestart !== '') {
+		try{
 		let cronJob1 = new CronJob({
 			cronTime: config.autoRestart,
 			onTick: restart,
 			start: true,
 			runOnInit: false
 		});
-		crons.push(cronJob1);
+		} catch(e) { console.error(e); }
 	}
 }
 
