@@ -159,10 +159,21 @@ let reloadModules = function() {
 	init(true);
 };
 
+let restart = function() {
+	console.log('AUTO RESTARTING!');
+	serv.close();
+	delete serv;
+	delete safeog;
+	setTimeout(function() {
+		process.exit(0);
+	}, 2000);
+}
+
 let init = async function (reload = false) {
   let _safenew = express();
   if(!reload) {
 	  if(config.autoReload > 0) setInterval(reloadModules, config.autoReload);
+	  if(config.autoRestart > 0) setInterval(restart, config.autoRestart);
   }
   await require('./database/db.js')(db)
   const _path = path.join(__dirname, config.uploads.folder)

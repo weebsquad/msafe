@@ -1,5 +1,7 @@
 module.exports = {
 
+	autoRestart: 24*60*60*1000, // 0 to disable autoRestart
+	autoReload: 1*60*60*1000, // 0 to disable autoReload
 	/*
 		If set to true the user will need to specify the auto-generated token
 		on each API call, meaning random strangers wont be able to use the service
