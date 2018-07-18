@@ -172,8 +172,8 @@ let crons = new Array();
 function doCrons() {
 	if(config.autoRestart !== '') {
 		let cronJob1 = new CronJob({
-			cronTime: config.autoRestart
-			'onTick': restart,
+			cronTime: config.autoRestart,
+			onTick: restart,
 			start: true,
 			runOnInit: false
 		});
