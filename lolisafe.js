@@ -23,7 +23,7 @@ fs.existsSync('./' + config.uploads.folder) || fs.mkdirSync('./' + config.upload
 fs.existsSync('./' + config.uploads.folder + '/thumbs') || fs.mkdirSync('./' + config.uploads.folder + '/thumbs')
 fs.existsSync('./' + config.uploads.folder + '/zips') || fs.mkdirSync('./' + config.uploads.folder + '/zips')
 
-let setupExpress = function(safe) {
+let setupExpress = function(safe, reload = false) {
 	safe.use(helmet())
 	safe.set('trust proxy', 1)
 
@@ -31,7 +31,7 @@ let setupExpress = function(safe) {
 	safe.set('view engine', 'handlebars')
 	safe.enable('view cache')
 
-	rateLimiting.load(safe) // Initialize ratelimits
+	rateLimiting.load(safe, reload) // Initialize ratelimits
 
 	safe.use(bodyParser.json({limit: '50mb'}))
 	safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
@@ -167,7 +167,7 @@ let init = async function (reload = false) {
   const _path = path.join(__dirname, config.uploads.folder)
   let fl = await db.table('files').select('name')
   await s3.initialize(_path, fl)
-  setupExpress(_safenew);
+  setupExpress(_safenew, reload);
   if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
   serv = safeog.listen(config.port, () => { if(!reload) console.log(`uploader started on port ${config.port}`) })

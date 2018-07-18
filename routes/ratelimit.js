@@ -70,7 +70,7 @@ rateLimiting.limitedHandler = function (options, req, res, next) {
   res.end()
 }
 
-rateLimiting.load = function (safe) {
+rateLimiting.load = function (safe, nolog = false) {
   for (let key in config.rateLimits) {
 	  let obj = config.rateLimits[key]
 	  let _a = function (req, res, next) {
@@ -89,7 +89,7 @@ rateLimiting.load = function (safe) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	  console.log(`Loaded ratelimit for ${key}`)
+	  if(nolog) console.log(`Loaded ratelimit for ${key}`)
   }
   console.log('Loaded all ratelimits!')
 }
