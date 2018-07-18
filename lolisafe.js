@@ -15,6 +15,7 @@ const mime = new MimeLookup(require('mime-db'))
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const requireUncached = require('require-uncached');
+const CronJob=require('cron').CronJob;
 let serv;
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
@@ -167,11 +168,24 @@ let restart = function() {
 	}, 2000);
 }
 
+let crons = new Array();
+function doCrons() {
+	if(config.autoRestart !== '') {
+		let cronJob1 = new CronJob({
+			cronTime: config.autoRestart
+			onTick: restart,
+			start: true,
+			runOnInit: false
+		});
+		crons.push(cronJob1);
+	}
+}
+
 let init = async function (reload = false) {
   let _safenew = express();
   if(!reload) {
 	  if(config.autoReload > 0) setInterval(reloadModules, config.autoReload);
-	  if(config.autoRestart > 0) setInterval(restart, config.autoRestart);
+	  doCrons();
   }
   await require('./database/db.js')(db)
   const _path = path.join(__dirname, config.uploads.folder)

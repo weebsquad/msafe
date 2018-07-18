@@ -1,6 +1,6 @@
 module.exports = {
 
-	autoRestart: 24*60*60*1000, // 0 to disable autoRestart
+	autoRestart: '00 00 00 * * * ', // A cronjob pattern, default restarts every day @ midnight
 	autoReload: 1*60*60*1000, // 0 to disable autoReload
 	/*
 		If set to true the user will need to specify the auto-generated token
