@@ -83,5 +83,5 @@ api.reloadModules = function () {
   console.log('Reloaded')
 }
 
-setRoutes(route, false)
+setRoutes(route, true)
 module.exports = api
