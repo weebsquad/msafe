@@ -56,12 +56,12 @@ const map = {
   }
 }
 
-function setRoutes (routes) {
+function setRoutes (routes, log = true) {
   for (let type in map) {
 	  for (let key in map[type]) {
       let obj = map[type][key]
       routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
-      console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+      if(log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 	  }
   }
   api.routes = routes
@@ -79,9 +79,9 @@ api.reloadModules = function (requireUncached) {
   authController = requireUncached('../controllers/authController')
   authController.reloadModules(authController)
   route = require('express').Router()
-  setRoutes(route)
+  setRoutes(route, false)
   console.log('Done!');
 }
 
-setRoutes(route)
+setRoutes(route, false)
 module.exports = api
