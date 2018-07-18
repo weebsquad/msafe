@@ -163,8 +163,8 @@ let init = async function (reload = false) {
 	  await require('./database/db.js')(db)
 	  const _path = path.join(__dirname, config.uploads.folder)
 	  let fl = await db.table('files').select('name')
-	  await s3.initialize(_path, fl)
   }
+  await s3.initialize(_path, fl)
   setupExpress(_safenew);
   if(reload) safeog.close();
   delete safeog;
