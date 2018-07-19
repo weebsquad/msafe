@@ -104,6 +104,7 @@ let init = async function(db){
 				}
 				console.log(`Added ${tableName}/${columnName}`);
 			}
+		}
 		
 		
 		
