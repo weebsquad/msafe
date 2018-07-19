@@ -107,7 +107,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
 		  console.log(expdate);
 		  let fl = await db.table('files').where('name', dbId)
 		  if(fl) {
-			  await fl.update({ timestampExpire: expdate });
+			  await await db.table('files').where('name', dbId).update({ timestampExpire: expdate });
 			  fl = await db.table('files').where('name', dbId).first();
 			  console.log(fl);
 		  }
