@@ -32,6 +32,7 @@ let init = async function(db){
 				'timestampExpire': 'integer',
 				'encodeVersion': 'integer',
 				'encodedString': 'string',
+				'deletekey': 'string',
 			},
 			'functions': {
 			},

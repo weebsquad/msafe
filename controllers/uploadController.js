@@ -128,31 +128,41 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           .first()
         let encodeString = ''
         if (encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion)
+        let now = new Date()
+        let txtHash = `${file.filename}${now}`
+        bcrypt.hash(txtHash, 10, async (err, hash) => {
+          let deletekey = ''
+          if (err) {
+			  console.log(err)
+          } else {
+			  deletekey = hash
+          }
+          if (!dbFile) {
+            files.push({
+              name: file.filename,
+              original: file.originalname,
+              type: file.mimetype,
+              size: file.size,
+              hash: fileHash,
+              ip: req.ip,
+              albumid: albumid,
+              userid: userid !== undefined ? userid.id : null,
+              timestamp: Math.floor(Date.now() / 1000),
+              timestampExpire: 0,
+              encodeVersion: encodeVersion,
+              encodedString: encodeString,
+              deletekey: deletekey
+            })
+          } else {
+            uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err))
+            existingFiles.push(dbFile)
+          }
 
-        if (!dbFile) {
-          files.push({
-            name: file.filename,
-            original: file.originalname,
-            type: file.mimetype,
-            size: file.size,
-            hash: fileHash,
-            ip: req.ip,
-            albumid: albumid,
-            userid: userid !== undefined ? userid.id : null,
-            timestamp: Math.floor(Date.now() / 1000),
-			timestampExpire: 0,
-            encodeVersion: encodeVersion,
-            encodedString: encodeString
-          })
-        } else {
-          uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err))
-          existingFiles.push(dbFile)
-        }
-
-        if (iteration === req.files.length) {
-          return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString)
-        }
-        iteration++
+          if (iteration === req.files.length) {
+            return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString)
+          }
+          iteration++
+        })
       })
     })
   })
@@ -217,17 +227,22 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
   })
 }
 
-
 uploadsController.delete = async (req, res) => {
-  const user = await utils.authorize(req, res)
-  if (!user.id) return
-  const id = req.body.id || req.params.file
+  let property = 'id'
+  let user
+  let id = req.body.id || ''
+  let deleteKey = req.params.deletekey || ''
+  if (deleteKey !== '') { id = deleteKey; property = 'deletekey' }
+  if (deleteKey === '') {
+    user = await utils.authorize(req, res)
+    if (!user.id) return
+  }
   if (id === undefined || id === '') {
     return res.json({ success: false, description: 'No file specified' })
   }
 
   const file = await db.table('files')
-    .where('id', id)
+    .where(property, id)
     .where(function () {
       if (!utils.isAdmin(user.username)) this.where('userid', user.id)
     })
@@ -235,8 +250,9 @@ uploadsController.delete = async (req, res) => {
   if (!file) return res.json({ success: false, description: 'No file found' })
   try {
     await uploadsController.deleteFile(file.name)
-    await db.table('files').where('id', id).del()
+    await db.table('files').where(property, id).del()
     if (file.albumid) {
+	  id = file.id
       await db.table('albums').where('id', file.albumid).update('editedAt', Math.floor(Date.now() / 1000))
     }
   } catch (err) {
@@ -245,7 +261,6 @@ uploadsController.delete = async (req, res) => {
 
   return res.json({ success: true })
 }
-
 
 uploadsController.deleteFile = function (file) {
   const ext = path.extname(file).toLowerCase()

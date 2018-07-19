@@ -29,7 +29,7 @@ const map = {
     'account/list': authController.listAccounts,
     'uploads': uploadController.list,
     'uploads/:page': uploadController.list,
-	'upload/getdelete/:file': uploadController.delete,
+    'upload/gdelete/:deletekey': uploadController.delete,
     'album/get/:identifier': albumsController.get,
     'album/zip/:identifier': albumsController.generateZip,
     'album/:id': uploadController.list,
@@ -58,16 +58,16 @@ const map = {
 }
 
 function setRoutes (routes, log = true) {
-  let i = 0;
+  let i = 0
   for (let type in map) {
 	  for (let key in map[type]) {
       let obj = map[type][key]
       routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
       if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
-		  i++;
+		  i++
 	  }
   }
-  console.log(`Loaded ${i} API routes!`);
+  console.log(`Loaded ${i} API routes!`)
   api.routes = routes
 }
 
