@@ -136,7 +136,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           if (err) {
 			  console.log(err)
           } else {
-			  deletekey = hash.toLowerCase()
+			  deletekey = hash.toLowerCase().split('/').join('')
           }
 
           if (!dbFile) {
