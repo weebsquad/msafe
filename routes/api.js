@@ -29,7 +29,7 @@ const map = {
     'account/list': authController.listAccounts,
     'uploads': uploadController.list,
     'uploads/:page': uploadController.list,
-    'upload/gdelete/:deletekey': uploadController.delete,
+    'gdelete/:deletekey': uploadController.delete,
     'album/get/:identifier': albumsController.get,
     'album/zip/:identifier': albumsController.generateZip,
     'album/:id': uploadController.list,
