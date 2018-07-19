@@ -186,7 +186,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       await utils.generateThumbs(file)
     }
     const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
-    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.id)
+    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name)
   }
 
   let albumSuccess = true

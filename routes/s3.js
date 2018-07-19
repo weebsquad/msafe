@@ -78,7 +78,7 @@ s3.getFiles = async function (bucket) {
   })
 }
 
-s3.uploadFile = async function (bucket, fileName, localPath, dbId) {
+s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
   return new Promise(function (resolve, reject) {
     let expdate = s3.getExpireDate(new Date());
     let params = {
@@ -105,8 +105,9 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId) {
 		  await s3.getFiles(s3.options.bucket)
 		  console.log(dbId)
 		  console.log(expdate);
-		  //await db.table('files').where('id', dbId).update({ timestampExpire: expdate });
-		  //console.log(await db.table('files').where('id', dbId));
+		  let fl = db.table('files').where('name', dbId);
+		  fl.update({ timestampExpire: expdate });
+		  console.log(fl);
 		  resolve(true)
     })
   })
