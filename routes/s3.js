@@ -67,7 +67,7 @@ s3.getFiles = async function (bucket) {
 
       contents.forEach(function (vl) {
         if (vl.Key === optionsS3.uploadsFolder + '/') return
-		//console.log(vl);
+		console.log(vl);
         flnew.push(vl)
       })
     })
@@ -103,8 +103,6 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
     uploader.on('end', async function () {
 		  // console.log('done uploading')
 		  await s3.getFiles(s3.options.bucket)
-		  console.log(dbId)
-		  console.log(expdate);
 		  let fl = await db.table('files').where('name', dbId)
 		  if(fl && fl.length > 0) {
 			  await await db.table('files').where('name', dbId).update({ timestampExpire: expdate });
