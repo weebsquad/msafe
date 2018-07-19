@@ -249,9 +249,13 @@ uploadsController.delete = async (req, res) => {
 	const filesdel = await db.table('files')
 		.whereNotNull('deletekey')
 		.whereNot('deletekey', '')
+		.where({
+			deletekey: deleteKey
+		});
 	console.log(filesdel);
+
   }
-  console.log(filexd);
+
   const file = await db.table('files')
     .where(property, id)
     .where(function () {
