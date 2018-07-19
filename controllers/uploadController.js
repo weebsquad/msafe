@@ -246,7 +246,7 @@ uploadsController.delete = async (req, res) => {
   const file = await db.table('files')
     .where(property, id)
     .where(function () {
-      if (!utils.isAdmin(user.username)) this.where('userid', user.id)
+      if (deleteKey === '' && !utils.isAdmin(user.username)) this.where('userid', user.id)
     })
     .first()
   if (!file) return res.json({ success: false, description: 'No file found' })
