@@ -138,6 +138,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           } else {
 			  deletekey = hash
           }
+
           if (!dbFile) {
             files.push({
               name: file.filename,
@@ -223,7 +224,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
         size: file.size,
         url: `${basedomain}/${file.name}`,
         encodeVersion: encodeVersion,
-        encodeString: encodeString
+        encodeString: encodeString,
+		deleteKey: deleteKey,
       }
     })
   })
@@ -244,10 +246,14 @@ uploadsController.delete = async (req, res) => {
   }
 	console.log(property);
 	console.log(id);
+  const filexd = await db.table('files')
+    .where(property, id)
+  console.log(filexd);
   const file = await db.table('files')
     .where(property, id)
     .where(function () {
       if (deleteKey === '' && !utils.isAdmin(user.username)) this.where('userid', user.id)
+	  
     })
     .first()
   if (!file) return res.json({ success: false, description: 'No file found' })
