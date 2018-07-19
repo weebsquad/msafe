@@ -67,7 +67,7 @@ s3.getFiles = async function (bucket) {
 
       contents.forEach(function (vl) {
         if (vl.Key === optionsS3.uploadsFolder + '/') return
-		console.log(vl);
+		//console.log(vl);
         flnew.push(vl)
       })
     })
