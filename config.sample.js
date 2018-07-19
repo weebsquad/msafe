@@ -43,6 +43,9 @@ module.exports = {
 		uploadsFolder: 'uploads'
 		proxyFiles: false, // acts as a middleman proxy between s3 and the client, so that we can serve files on our own domain. otherwise redirects to s3
 		merge: true, // Convert files from disk to s3 on startup
+		expireUnits: 'year', // days, months, years
+		expireValue: 1, // Value of units // 0 = never delete
+		listRequestsOnFileChanges: false, // True = do a list request to S3 whenever a file is changed // False = maintain a local cache of files (more economic)
 	},
 	
 	obfuscateClJs: false, // Should we obfuscate all clientside js before sending it to the clients?

@@ -67,7 +67,7 @@ s3.getFiles = async function (bucket) {
 
       contents.forEach(function (vl) {
         if (vl.Key === optionsS3.uploadsFolder + '/') return
-		console.log(vl);
+		//console.log(vl);
         flnew.push(vl)
       })
     })
@@ -102,12 +102,17 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
     })
     uploader.on('end', async function () {
 		  // console.log('done uploading')
-		  await s3.getFiles(s3.options.bucket)
+		  if(optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(s3.options.bucket)
+		  if(!optionsS3.listRequestsOnFileChanges) {
+			  s3.files.push({
+				  'Key': `${optionsS3.uploadsFolder}/${fileName}`
+			  });
+		  }
 		  let fl = await db.table('files').where('name', dbId)
 		  if(fl && fl.length > 0) {
 			  await await db.table('files').where('name', dbId).update({ timestampExpire: expdate });
 			  fl = await db.table('files').where('name', dbId).first();
-			  console.log(fl);
+			  //console.log(fl);
 		  }
 		  resolve(true)
     })
@@ -184,12 +189,16 @@ s3.deleteFiles = async function (bucket, files) {
     })
     deleter.on('end', async function () {
 		  // console.log('done deleting')
-		  // await s3.getFiles(bucket)
-		  for (var i = 0; i < s3.files.length; i++) {
-			  let vl = s3.files[i]
-			  flnew.forEach(function (vl2) {
-				  if (vl['Key'] === vl2['Key']) s3.files.splice(i)
-			  })
+		  if(optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
+		  if(!optionsS3.listRequestsOnFileChanges) {
+			  console.log(s3.files.length);
+			  for (var i = 0; i < s3.files.length; i++) {
+				  let vl = s3.files[i]
+				  flnew.forEach(function (vl2) {
+					  if (vl['Key'] === vl2['Key']) s3.files.splice(i)
+				  })
+			  }
+			  console.log(s3.files.length);
 		  }
 
 		  resolve(true)
