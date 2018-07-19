@@ -136,7 +136,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           if (err) {
 			  console.log(err)
           } else {
-			  deletekey = hash
+			  deletekey = hash.toLowerCase()
           }
 
           if (!dbFile) {
@@ -247,7 +247,7 @@ uploadsController.delete = async (req, res) => {
 	console.log(property);
 	console.log(id);
   const filexd = await db.table('files')
-    .where(property, id)
+    .where(property, id.toLowerCase())
   console.log(filexd);
   const file = await db.table('files')
     .where(property, id)
