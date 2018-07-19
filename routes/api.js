@@ -63,7 +63,7 @@ function setRoutes (routes, log = true) {
 	  for (let key in map[type]) {
       let obj = map[type][key]
       routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
-      //if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+      if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 		  i++;
 	  }
   }
