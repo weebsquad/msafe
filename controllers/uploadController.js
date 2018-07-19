@@ -160,7 +160,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           }
 
           if (iteration === req.files.length) {
-            return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString)
+            return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString, deletekey)
           }
           iteration++
         })
