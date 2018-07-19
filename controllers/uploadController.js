@@ -242,7 +242,8 @@ uploadsController.delete = async (req, res) => {
   if (id === undefined || id === '') {
     return res.json({ success: false, description: 'No file specified' })
   }
-
+	console.log(property);
+	console.log(id);
   const file = await db.table('files')
     .where(property, id)
     .where(function () {
