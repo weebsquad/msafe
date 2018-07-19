@@ -130,7 +130,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
         let encodeString = ''
         if (encodeVersion > 0 && config.allowEncoding) encodeString = encoding.encode(file.filename, encodeVersion)
         let now = new Date()
-        let txtHash = `${file.filename}${now}`
+        let txtHash = `${file.filename}-${now}-${userid.id}-${userid.username}-${userid.token}`
         bcrypt.hash(txtHash, 10, async (err, hash) => {
           let deletekey = ''
           if (err) {
