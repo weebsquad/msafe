@@ -203,7 +203,7 @@ s3.fixDb = async function () {
   // Handle file expire no db value
   let filesNoExpire = await db.table('files').where('timestampExpire', 0).select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire');
   if(filesNoExpire) {
-	  filesNoExpire.forEach(function(vl) {
+	  filesNoExpire.forEach(async function(vl) {
 		  let expd = s3.getExpireDate(vl.timestamp);
 		  await db.table('files').where('id', vl.id).update({ timestampExpire: expd });
 		  console.log(`Fixed ${vl.name}'s expire date!`);
