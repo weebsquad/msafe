@@ -217,10 +217,11 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
   })
 }
 
+
 uploadsController.delete = async (req, res) => {
   const user = await utils.authorize(req, res)
   if (!user.id) return
-  const id = req.body.id
+  const id = req.body.id || req.params.file
   if (id === undefined || id === '') {
     return res.json({ success: false, description: 'No file specified' })
   }
@@ -244,6 +245,7 @@ uploadsController.delete = async (req, res) => {
 
   return res.json({ success: true })
 }
+
 
 uploadsController.deleteFile = function (file) {
   const ext = path.extname(file).toLowerCase()
