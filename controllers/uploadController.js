@@ -169,7 +169,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
   })
 }
 
-uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid, encodeVersion = 0, encodeString = '') => {
+uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid, encodeVersion = 0, encodeString = '', deleteKey = '') => {
   let basedomain = config.domain
   if (files.length === 0) {
     return res.json({
@@ -180,7 +180,8 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
           size: file.size,
           url: `${basedomain}/${file.name}`,
           encodeVersion: encodeVersion,
-          encodeString: encodeString
+          encodeString: encodeString,
+		  deleteKey: deleteKey,
         }
       })
     })
