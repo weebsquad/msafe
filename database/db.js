@@ -95,7 +95,7 @@ let init = async function(db){
 		
 		// Handle missing columns
 		for(let columnName in tableDef.columns) {
-			const columnType = tableDef.columns.columnName;
+			const columnType = tableDef.columns[columnName];
 			let hasColumn = await db.schema.hasColumn(tableName, columnName);
 			console.log(`Checking ${tableName}/${columnName} (${columnType})`);
 			if(!hasColumn && typeof(columnType) === 'string') {
