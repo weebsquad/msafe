@@ -163,16 +163,15 @@ s3.fileExists = async function (bucket, fileName) {
 
 s3.deleteFiles = async function (bucket, files) {
   return new Promise(function (resolve, reject) {
-    let flnew = new Array()
+    let flbuild = new Array()
     files.forEach(function (vl) {
       let _ex = false
-      s3.files.forEach(function (vl2) {
-        if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true
-      })
+      s3.files.forEach(function (vl2) { if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true })
       if (_ex) {
-        flnew.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
+        flbuild.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
       }
     })
+	const flnew = flbuild
     const params = {
       Delete: {
         Objects: flnew,
@@ -194,9 +193,9 @@ s3.deleteFiles = async function (bucket, files) {
 			  console.log(s3.files.length);
 			  for (var i = 0; i < s3.files.length; i++) {
 				  let vl = s3.files[i]
-				  flnew.forEach(function (vl2) {
-					  if (vl['Key'] === vl2['Key']) s3.files.splice(i)
-				  })
+				  let _del = false;
+				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true; })
+				  if(_del) { console.log(`Deleting ${s3.files[i].Key} from cache`); s3.files.splice(i) }
 			  }
 			  console.log(s3.files.length);
 		  }
