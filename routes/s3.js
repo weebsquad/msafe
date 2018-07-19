@@ -134,7 +134,7 @@ s3.fileExists = async function (bucket, fileName) {
 		resolve(cachedCheck())
 	} else {
 		let diff = new Date() - cacheChecks;
-		if(diff < 60*1000) { resolve(cachedCheck()) return; }
+		if(diff < 60*1000) { resolve(cachedCheck()) }
 		cacheChecks = new Date();
 		s3.client.s3.headObject({
 		  Bucket: bucket,
