@@ -121,11 +121,11 @@ s3.convertFile = async function (bucket, localPath, remotePath, id) {
 }
 
 const cacheChecks = new Date();
-const fileExistsUseDelays = true; // If false will simply return from cached files
+const fileExistsUseDelays = false; // If false will simply return from cached files
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
 	  function cachedCheck() {
-		  console.log('Returning cached answer to fileExists!');
+		  //console.log('Returning cached answer to fileExists!');
 		  let exists = false;
 		  s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) exists = true })
 		  return exists;
