@@ -250,7 +250,7 @@ uploadsController.delete = async (req, res) => {
 		.whereNotNull('deletekey')
 		.whereNot('deletekey', '')
 	let fl = filesdel.find(function(el) {
-		//console.log(`${deleteKey} | ${el.deletekey}`)
+		console.log(`${deleteKey} | ${el.deletekey}`)
 		return el.deletekey === deleteKey;
 	});
 	console.log(fl);
