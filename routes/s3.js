@@ -70,9 +70,9 @@ s3.getFiles = async function (bucket) {
   })
 }
 
-s3.uploadFile = async function (bucket, fileName, localPath) {
+s3.uploadFile = async function (bucket, fileName, localPath, dbId) {
   return new Promise(function (resolve, reject) {
-    const yearfromnow = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    let expdate = new Date(new Date().setFullYear(new Date().getFullYear() + optionsS3.expireValue))
     let params = {
       localFile: localPath,
 
@@ -82,7 +82,7 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
         ACL: 'public-read',
         // Body: fs.createReadStream(localPath),
         ServerSideEncryption: 'AES256',
-        Expires: yearfromnow
+        Expires: expdate
         // ContentType: 'application/octet-stream',
 	    }
     }
@@ -95,15 +95,17 @@ s3.uploadFile = async function (bucket, fileName, localPath) {
     uploader.on('end', async function () {
 		  // console.log('done uploading')
 		  await s3.getFiles(s3.options.bucket)
+		  await db.table('files').where('id', dbId).update({ timestampExpire: expdate });
+		  console.log(await db.table('files').where('id', dbId));
 		  resolve(true)
     })
   })
 }
 
-s3.convertFile = async function (bucket, localPath, remotePath) {
+s3.convertFile = async function (bucket, localPath, remotePath, id) {
   return new Promise(function (resolve, reject) {
     // const fileName = localPath.split('.').reverse().splice(1).reverse().join('.')
-    s3.uploadFile(bucket, remotePath, localPath).then(r => {
+    s3.uploadFile(bucket, remotePath, localPath, id).then(r => {
       fs.unlinkSync(localPath)
       resolve(r)
     }).catch(e => { reject(e) })

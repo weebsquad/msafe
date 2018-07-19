@@ -140,6 +140,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
             albumid: albumid,
             userid: userid !== undefined ? userid.id : null,
             timestamp: Math.floor(Date.now() / 1000),
+			timestampExpire: 0,
             encodeVersion: encodeVersion,
             encodedString: encodeString
           })
