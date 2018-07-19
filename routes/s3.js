@@ -124,11 +124,18 @@ const cacheChecks = new Date();
 const fileExistsUseDelays = true; // If false will simply return from cached files
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
+	  function cachedCheck() {
+		  console.log('Returning cached answer to fileExists!');
+		  let exists = false;
+		  s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) exists = true })
+		  return exists;
+	  }
 	if(!fileExistsUseDelays) {
-		
+		resolve(cachedCheck())
 	} else {
 		let diff = new Date() - cacheChecks;
-		console.log(diff);
+		if(diff < 60*1000) { resolve(cachedCheck()) return; }
+		cacheChecks = new Date();
 		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: `${optionsS3.uploadsFolder}/${fileName}`
@@ -202,14 +209,16 @@ s3.fixDb = async function () {
   
   // Handle file expire no db value
   let filesNoExpire = await db.table('files').where('timestampExpire', 0).select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire');
-  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`);
-  if(filesNoExpire) {
-	  filesNoExpire.forEach(async function(vl) {
-		  let expd = s3.getExpireDate(vl.timestamp);
-		  await db.table('files').where('id', vl.id).update({ timestampExpire: expd });
-		  console.log(`Fixed ${vl.name}'s expire date!`);
-	  });
+  
+  if(filesNoExpire && filesNoExpire.length > 0) {
+	  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`);
+		  filesNoExpire.forEach(async function(vl) {
+			  let expd = s3.getExpireDate(vl.timestamp);
+			  await db.table('files').where('id', vl.id).update({ timestampExpire: expd });
+			  console.log(`Fixed ${vl.name}'s expire date!`);
+		  });
   }
+  
 }
 
 
