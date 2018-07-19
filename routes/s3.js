@@ -42,6 +42,12 @@ s3.enabledCheck = function () {
   return true
 }
 
+s3.getExpireDate = function(start) {
+	start = new Date(start);
+	let expdate = new Date(start.setFullYear(start.getFullYear() + optionsS3.expireValue))
+	return expdate;
+}
+
 s3.getFiles = async function (bucket) {
   var params = {
     'Bucket': bucket,
@@ -74,7 +80,7 @@ s3.getFiles = async function (bucket) {
 
 s3.uploadFile = async function (bucket, fileName, localPath, dbId) {
   return new Promise(function (resolve, reject) {
-    let expdate = new Date(new Date().setFullYear(new Date().getFullYear() + optionsS3.expireValue))
+    let expdate = s3.getExpireDate(new Date());
     let params = {
       localFile: localPath,
 
@@ -114,20 +120,28 @@ s3.convertFile = async function (bucket, localPath, remotePath, id) {
   })
 }
 
+const cacheChecks = new Date();
+const fileExistsUseDelays = true; // If false will simply return from cached files
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
-    s3.client.s3.headObject({
-	  Bucket: bucket,
-	  Key: `${optionsS3.uploadsFolder}/${fileName}`
-    }, function (err, data) {
-	  if (err) {
-        // file does not exist (err.statusCode == 404)
-        // reject(false);
-        resolve(false)
-	  }
-	  // file exists
-	  resolve(true)
-    })
+	if(!fileExistsUseDelays) {
+		
+	} else {
+		let diff = new Date() - cacheChecks;
+		console.log(diff);
+		s3.client.s3.headObject({
+		  Bucket: bucket,
+		  Key: `${optionsS3.uploadsFolder}/${fileName}`
+		}, function (err, data) {
+		  if (err) {
+			// file does not exist (err.statusCode == 404)
+			// reject(false);
+			resolve(false)
+		  }
+		  // file exists
+		  resolve(true)
+		})
+	}
   })
 }
 
@@ -159,7 +173,7 @@ s3.deleteFiles = async function (bucket, files) {
     })
     deleter.on('end', async function () {
 		  // console.log('done deleting')
-		   await s3.getFiles(bucket)
+		  // await s3.getFiles(bucket)
 		  for (var i = 0; i < s3.files.length; i++) {
 			  let vl = s3.files[i]
 			  flnew.forEach(function (vl2) {
@@ -173,19 +187,31 @@ s3.deleteFiles = async function (bucket, files) {
 }
 
 s3.fixDb = async function () {
-  let files = await db.table('files').select('name', 'id', 'userid', 'original')
+  let files = await db.table('files').select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire')
   if (s3.enabledCheck()) {
     // Check S3 files
     files.forEach(async function (file) {
       let inS3 = false
       s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${file.name}`) inS3 = true })
-      if (!inS3) await db.table('files').where('id', file.id).del()
+      if (!inS3) return await db.table('files').where('id', file.id).del() 
     })
   } else {
     // Check files
     // todo
   }
+  
+  // Handle file expire no db value
+  let filesNoExpire = await db.table('files').where('timestampExpire', 0).select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire');
+  if(filesNoExpire) {
+	  filesNoExpire.forEach(function(vl) {
+		  let expd = s3.getExpireDate(vl.timestamp);
+		  await db.table('files').where('id', vl.id).update({ timestampExpire: expd });
+		  console.log(`Fixed ${vl.name}'s expire date!`);
+	  });
+  }
 }
+
+
 
 s3.mergeFiles = async function (bucket, files, uploadsFolder) {
   if (!s3.options.merge) return
