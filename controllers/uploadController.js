@@ -8,6 +8,7 @@ const multer = require('multer')
 const randomstring = require('randomstring')
 const crypto = require('crypto')
 const fs = require('fs')
+const bcrypt = require('bcrypt')
 
 const uploadsController = {}
 
