@@ -99,7 +99,7 @@ let init = async function(db){
 			let hasColumn = await db.schema.hasColumn(tableName, columnName);
 			if(!hasColumn) {
 				actions.update = true;
-				await db.schema.table(tableName, function(tableOject) {
+				await db.schema.table(tableName, function(tableObject) {
 					tableObject[columnType](columnName);
 				});
 				console.log(`Added ${tableName}/${columnName}`);
