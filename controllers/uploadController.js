@@ -183,7 +183,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 		  deleteUrl: `${basedomain}/api/gdelete/${deleteKey}`,
           encodeVersion: encodeVersion,
           encodeString: encodeString,
-		  deleteKey: deleteKey,
+		  deleteKey: deleteKey
         }
       })
     })
@@ -224,10 +224,10 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
         name: file.name,
         size: file.size,
         url: `${basedomain}/${file.name}`,
-		deleteUrl: `${basedomain}/api/gdelete/${deleteKey}`,
+        deleteUrl: `${basedomain}/api/gdelete/${deleteKey}`,
         encodeVersion: encodeVersion,
         encodeString: encodeString,
-		deleteKey: deleteKey,
+        deleteKey: deleteKey
       }
     })
   })
@@ -247,7 +247,7 @@ uploadsController.delete = async (req, res) => {
     return res.json({ success: false, description: 'No file specified' })
   }
 
-  /*if(deleteKey !== '') {
+  /* if(deleteKey !== '') {
 	const filesdel = await db.table('files')
 		.whereNotNull('deletekey')
 		.whereNot('deletekey', '')
@@ -257,7 +257,7 @@ uploadsController.delete = async (req, res) => {
 	});
 	console.log(fl);
 
-  }*/
+  } */
 
   const file = await db.table('files')
     .where(property, id)
