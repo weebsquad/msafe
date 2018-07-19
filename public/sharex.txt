@@ -1,15 +1,15 @@
 Download this, remove this text, edit the token argument, rename extension to .sxcu, then import
 
 {
-  "Name": "https://msafe.i0.tf",
-  "DestinationType": "ImageUploader, FileUploader",
-  "RequestType": "POST",
+  "Name": "MetalSafe Uploader",
+  "DestinationType": "ImageUploader, TextUploader, FileUploader",
   "RequestURL": "https://msafe.i0.tf/api/upload",
   "FileFormName": "files[]",
   "Headers": {
-    "token": "<grab this from the dashboard>"
+    "token": "<grab this from the dashboard>",
+    "encodeversion": "0"
   },
-  "ResponseType": "Text",
-  "URL": "$json:files[0].url$",
-  "ThumbnailURL": "$json:files[0].url$"
+  "URL": "https://msafe.i0.tf/$json:files[0].name$",
+  "ThumbnailURL": "$json:files[0].url$",
+  "DeletionURL": "$json:files[0].deleteUrl$"
 }

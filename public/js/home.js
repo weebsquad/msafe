@@ -255,16 +255,18 @@ upload.prepareShareX = function () {
     var sharex_element = document.getElementById('ShareX')
     var sharex_file = '{\r\n\
   "Name": "' + location.hostname + '",\r\n\
-  "DestinationType": "ImageUploader, FileUploader",\r\n\
+  "DestinationType": "ImageUploader, TextUploader, FileUploader",\r\n\
   "RequestType": "POST",\r\n\
   "RequestURL": "' + location.origin + '/api/upload",\r\n\
   "FileFormName": "files[]",\r\n\
   "Headers": {\r\n\
     "token": "' + upload.token + '"\r\n\
+	"encodeversion": "0"\r\n\
   },\r\n\
   "ResponseType": "Text",\r\n\
   "URL": "http://' + location.hostname + '/$json:files[0].name$",\r\n\
   "ThumbnailURL": "$json:files[0].url$"\r\n\
+  "DeletionURL": "$json:files[0].deleteUrl$"\r\n\
 }'
     var sharex_blob = new Blob([sharex_file], {type: 'application/octet-binary'})
     sharex_element.setAttribute('href', URL.createObjectURL(sharex_blob))
