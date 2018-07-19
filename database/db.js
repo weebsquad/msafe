@@ -101,7 +101,7 @@ let init = async function(db){
 				actions.update = true;
 				await db.schema.table(tableName, function(tableOject) {
 					tableObject[columnType](columnName);
-				}
+				});
 				console.log(`Added ${tableName}/${columnName}`);
 			}
 		}
