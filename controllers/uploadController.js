@@ -245,7 +245,7 @@ uploadsController.delete = async (req, res) => {
     return res.json({ success: false, description: 'No file specified' })
   }
 
-  if(deleteKey !== '') {
+  /*if(deleteKey !== '') {
 	const filesdel = await db.table('files')
 		.whereNotNull('deletekey')
 		.whereNot('deletekey', '')
@@ -255,13 +255,12 @@ uploadsController.delete = async (req, res) => {
 	});
 	console.log(fl);
 
-  }
+  }*/
 
   const file = await db.table('files')
     .where(property, id)
     .where(function () {
       if (deleteKey === '' && !utils.isAdmin(user.username)) this.where('userid', user.id)
-	  
     })
     .first()
   if (!file) return res.json({ success: false, description: 'No file found' })
