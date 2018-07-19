@@ -97,10 +97,9 @@ let init = async function(db){
 		for(let columnName in tableDef.columns) {
 			const columnType = tableDef.columns.columnName;
 			let hasColumn = await db.schema.hasColumn(tableName, columnName);
-			if(!hasColumn) {
+			if(!hasColumn && typeof(columnType) === 'string') {
 				actions.update = true;
 				await db.schema.table(tableName, function(tableObject) {
-					console.log(columnType);
 					tableObject[columnType](columnName);
 				});
 				console.log(`Added ${tableName}/${columnName}`);
