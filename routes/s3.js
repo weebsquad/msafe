@@ -196,7 +196,7 @@ s3.deleteFiles = async function (bucket, files) {
 				  let vl = s3.files[i]
 				  let _del = false
 				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
-				  if (_del) { console.log(`Deleting ${s3.files[i].Key} from cache`); s3.files.splice(i, 1) }
+				  if (_del) s3.files.splice(i, 1)
 			  }
 			  //console.log(s3.files.length)
 		  }
