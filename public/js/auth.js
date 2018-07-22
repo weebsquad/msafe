@@ -67,8 +67,8 @@ page.errorHandler = async function (err) {
         _handlers[err]()
 				 })
     } else {
-		swal('Error(3)', err, 'error')
-	}
+      swal('Error(3)', err, 'error')
+    }
   } else {
     console.log(err)
   }

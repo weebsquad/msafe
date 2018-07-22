@@ -73,6 +73,8 @@ upload.errorHandler = async function (err) {
 				 function () {
         _handlers[err]()
 				 })
+    } else {
+      swal('Error(3)', err, 'error')
     }
   } else {
     console.log(err)

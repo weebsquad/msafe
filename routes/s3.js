@@ -106,7 +106,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
 		  if (!optionsS3.listRequestsOnFileChanges) {
 			  let p = {
 				  'Key': `${optionsS3.uploadsFolder}/${fileName}`
-			  };
+			  }
 			  s3.files.push(p)
 		  }
 		  let fl = await db.table('files').where('name', dbId)
@@ -191,14 +191,14 @@ s3.deleteFiles = async function (bucket, files) {
 		  // console.log('done deleting')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
 		  if (!optionsS3.listRequestsOnFileChanges) {
-			  //console.log(s3.files.length)
+			  // console.log(s3.files.length)
 			  for (var i = 0; i < s3.files.length; i++) {
 				  let vl = s3.files[i]
 				  let _del = false
 				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
 				  if (_del) s3.files.splice(i, 1)
 			  }
-			  //console.log(s3.files.length)
+			  // console.log(s3.files.length)
 		  }
 
 		  resolve(true)
