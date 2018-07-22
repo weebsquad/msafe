@@ -90,6 +90,7 @@ page.do = function (dest) {
 	  }
     })
     .catch(function (error) {
+	  console.error(error);
       page.errorHandler(error)
     })
 }
