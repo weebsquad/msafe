@@ -209,7 +209,7 @@ authController.register = async (req, res, next) => {
 
   const user = await db.table('users').where('username', username).first()
   if (user) return res.json({ success: false, description: 'Username already exists' })
-
+  return res.json({ success: false, description: 'sorry nob' })
   bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
       console.log(err)
