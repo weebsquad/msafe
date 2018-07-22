@@ -36,7 +36,7 @@ page.errorHandler = async function (err) {
     }
   }
   if (typeof (err) === 'object') {
-    const _strerror = JSON.parse(panel.stringifyError(err, null, '\t'))
+    const _strerror = JSON.parse(page.stringifyError(err, null, '\t'))
     if (typeof (_strerror) === 'object' && typeof (_strerror.response) === 'object' && typeof (_strerror.response.data) === 'object') {
       if (_strerror.response.data.success === false && typeof (_strerror.response.data.description) === 'string') {
         swal({
