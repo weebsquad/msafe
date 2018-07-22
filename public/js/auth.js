@@ -66,7 +66,9 @@ page.errorHandler = async function (err) {
 				 function () {
         _handlers[err]()
 				 })
-    }
+    } else {
+		swal('Error(3)', err, 'error')
+	}
   } else {
     console.log(err)
   }
@@ -84,14 +86,12 @@ page.do = function (dest) {
     password: pass
   })
     .then(function (response) {
-	  console.log(response.data);
       if (response.data.success === false) { page.errorHandler(response.data.description) } else {
 		  localStorage.token = response.data.token
 		  window.location = '/dashboard'
 	  }
     })
     .catch(function (error) {
-	  console.error(error);
       page.errorHandler(error)
     })
 }
