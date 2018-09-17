@@ -85,7 +85,11 @@ panel.errorHandler = async function (err) {
 
 panel.admins = new Array()
 panel.isAdmin = async function (name) {
-  if(!panel.fetchedAdmin) await panel.checkAdmin();
+  if(!panel.fetchedAdmin) { 
+	await panel.checkAdmin();
+	await panel.fetchAdmins();
+	panel.fetchedAdmin = true;
+  }
   return panel.adminacc;
   //if (panel.admins.length < 1) await panel.fetchAdmins()
   //if (panel.admins.indexOf(name) > -1) return true
@@ -97,7 +101,7 @@ panel.fetchAdmins = async function () {
   return new Promise(function (resolve) {
     axios.get('/api/admins').then(function (response) {
       if (response.data.success === false) {
-        panel.errorHandler(response.data.description)
+        //panel.errorHandler(response.data.description)
         resolve()
         return
       }
