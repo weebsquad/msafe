@@ -23,21 +23,16 @@ authController.reloadModules = function () {
 }
 
 authController.adminCheck = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
-  if (!user.id) return
+  //const user = await utils.authorize(req, res)
+  //if (!user.id) return
+  const user = req.user;
   return res.json({ success: true, admin: utils.isAdmin(user.username) })
 }
 
 authController.listAdmins = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
-  if (!user.id) return
-  let _adm = new Array();
-  if(utils.isAdmin(user.username)) { 
-	_adm = config.admins;
-	return res.json({ success: true, admins: _adm })
-  } else {
-	  return res.json({ success: false, description: 'deprecated' })
-  }
+  //const user = await utils.authorize(req, res)
+  //if (!user.id) return
+  return res.json({ success: true, admins: config.admins })
 }
 
 authController.verify = async (req, res, next) => {
