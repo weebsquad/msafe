@@ -204,7 +204,7 @@ function setRoutes (routes, log = true) {
 					if(callHandlers.adminOnly(req, res, next, user)) return;
 				  }
 
-				  _callbackFunction(req, res, next);
+				  callHandlers.success(req, res, next, _callbackFunction, user);
 			  }
 			  
 			  let _opts = shallowCopy(obj);
