@@ -829,9 +829,9 @@ panel.updateAdminPage = function (pw = '') {
 		  const _test = document.getElementById(key)
 		  if (_test) {
 			  clearInterval(_int)
-			  setTimeout(function () { obj(key, _test) }, 150)
+			  setTimeout(function () { obj(key, _test) }, 25)
 		  }
-	  }, 75)
+	  }, 25)
   }
 }
 
