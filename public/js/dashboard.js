@@ -949,7 +949,7 @@ panel.lookupFile = function(txt) {
 				tables[tablecount][key] = obj;
 				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
 				tables[tablecount]['body'] = tables[tablecount]['body'] + `<th>${obj}</th>`;
-				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr>${tables[tablecount]['body']} ${tables[tablecount]['headers']}</tr>`;
+				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr><th>${key}</th><td>${obj}</td></tr>`;
 				if(itemcount%itemsPerTable === 0) {
 					tablecount++;
 				}
@@ -964,7 +964,7 @@ panel.lookupFile = function(txt) {
 				let headers = obj['headers'];
 				let body = obj['body'];
 				body = obj['rows'];
-				headers = `<th></th><th></th>`;
+				headers = `<th>1</th><th>2</th>`;
 				let _tablehtml = `
 				<table class="table is-striped is-narrow is-left is-fullwidth is-hoverable is-bordered">
 				<thead>
