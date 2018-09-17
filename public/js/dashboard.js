@@ -941,13 +941,13 @@ panel.lookupFile = function(txt) {
 			for(var key in response.data.fileData) { 
 			    let obj = response.data.fileData[key];
 				itemcount++; 
-				if(typeof(tables[itemcount]) !== 'object') tables[itemcount] = {
+				if(typeof(tables[tablecount]) !== 'object') tables[tablecount] = {
 					'headers': '',
 					'body': '',
 				};
-				tables[itemcount][key] = obj;
-				tables[itemcount]['headers'] = tables[itemcount]['headers'] + `<th>${key}</th>`;
-				tables[itemcount]['body'] = tables[itemcount]['body'] + `<th>${obj}</th>`;
+				tables[tablecount][key] = obj;
+				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
+				tables[tablecount]['body'] = tables[tablecount]['body'] + `<th>${obj}</th>`;
 				if(itemcount%itemsPerTable === 0) {
 					tablecount++;
 				}
@@ -960,7 +960,7 @@ panel.lookupFile = function(txt) {
 			for(var key in tables) {
 				let obj = tables[key];
 				let headers = obj['headers'];
-				let body = ``;
+				let body = obj['body'];
 				let _tablehtml = `
 				<table class="table is-striped is-narrow is-left">
 				<thead>
