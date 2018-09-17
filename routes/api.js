@@ -162,17 +162,17 @@ function setRoutes (routes, log = true) {
 	  for (let key in map[type]) {
 		  let obj = map[type][key]
 		  let _objc = shallowCopy(obj);
-		  console.log(_objc);
+
 		  for(var ky in _objc) {
 			let _found = false;
 			for(var key2 in defaults) { if(key2 === ky) _found = true; }
-			if(!_found) _objc[ky] = defaults[ky]; 
+			if(!_found) { 
+				_objc[ky] = defaults[ky]; 
+				_objc.function = obj.function;
+				obj = _objc;
+				map[type][key] = obj;
+			}
 		  }
-		  console.log(_objc);
-		  _objc.function = obj.function;
-		  obj = _objc;
-		  map[type][key] = obj;
-		  console.log(obj);
 		  
 				  
 		  if(typeof(obj['function']) === 'function') {
