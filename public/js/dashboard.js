@@ -744,11 +744,12 @@ panel.updateAdminPage = function (pw = '') {
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
+	  let enabledisp = '';
 	  if (item.enabled === 1) item.enabled = true
 	  if (item.enabled === 0) item.enabled = false
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
-	  if (item.enabled === false) item.enabledisp = '<i class="fa fa-check fa-2x"></i>'
-	  if (item.enabled === true) item.enabledisp = '<i class="fa fa-times-circle fa-2x"></i>'
+	  if (item.enabled === false) enabledisp = '<i class="fa fa-check fa-2x"></i>'
+	  if (item.enabled === true) enabledisp = '<i class="fa fa-times-circle fa-2x"></i>'
 
 	  let buttons = `
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
@@ -774,21 +775,21 @@ panel.updateAdminPage = function (pw = '') {
 	  `
 	  	  let enableButton = `
 	  <a title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
-		${item.enabledisp}
+		${enabledisp}
 	</a>
 	  `
-	  item.enabledisp = enableButton
+	  enabledisp = enableButton
 	  
 	  if (item.admin === true) {
         buttons = ''
         item.admin = '<i class="fa fa-check fa-2x"></i>'
+		enabledisp = ''
 	  }
 
 	  if (item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>'
 
 	  if (item.username === panel.username) item.username = `(self) ${item.username}`
 
-	  if (item.admin === true || item.username === panel.username) item.enabledisp = '<a> </a>'
 	  
 
 
@@ -798,7 +799,7 @@ panel.updateAdminPage = function (pw = '') {
 					<th>${item.admin}</th>
 					<th>${item.username}</th>
 					<th>${item.filecount}</th>
-					<td>${item.enabledisp}</td>
+					<td>${enabledisp}</td>
 					<td>
 						${buttons}
 					</td>
