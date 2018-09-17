@@ -23,7 +23,7 @@ authController.reloadModules = function () {
 }
 
 authController.adminCheck = async (req, res, next) => {
-  const user = req.user;
+  const user = await utils.authorize(req, res)
   if (!user.id) return
   return res.json({ success: true, admin: utils.isAdmin(user.username) })
 }
