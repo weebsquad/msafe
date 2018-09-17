@@ -781,7 +781,7 @@ panel.updateAdminPage = function (pw = '') {
 
 	  if (item.username === panel.username) item.username = `(self) ${item.username}`
 
-	  if (item.admin === true) item.enabledisp = '-'
+	  if (item.admin === true || item.username === panel.username) item.enabledisp = '<a> </a>'
 	  
 	  let enableButton = `
 	  <a title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
