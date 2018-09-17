@@ -228,11 +228,16 @@ s3.fixDb = async function () {
   
   
   if (filesNoExpire && filesNoExpire.length > 0) {
-	  // Check if users are admins
 	  let allUsers = await db.table('users').select('id', 'username');
 	  let adminIds = new Array();
 	  allUsers.forEach(function (vl) { if(config.admins.indexOf(vl.username) > -1) adminIds.push(vl.id); });
-	  console.log(adminIds);
+	  for(var i = 0; i < filesNoExpire.length; i++) {
+		  let obj = filesNoExpire[i];
+		  if(adminIds.indexOf(obj.userid) > -1) filesNoExpire.splice(i, 1);
+	  }
+  }
+  
+  if (filesNoExpire && filesNoExpire.length > 0) {
 	  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`)
 		  filesNoExpire.forEach(async function (vl) {
 			  let expd = s3.getExpireDate(vl.timestamp)
