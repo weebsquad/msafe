@@ -73,12 +73,14 @@ uploadsController.fileInfo = async(req, res, next) => {
 	const fileId = req.params.id;
 	const file = await db.table('files').where('name', fileId).first();
 	if(!file) return res.json({ success: false, description: 'File not found'});
+	const _usrUpl = await db.table('users').where('id', file.userid).first();
 	let _fileInfo = {
 		'File Type': file.type,
-		'Uploader': file.userid,
-		'Timestamp Upload': file.timestamp,
-		'Timestamp Expire': file.timestampExpire,
+		'Uploader': _usrUpl.username,
+		'Timestamp Upload': new Date(file.timestamp)
 	};
+	if(typeof(file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire);
+	
 	if(utils.isAdmin(user.username) || file.userid === user.id) {
 		_fileInfo['Original Name'] = file.original;
 		_fileInfo['IP'] = file.ip;

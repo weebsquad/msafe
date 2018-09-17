@@ -937,7 +937,7 @@ panel.lookupFile = function(txt) {
 			let tables = {};
 			let itemcount = 0;
 			let tablecount = 1;
-			const itemsPerTable = 4;
+			const itemsPerTable = 2;
 			for(var key in response.data.fileData) { 
 			    let obj = response.data.fileData[key];
 				itemcount++; 
@@ -962,7 +962,7 @@ panel.lookupFile = function(txt) {
 				let headers = obj['headers'];
 				let body = obj['body'];
 				let _tablehtml = `
-				<table class="table is-striped is-narrow is-left">
+				<table class="table is-striped is-narrow">
 				<thead>
 					<tr>
 						  ${headers}
