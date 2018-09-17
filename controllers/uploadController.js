@@ -75,6 +75,7 @@ uploadsController.fileInfo = async (req, res, next) => {
   const _usrUpl = await db.table('users').where('id', file.userid).first()
   if (!_usrUpl) _usrUpl = '<UNKNOWN>'
   let _fileInfo = {
+	'File': `<a href="${config.domain}/${file.name}" target="_blank">${file.name}</a>`,
     'Uploader': _usrUpl.username,
     'File Type': file.type
     // 'Timestamp Upload': new Date(file.timestamp)
