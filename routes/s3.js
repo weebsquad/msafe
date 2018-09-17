@@ -95,9 +95,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 	    }
     }
 	
-	if(typeof(expdate) !== 'undefined') { params.s3Params.Expires = expdate; } else {
-		console.log(`uploaded admin file, no expire date! ${fileName}`);
-	}
+	if(typeof(expdate) !== 'undefined') params.s3Params.Expires = expdate; 
 	
     // console.log(params)
     let uploader = s3.client.uploadFile(params)
@@ -227,8 +225,14 @@ s3.fixDb = async function () {
 
   // Handle file expire no db value
   let filesNoExpire = await db.table('files').where('timestampExpire', 0).select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire')
-
+  
+  
   if (filesNoExpire && filesNoExpire.length > 0) {
+	  // Check if users are admins
+	  let allUsers = await db.table('users').select('id', 'username');
+	  let adminIds = new Array();
+	  allUsers.forEach(function (vl) { if(config.admins.indexOf(vl.username) > -1) adminIds.push(vl.id); });
+	  console.log(adminIds);
 	  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`)
 		  filesNoExpire.forEach(async function (vl) {
 			  let expd = s3.getExpireDate(vl.timestamp)
