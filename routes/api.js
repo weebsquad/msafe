@@ -66,7 +66,7 @@ const map = {
 	},
     'album/zip/:identifier': {
 		'function': albumsController.generateZip,
-		'disabled': true,
+		'disabled': !config.uploads.generateZips,
 	},
     'album/:id': {
 		'function': uploadController.list,

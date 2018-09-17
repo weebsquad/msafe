@@ -323,8 +323,9 @@ uploadsController.deleteFile = function (file) {
 }
 
 uploadsController.list = async (req, res) => {
-  const user = await utils.authorize(req, res)
-  if (!user.id) return
+  //const user = await utils.authorize(req, res)
+  //if (!user.id) return
+  const user = req.user;
   let offset = req.params.page
   if (offset === undefined) offset = 0
 

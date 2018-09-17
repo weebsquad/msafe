@@ -267,8 +267,8 @@ panel.getUploads = function (album = undefined, page = undefined) {
       var albumOrUser = 'Album'
 	  const _adm = await panel.isAdmin(panel.username)
       if (_adm) { albumOrUser = 'User' }
-
-      container.innerHTML = `
+      
+	  let _thehtml = `
 				${pagination}
 				<hr>
 				${listType}
@@ -287,7 +287,14 @@ panel.getUploads = function (album = undefined, page = undefined) {
 				<hr>
 				${pagination}
 			`
-
+      if(panel.isAdmin(panel.username)) {
+		  _thehtml = `
+		  <p class="control has-addons">
+				<input id="filesfromuser" class="input" type="text" placeholder="A username">
+		  </p>
+		  ${_thehtml}`;
+	  }
+	  container.innerHTML = _thehtml;
       panel.page.appendChild(container)
       var table = document.getElementById('table')
 
@@ -560,6 +567,8 @@ panel.getAlbum = function (item) {
   panel.setActiveMenu(item)
   panel.getUploads(item.id)
 }
+
+
 
 panel.changeToken = function () {
   panel.onAdminP = false

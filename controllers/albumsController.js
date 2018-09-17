@@ -15,8 +15,9 @@ albumsController.reloadModules = function () {
 }
 
 albumsController.list = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
-
+  //const user = await utils.authorize(req, res)
+  const user = req.user;
+  
   const fields = ['id', 'name']
   if (req.params.sidebar === undefined) {
     fields.push('timestamp')
@@ -48,7 +49,8 @@ albumsController.list = async (req, res, next) => {
 }
 
 albumsController.create = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
+  //const user = await utils.authorize(req, res)
+  const user = req.user;
 
   const name = req.body.name
   if (name === undefined || name === '') {
@@ -77,7 +79,8 @@ albumsController.create = async (req, res, next) => {
 }
 
 albumsController.delete = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
+  //const user = await utils.authorize(req, res)
+  const user = req.user;
 
   const id = req.body.id
   if (id === undefined || id === '') {
@@ -89,7 +92,8 @@ albumsController.delete = async (req, res, next) => {
 }
 
 albumsController.rename = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
+  //const user = await utils.authorize(req, res)
+  const user = req.user;
 
   const id = req.body.id
   if (id === undefined || id === '') {
