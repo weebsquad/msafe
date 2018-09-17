@@ -101,7 +101,7 @@ panel.fetchAdmins = async function () {
   return new Promise(function (resolve) {
     axios.get('/api/admins').then(function (response) {
       if (response.data.success === false) {
-        //panel.errorHandler(response.data.description)
+        panel.errorHandler(response.data.description)
         resolve()
         return
       }
