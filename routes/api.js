@@ -29,7 +29,7 @@ function check (req, res, next) {
 
 
 
-const map = {
+let map = {
   'get': {
     'check': {
 		'function': check,
@@ -151,16 +151,29 @@ const map = {
 	}
   }
 }
-
+const defaults = {
+	'admin': false,
+	'auth': false,
+	'disabled': false,
+};
 function setRoutes (routes, log = true) {
   let i = 0
   for (let type in map) {
 	  for (let key in map[type]) {
       let obj = map[type][key]
-      //routes[type](`/${key}`, (req, res, next) => obj(req, res, next))
+	  
+	  for(var ky in _options) {
+		let _found = false;
+		for(var key2 in defaults) { if(key2 === ky) _found = true; }
+		if(!_found) { obj[ky] = defaults[ky]; map[type][key] = obj; }
+	  }
+	  
+			  
 	  if(typeof(obj['function']) === 'function') {
 		  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
-			  console.log(_options);
+
+			  // Handle auth
+			  
 			  _callbackFunction(req, res, next);
 		  }
 		  
@@ -168,11 +181,11 @@ function setRoutes (routes, log = true) {
 		  delete _opts['function'];
 		  
 		  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
+		  if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+			  i++
+		  }
 	  } else {
 		  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`);
-	  }
-      if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
-		  i++
 	  }
   }
   console.log(`Loaded ${i} API routes!`)
