@@ -174,7 +174,9 @@ panel.prepareDashboard = async function () {
 	  const _obj = document.getElementById(vl)
 	  function _f (elem) {
 		  elem.addEventListener('click', function () {
-        panel.setActiveMenu(this)
+			panel.setActiveMenu(this)
+			panel.onAdminP = true
+			if(vl !== 'itemAdmin') panel.onAdminP = false
 		  })
 	  }
 	  if (!_obj) {
@@ -184,7 +186,7 @@ panel.prepareDashboard = async function () {
 				  clearInterval(_int)
 				  _f(_check)
 			  }
-		  }, 50)
+		  }, 75)
 	  } else {
 		  _f(_obj)
 	  }
@@ -1024,6 +1026,7 @@ panel.fileLookupScreen = function () {
 }
 
 panel.accountScreen = function () {
+  panel.onAdminP = false
   panel.page.innerHTML = ''
   var container = document.createElement('div')
   container.className = 'container'
