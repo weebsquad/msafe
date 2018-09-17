@@ -171,7 +171,7 @@ function setRoutes (routes, log = true) {
 			  
 	  if(typeof(obj['function']) === 'function') {
 		  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
-
+				console.log(_options);
 			  // Handle auth
 			  
 			  _callbackFunction(req, res, next);
