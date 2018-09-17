@@ -949,7 +949,7 @@ panel.lookupFile = function(txt) {
 				tables[tablecount][key] = obj;
 				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
 				tables[tablecount]['body'] = tables[tablecount]['body'] + `<th>${obj}</th>`;
-				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr>${tables[tablecount]['body']} ${<th>${key}</th>}</tr>`;
+				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr>${tables[tablecount]['body']} ${tables[tablecount]['headers']}</tr>`;
 				if(itemcount%itemsPerTable === 0) {
 					tablecount++;
 				}
