@@ -937,22 +937,24 @@ panel.lookupFile = function(txt) {
 			let tables = {};
 			let itemcount = 0;
 			let tablecount = 1;
-			const itemsPerTable = 2;
+			const itemsPerTable = 9999;
 			for(var key in response.data.fileData) { 
 			    let obj = response.data.fileData[key];
 				itemcount++; 
 				if(typeof(tables[tablecount]) !== 'object') tables[tablecount] = {
 					'headers': '',
 					'body': '',
+					'rows': '',
 				};
 				tables[tablecount][key] = obj;
 				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
 				tables[tablecount]['body'] = tables[tablecount]['body'] + `<th>${obj}</th>`;
+				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr>${tables[tablecount]['body']} ${<th>${key}</th>}</tr>`;
 				if(itemcount%itemsPerTable === 0) {
 					tablecount++;
 				}
 			}
-			console.log(tables);
+			//console.log(tables);
 
 			let txt = `<br><br><h2 class="subtitle"><u>File Info</u></h2><br>
 				<hr>
@@ -961,20 +963,21 @@ panel.lookupFile = function(txt) {
 				let obj = tables[key];
 				let headers = obj['headers'];
 				let body = obj['body'];
+				body = obj['rows'];
+				headers = `<th></th><th></th>`;
 				let _tablehtml = `
-				<table class="table is-striped is-narrow">
+				<table class="table is-striped is-narrow is-left is-fullwidth is-hoverable is-bordered">
 				<thead>
 					<tr>
 						  ${headers}
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						${body}
-					</tr>
+					${body}
 				</tbody>
 				</table>
 				`;
+				
 				txt = `${txt} ${_tablehtml}`;
 			}
 			

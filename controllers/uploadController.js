@@ -89,10 +89,10 @@ uploadsController.fileInfo = async(req, res, next) => {
 		if(file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion;
 	}
 	if(utils.isAdmin(user.username)) {
+		if(file.encodedString) _fileInfo['Encoded String'] = file.encodedString;
 		_fileInfo['Hash'] = file.hash;
 		_fileInfo['Size'] = file.size;
 		if(file.albumid) _fileInfo['Album ID'] = file.albumid;
-		if(file.encodedString) _fileInfo['Encoded String'] = file.encodedString;
 	}
 	
 	return res.json({ success: true, fileData: _fileInfo});
