@@ -90,7 +90,7 @@ panel.isAdmin = async function (name) {
     await panel.fetchAdmins()
     panel.fetchedAdmin = true
   }
-  if(name === panel.username) return panel.adminacc
+  if (name === panel.username) return panel.adminacc
   if (panel.admins.length < 1) await panel.fetchAdmins()
   if (panel.admins.indexOf(name) > -1) return true
   return false
@@ -174,9 +174,9 @@ panel.prepareDashboard = async function () {
 	  const _obj = document.getElementById(vl)
 	  function _f (elem) {
 		  elem.addEventListener('click', function () {
-			panel.setActiveMenu(this)
-			panel.onAdminP = true
-			if(vl !== 'itemAdmin') panel.onAdminP = false
+        panel.setActiveMenu(this)
+        panel.onAdminP = true
+        if (vl !== 'itemAdmin') panel.onAdminP = false
 		  })
 	  }
 	  if (!_obj) {
@@ -784,9 +784,9 @@ panel.updateAdminPage = function (pw = '') {
 
 	  if (item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>'
 
-	  if (item.username === panel.username)  item.username = `(self) ${item.username}`
-	  
-	  if(panel.isAdmin(item.username)) item.enabledisp = '';
+	  if (item.username === panel.username) item.username = `(self) ${item.username}`
+
+	  if (panel.isAdmin(item.username)) item.enabledisp = ''
 
       tr.innerHTML = `
 				<tr>
@@ -828,7 +828,7 @@ panel.updateAdminPage = function (pw = '') {
 		  const _test = document.getElementById(key)
 		  if (_test) {
 			  clearInterval(_int)
-			  //setTimeout(function () { obj(key, _test) }, 25)
+			  // setTimeout(function () { obj(key, _test) }, 25)
 			  obj(key, _test)
 		  }
 	  }, 25)

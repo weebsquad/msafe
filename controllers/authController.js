@@ -104,7 +104,7 @@ authController.disableAccount = async (req, res, next) => {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
 	  if (user.id !== targ.id && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'No permission to disable this user' })
-	  if(targ.username === 'root' && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'Root account may not be disabled.' })
+	  if (targ.username === 'root' && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'Root account may not be disabled.' })
     }
     if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to disable other users' })
 
@@ -149,7 +149,7 @@ authController.deleteAccount = async (req, res, next) => {
       targ = await db.table('users').where('username', username).first()
       if (!targ) return res.json({ success: false, description: 'Couldn\'t find the target user!' })
 	  if (user.id !== targ.id && utils.isAdmin(targ.username)) return res.json({ success: false, description: 'No permission to delete this user' })
-	  if(targ.username === 'root' && utils.isAdmin(targ.username) && !filesOnly) return res.json({ success: false, description: 'Root account may not be deleted.' })
+	  if (targ.username === 'root' && utils.isAdmin(targ.username) && !filesOnly) return res.json({ success: false, description: 'Root account may not be deleted.' })
     }
     if (!bypassEnable && username !== user.username) return res.json({ success: false, description: 'No permission to delete other users' })
 

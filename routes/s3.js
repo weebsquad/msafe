@@ -45,7 +45,7 @@ s3.enabledCheck = function () {
 s3.getExpireDate = function (start, adminFile = false) {
   start = new Date(start)
   let expdate = new Date(start.setFullYear(start.getFullYear() + optionsS3.expireValue))
-  if(adminFile) expdate = new Date(start.setFullYear(start.getFullYear() + 100))
+  if (adminFile) expdate = new Date(start.setFullYear(start.getFullYear() + 100))
   return expdate
 }
 
