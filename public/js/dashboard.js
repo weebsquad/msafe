@@ -934,41 +934,64 @@ panel.lookupFile = function(txt) {
 		  else return swal('An error ocurred', response.data.description, 'error')
 		}
 		if(typeof(response.data.fileData) !== 'undefined') {
-			let headers = ``;
-			let _txtbody = ``
-			for(var key in response.data.fileData) {
-				let obj = response.data.fileData[key];
-				headers = `${headers}<th>${key}</th>`;
-				_txtbody = `${_txtbody}<th>${obj}</th>`;
+			let tables = {};
+			let itemcount = 0;
+			let tablecount = 1;
+			const itemsPerTable = 4;
+			for(var key in response.data.fileData) { 
+			    let obj = response.data.fileData[key];
+				itemcount++; 
+				if(typeof(tables[itemcount]) !== 'object') tables[itemcount] = {
+					'headers': '',
+					'body': '',
+				};
+				tables[itemcount][key] = obj;
+				tables[itemcount]['headers'] = tables[itemcount]['headers'] + `<th>${key}</th>`;
+				tables[itemcount]['body'] = tables[itemcount]['body'] + `<th>${obj}</th>`;
+				if(itemcount%itemsPerTable === 0) {
+					tablecount++;
+				}
 			}
+			console.log(tables);
 
 			let txt = `<br><br><h2 class="subtitle"><u>File Info</u></h2><br>
 				<hr>
+			`;
+			for(var key in tables) {
+				let obj = tables[key];
+				let headers = obj['headers'];
+				let body = ``;
+				let _tablehtml = `
 				<table class="table is-striped is-narrow is-left">
 				<thead>
 					<tr>
 						  ${headers}
 					</tr>
 				</thead>
-				<tbody id="tableLookup">
+				<tbody>
+					<tr>
+						${body}
+					</tr>
 				</tbody>
-			</table>
-			`;
+				</table>
+				`;
+				txt = `${txt} ${_tablehtml}`;
+			}
 			
 			for(var key in response.data.fileData) {
 				let obj = response.data.fileData[key];
-				txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label>${obj}`;
+				//txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label>${obj}`;
 			}
 			txt = `${txt}</table>`;
 			document.getElementById('filedata').innerHTML = txt;
-			let _tbody = document.getElementById('tableLookup');
+			/*let _tbody = document.getElementById('tableLookup');
 			var tr = document.createElement('tr');
 			tr.innerHTML = `
 				<tr>
 				${_txtbody}
 				</tr>
 			`
-			_tbody.appendChild(tr);
+			_tbody.appendChild(tr);*/
 			
 		}
 	}).catch(function(error) {
