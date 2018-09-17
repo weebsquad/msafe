@@ -6,6 +6,8 @@ panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 panel.onAdminP = false
 panel.loadedAt
+panel.adminacc = false;
+panel.fetchedAdmin = false;
 
 panel.stringifyError = function (err, filter, space) {
   var plainObject = {}
@@ -83,6 +85,8 @@ panel.errorHandler = async function (err) {
 
 panel.admins = new Array()
 panel.isAdmin = async function (name) {
+  if(!panel.fetchedAdmin) await panel.checkAdmin();
+  return panel.adminacc;
   if (panel.admins.length < 1) await panel.fetchAdmins()
   if (panel.admins.indexOf(name) > -1) return true
   return false
@@ -98,6 +102,26 @@ panel.fetchAdmins = async function () {
         return
       }
       response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
+      resolve()
+    }).catch(function (error) {
+      panel.errorHandler(error)
+      resolve()
+    })
+  })
+}
+
+panel.checkAdmin = async function() {
+	
+	panel.adminacc = false;
+	return new Promise(function (resolve) {
+    axios.get('/api/admincheck').then(function (response) {
+      if (response.data.success === false) {
+        panel.errorHandler(response.data.description)
+        resolve()
+        return
+      }
+      response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
+	  panel.adminacc = response.data.admin;
       resolve()
     }).catch(function (error) {
       panel.errorHandler(error)

@@ -26,6 +26,7 @@ const map = {
   'get': {
     'check': check,
     'admins': authController.listAdmins,
+	'admincheck': authController.adminCheck,
     'account/list': authController.listAccounts,
     'uploads': uploadController.list,
     'uploads/:page': uploadController.list,

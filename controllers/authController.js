@@ -22,10 +22,17 @@ authController.reloadModules = function () {
   db = require('knex')(config.database)
 }
 
-authController.listAdmins = async (req, res, next) => {
-  const user = await utils.authorize(req, res)
+authController.adminCheck = async (req, res, next) => {
+  const user = req.user;
   if (!user.id) return
-  return res.json({ success: true, admins: config.admins })
+  return res.json({ success: true, admin: utils.isAdmin(user.username) })
+}
+
+authController.listAdmins = async (req, res, next) => {
+  /*const user = await utils.authorize(req, res)
+  if (!user.id) return*/
+  //return res.json({ success: false, admins: config.admins })
+  return res.json({ success: false, description: 'deprecated' })
 }
 
 authController.verify = async (req, res, next) => {
