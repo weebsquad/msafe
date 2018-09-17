@@ -87,8 +87,8 @@ panel.admins = new Array()
 panel.isAdmin = async function (name) {
   if(!panel.fetchedAdmin) await panel.checkAdmin();
   return panel.adminacc;
-  if (panel.admins.length < 1) await panel.fetchAdmins()
-  if (panel.admins.indexOf(name) > -1) return true
+  //if (panel.admins.length < 1) await panel.fetchAdmins()
+  //if (panel.admins.indexOf(name) > -1) return true
   return false
 }
 
@@ -120,7 +120,6 @@ panel.checkAdmin = async function() {
         resolve()
         return
       }
-      response.data.admins.forEach(function (vl) { panel.admins.push(vl) })
 	  panel.adminacc = response.data.admin;
       resolve()
     }).catch(function (error) {
