@@ -167,10 +167,10 @@ function setRoutes (routes, log = true) {
 			for(var key2 in defaults) { if(key2 === ky) _found = true; }
 			if(!_found) { 
 				_objc[ky] = defaults[ky]; 
-				_objc.function = obj.function;
-				obj = _objc;
 			}
 		  }
+		  _objc.function = obj.function;
+		  obj = _objc;
 		  
 				  
 		  if(typeof(obj['function']) === 'function') {
