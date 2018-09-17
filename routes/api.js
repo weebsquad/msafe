@@ -162,11 +162,16 @@ function setRoutes (routes, log = true) {
 	  for (let key in map[type]) {
 		  let obj = map[type][key]
 		  
+		  console.log(obj);
 		  for(var ky in obj) {
 			let _found = false;
 			for(var key2 in defaults) { if(key2 === ky) _found = true; }
-			if(!_found) { obj[ky] = defaults[ky]; map[type][key] = obj; }
+			if(!_found) { 
+				obj[ky] = defaults[ky]; 
+				map[type][key] = obj; 
+			}
 		  }
+		  console.log(obj);
 		  
 				  
 		  if(typeof(obj['function']) === 'function') {
@@ -185,7 +190,7 @@ function setRoutes (routes, log = true) {
 			  i++
 		  } else {
 			  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`);
-	  }
+			}
 	  }
   }
   console.log(`Loaded ${i} API routes!`)
