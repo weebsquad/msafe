@@ -17,6 +17,7 @@ const bodyParser = require('body-parser')
 const requireUncached = require('require-uncached');
 const CronJob=require('cron').CronJob;
 let serv;
+let boot = new Date();
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
@@ -195,6 +196,7 @@ let init = async function (reload = false) {
   setupExpress(_safenew, reload);
   if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
-  serv = safeog.listen(config.port, () => { if(!reload) console.log(`uploader started on port ${config.port}`) })
+  let diffboot = ((new Date() - boot)/1000).toFixed(2);
+  serv = safeog.listen(config.port, () => { if(!reload) console.log(`uploader started within ${diffboot}s on port ${config.port}`) })
 }
 init()
