@@ -749,12 +749,7 @@ panel.updateAdminPage = function (pw = '') {
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
 	  if (item.enabled === false) item.enabledisp = '<i class="fa fa-check fa-2x"></i>'
 	  if (item.enabled === true) item.enabledisp = '<i class="fa fa-times-circle fa-2x"></i>'
-	  let enableButton = `
-	  <a title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
-		${item.enabledisp}
-	</a>
-	  `
-	  item.enabledisp = enableButton
+
 	  let buttons = `
 						<a class="button is-primary is-small is-outlined is-rounded" title="Reset Password" onclick="panel._sendAdminAction(panel.resetUserPw, 'reset password of', '${item.username}')">
 							<span class="icon is-small">
@@ -787,6 +782,13 @@ panel.updateAdminPage = function (pw = '') {
 	  if (item.username === panel.username) item.username = `(self) ${item.username}`
 
 	  if (item.admin === true) item.enabledisp = '-'
+	  
+	  let enableButton = `
+	  <a title="${disabledTxt}" onclick="panel._sendAdminAction(panel.disableUser, '${disabledTxt.toLowerCase()}', '${item.username}', !${item.enabled})">
+		${item.enabledisp}
+	</a>
+	  `
+	  item.enabledisp = enableButton
 
       tr.innerHTML = `
 				<tr>
