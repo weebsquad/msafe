@@ -928,6 +928,7 @@ panel.registerNewUser = function (username, pass, adminpw = '') {
 
 
 panel.lookupFile = function(txt) {
+	document.getElementById('filedata').innerHTML = ``;
 	axios.get(`/api/uploads/info/${txt}`).then(function(response) {
 		if (response.data.success === false) {
 		  if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
@@ -948,7 +949,7 @@ panel.lookupFile = function(txt) {
 				};
 				tables[tablecount][key] = obj;
 				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
-				tables[tablecount]['body'] = tables[tablecount]['body'] + `<th>${obj}</th>`;
+				tables[tablecount]['body'] = tables[tablecount]['body'] + `<td>${obj}</td>`;
 				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr><th>${key}</th><td>${obj}</td></tr>`;
 				if(itemcount%itemsPerTable === 0) {
 					tablecount++;
@@ -964,7 +965,7 @@ panel.lookupFile = function(txt) {
 				let headers = obj['headers'];
 				let body = obj['body'];
 				body = obj['rows'];
-				headers = `<th>1</th><th>2</th>`;
+				headers = `<th><b>Key</b></th><th>Value</th>`;
 				let _tablehtml = `
 				<table class="table is-striped is-narrow is-left is-fullwidth is-hoverable is-bordered">
 				<thead>
