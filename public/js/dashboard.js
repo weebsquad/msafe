@@ -946,7 +946,11 @@ panel.lookupFile = function(txt) {
 	});
 };
 
-let _event
+
+panel.lookupBoxUpdated = function() {
+	console.log('hi');
+}
+
 panel.fileLookupScreen = function() {
 	panel.onAdminP = false
 	panel.page.innerHTML = ''
@@ -956,7 +960,7 @@ panel.fileLookupScreen = function() {
 			<h2 class="subtitle">Lookup some file infos</h2>
 
 			<p class="control has-addons">
-				<input id="filelookupid" class="input is-expanded" type="text" placeholder="File name/id">
+				<input id="filelookupid" class="input is-expanded" type="text" placeholder="File name/id" oninput="panel.lookupBoxUpdated()">
 			</p>
 			
 			<div id="filedata"></div>
