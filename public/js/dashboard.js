@@ -90,9 +90,9 @@ panel.isAdmin = async function (name) {
     await panel.fetchAdmins()
     panel.fetchedAdmin = true
   }
-  return panel.adminacc
-  // if (panel.admins.length < 1) await panel.fetchAdmins()
-  // if (panel.admins.indexOf(name) > -1) return true
+  if(name === panel.username) return panel.adminacc
+  if (panel.admins.length < 1) await panel.fetchAdmins()
+  if (panel.admins.indexOf(name) > -1) return true
   return false
 }
 
@@ -784,9 +784,8 @@ panel.updateAdminPage = function (pw = '') {
 
 	  if (item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>'
 
-	  if (item.username === panel.username) {
-        item.username = `(self) ${item.username}`
-	  }
+	  if (item.username === panel.username)  item.username = `(self) ${item.username}`
+	  
 	  if(panel.isAdmin(item.username)) item.enabledisp = '';
 
       tr.innerHTML = `
