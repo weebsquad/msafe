@@ -786,8 +786,8 @@ panel.updateAdminPage = function (pw = '') {
 
 	  if (item.username === panel.username) {
         item.username = `(self) ${item.username}`
-        item.enabledisp = ''
 	  }
+	  if(panel.isAdmin(item.username)) item.enabledisp = '';
 
       tr.innerHTML = `
 				<tr>
