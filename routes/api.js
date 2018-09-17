@@ -3,6 +3,7 @@ let uploadController = require('../controllers/uploadController')
 let albumsController = require('../controllers/albumsController')
 let tokenController = require('../controllers/tokenController')
 let authController = require('../controllers/authController')
+let utils = require('../controllers/utilsController')
 let route = require('express').Router()
 
 
@@ -162,13 +163,6 @@ const callHandlers = {
 		if(typeof(user) !== 'undefined') req.user = user;
 		callbackFunction(req, res, next);
 	},
-	'disabled': function(req, res, next) {
-		return res.json({ 'success': false, 'description': 'This API call is disabled' })
-	},
-	'adminOnly': function(req, res, next, user) {
-		if (config.admins.indexOf(name) > -1) return true
-		return false
-	},
 };
 
 function setRoutes (routes, log = true) {
@@ -191,7 +185,7 @@ function setRoutes (routes, log = true) {
 			  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
 				  
 				  // Handle disabled
-				  if(_options.disabled === true) return callHandlers.disabled(req, res, next);
+				  if(_options.disabled === true) return res.json({ 'success': false, 'description': 'This API call is disabled' })
 				  
 				  // Handle auth
 				  let user;
@@ -201,7 +195,7 @@ function setRoutes (routes, log = true) {
 				  }
 				  
 				  if(_options.admin === true) {
-					if(callHandlers.adminOnly(req, res, next, user)) return;
+					if(!utils.isAdmin(user.username)) return res.json({ 'success': false, 'description': 'This API call is reserved for administration' })
 				  }
 
 				  callHandlers.success(req, res, next, _callbackFunction, user);
