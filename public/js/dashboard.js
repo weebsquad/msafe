@@ -937,7 +937,7 @@ panel.lookupFile = function(txt) {
 			let txt = `File Info`;
 			for(var key in response.data.fileData) {
 				let obj = response.data.fileData[key];
-				txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label> > <label class="label">${obj}</label>`;
+				txt = `${txt}<br><br><label class="label"><b><u>${key}</b></u></label>${obj}`;
 			}
 			document.getElementById('filedata').innerHTML = txt;
 		}
@@ -953,7 +953,7 @@ panel.lookupBoxUpdated = function() {
 		panel.lookupFile(document.getElementById('filelookupid').value);
 		clearTimeout(_tm);
 		_tm = false;
-	}, 1000);
+	}, 1500);
 }
 
 panel.fileLookupScreen = function() {

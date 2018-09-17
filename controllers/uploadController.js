@@ -71,7 +71,26 @@ const upload = multer({
 uploadsController.fileInfo = async(req, res, next) => {
 	const user = req.user;
 	const fileId = req.params.id;
-	return res.json({ success: true, fileData: {'1': '2', 'a': 'b' }});
+	const file = await db.table('files').where('name', fileId).first();
+	if(!file) return res.json({ success: false, description: 'File not found'});
+	let _fileInfo = {
+		'File Type': file.type,
+		'Uploader': file.userid,
+		'Timestamp Upload': file.timestamp,
+		'Timestamp Expire': file.timestampExpire,
+	};
+	if(utils.isAdmin(user.username) || file.userid === user.id) {
+		_fileInfo['Original Name'] = file.original;
+		_fileInfo['IP'] = file.ip;
+		_fileInfo['Delete Key'] = file.deletekey;
+	}
+	if(utils.isAdmin(user.username)) {
+		_fileInfo['Hash'] = file.hash;
+		_fileInfo['Size'] = file.size;
+		_fileInfo['Album ID'] = file.albumid;
+	}
+	
+	return res.json({ success: true, fileData: _fileInfo});
 }
 
 uploadsController.upload = async (req, res, next) => {
