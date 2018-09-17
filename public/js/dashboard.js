@@ -1005,6 +1005,7 @@ panel.lookupFile = function(txt) {
 
 let _tm = false
 panel.lookupBoxUpdated = function() {
+	document.getElementById('filedata').innerHTML = ``;
 	if(typeof(_tm) !== 'boolean') { clearTimeout(_tm); _tm = false;}
 	_tm = setTimeout(function() {
 		panel.lookupFile(document.getElementById('filelookupid').value);
