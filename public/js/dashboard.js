@@ -927,8 +927,9 @@ panel.registerNewUser = function (username, pass, adminpw = '') {
 }
 
 
-panel.lookupFile = function(txt) {
+panel.lookupFile = function(txt = '') {
 	document.getElementById('filedata').innerHTML = ``;
+	if(txt.length < 4 || txt.indexOf('.') < 1) return;
 	axios.get(`/api/uploads/info/${txt}`).then(function(response) {
 		if (response.data.success === false) {
 		  if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
