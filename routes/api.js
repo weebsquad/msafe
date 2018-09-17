@@ -58,6 +58,11 @@ const map = {
 		'function': uploadController.list,
 		'auth': true,
 	},
+	'uploads/info/:id': {
+		'function': uploadController.fileInfo,
+		//'admin': true,
+		//'auth': true,
+	},
     'gdelete/:deletekey': {
 		'function': uploadController.delete,
 	},

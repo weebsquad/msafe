@@ -67,6 +67,13 @@ const upload = multer({
   }
 }).array('files[]')
 
+
+uploadsController.fileInfo = async(req, res, next) => {
+	const user = req.user;
+	const fileId = req.params.id;
+	return res.json({ success: true, fileData: {'1': '2', 'a': 'b' });
+});
+
 uploadsController.upload = async (req, res, next) => {
   if (config.private === true) {
     const _checkuser = await utils.authorize(req, res)

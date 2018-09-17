@@ -168,7 +168,7 @@ panel.prepareDashboard = async function () {
     document.getElementById('itemAdmin').style.display = 'block'
   }
 
-  const mapTabs = ['itemUploads', 'itemManageGallery', 'itemTokens', 'itemPassword', 'itemLogout', 'itemAdmin', 'itemAccount']
+  const mapTabs = ['itemUploads', 'itemManageGallery', 'itemTokens', 'itemPassword', 'itemLogout', 'itemAdmin', 'itemAccount', 'itemLookup']
 
   mapTabs.forEach(function (vlx) {
 	  const vl = vlx
@@ -200,6 +200,9 @@ panel.logout = function () {
   localStorage.removeItem('token')
   location.reload('/')
 }
+
+
+
 
 panel.getUploads = function (album = undefined, page = undefined) {
   panel.onAdminP = false
@@ -287,13 +290,6 @@ panel.getUploads = function (album = undefined, page = undefined) {
 				<hr>
 				${pagination}
 			`
-      if(panel.isAdmin(panel.username)) {
-		  _thehtml = `
-		  <p class="control has-addons">
-				<input id="filesfromuser" class="input" type="text" placeholder="A username">
-		  </p>
-		  ${_thehtml}`;
-	  }
 	  container.innerHTML = _thehtml;
       panel.page.appendChild(container)
       var table = document.getElementById('table')
@@ -690,6 +686,9 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
     })
 }
 
+
+
+
 panel.updateAdminPage = function (pw = '') {
   if (!panel.onAdminP) return
   panel.page.innerHTML = ''
@@ -925,6 +924,48 @@ panel.registerNewUser = function (username, pass, adminpw = '') {
     .catch(function (error) {
 	  panel.errorHandler(error)
     })
+}
+
+
+panel.lookupFile = function(txt) {
+	axios.get(`/api/uploads/info/${txt}`).then(function(response) {
+		if (response.data.success === false) {
+		  if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
+		  else return swal('An error ocurred', response.data.description, 'error')
+		}
+		if(typeof(response.data.fileData) !== 'undefined') {
+			let txt = `File Info`;
+			for(var key in response.data.fileData) {
+				let obj = response.data.fileData[key];
+				txt = `${txt}<br>${key} > ${obj}`;
+			}
+			document.getElementById('filedata').innerHTML = txt;
+		}
+	}).catch(function(error) {
+		panel.errorHandler(error);
+	});
+};
+
+let _event
+panel.fileLookupScreen = function() {
+	panel.onAdminP = false
+	panel.page.innerHTML = ''
+	  var container = document.createElement('div')
+	  container.className = 'container'
+	  container.innerHTML = `
+			<h2 class="subtitle">Lookup some file infos</h2>
+
+			<p class="control has-addons">
+				<input id="filelookupid" class="input is-expanded" type="password" placeholder="File name/id">
+			</p>
+			
+			<div id="filedata"></div>
+		`
+	panel.page.appendChild(container)
+	
+	document.getElementById('filelookupid').addEventListener('onchange', function () {
+		console.log('hi');
+	});
 }
 
 panel.accountScreen = function () {
