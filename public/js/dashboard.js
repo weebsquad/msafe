@@ -934,12 +934,42 @@ panel.lookupFile = function(txt) {
 		  else return swal('An error ocurred', response.data.description, 'error')
 		}
 		if(typeof(response.data.fileData) !== 'undefined') {
-			let txt = `File Info`;
+			let headers = ``;
+			let _txtbody = ``
 			for(var key in response.data.fileData) {
 				let obj = response.data.fileData[key];
-				txt = `${txt}<br><br><label class="label"><b><u>${key}</b></u></label>${obj}`;
+				headers = `${headers}<th>${key}</th>`;
+				_txtbody = `${_txtbody}<th>${obj}</th>`;
 			}
+
+			let txt = `<br><br><h2 class="subtitle"><u>File Info</u></h2><br>
+				<hr>
+				<table class="table is-striped is-narrow is-left">
+				<thead>
+					<tr>
+						  ${headers}
+					</tr>
+				</thead>
+				<tbody id="tableLookup">
+				</tbody>
+			</table>
+			`;
+			
+			for(var key in response.data.fileData) {
+				let obj = response.data.fileData[key];
+				txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label>${obj}`;
+			}
+			txt = `${txt}</table>`;
 			document.getElementById('filedata').innerHTML = txt;
+			let _tbody = document.getElementById('tableLookup');
+			var tr = document.createElement('tr');
+			tr.innerHTML = `
+				<tr>
+				${_txtbody}
+				</tr>
+			`
+			_tbody.appendChild(tr);
+			
 		}
 	}).catch(function(error) {
 		panel.errorHandler(error);
