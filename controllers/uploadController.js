@@ -74,6 +74,7 @@ uploadsController.fileInfo = async(req, res, next) => {
 	const file = await db.table('files').where('name', fileId).first();
 	if(!file) return res.json({ success: false, description: 'File not found'});
 	const _usrUpl = await db.table('users').where('id', file.userid).first();
+	if(!_usrUpl) _usrUpl = '<UNKNOWN>';
 	let _fileInfo = {
 		'File Type': file.type,
 		'Uploader': _usrUpl.username,
