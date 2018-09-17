@@ -76,21 +76,23 @@ uploadsController.fileInfo = async(req, res, next) => {
 	const _usrUpl = await db.table('users').where('id', file.userid).first();
 	if(!_usrUpl) _usrUpl = '<UNKNOWN>';
 	let _fileInfo = {
-		'File Type': file.type,
 		'Uploader': _usrUpl.username,
-		'Timestamp Upload': new Date(file.timestamp)
+		'File Type': file.type,
+		//'Timestamp Upload': new Date(file.timestamp)
 	};
 	if(typeof(file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire);
 	
 	if(utils.isAdmin(user.username) || file.userid === user.id) {
 		_fileInfo['Original Name'] = file.original;
 		_fileInfo['IP'] = file.ip;
-		_fileInfo['Delete Key'] = file.deletekey;
+		if(file.deletekey) _fileInfo['Delete Key'] = file.deletekey;
+		if(file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion;
 	}
 	if(utils.isAdmin(user.username)) {
 		_fileInfo['Hash'] = file.hash;
 		_fileInfo['Size'] = file.size;
-		_fileInfo['Album ID'] = file.albumid;
+		if(file.albumid) _fileInfo['Album ID'] = file.albumid;
+		if(file.encodedString) _fileInfo['Encoded String'] = file.encodedString;
 	}
 	
 	return res.json({ success: true, fileData: _fileInfo});
