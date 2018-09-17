@@ -42,9 +42,10 @@ s3.enabledCheck = function () {
   return true
 }
 
-s3.getExpireDate = function (start) {
+s3.getExpireDate = function (start, adminFile = false) {
   start = new Date(start)
   let expdate = new Date(start.setFullYear(start.getFullYear() + optionsS3.expireValue))
+  if(adminFile) = new Date(start.setFullYear(start.getFullYear() + 100))
   return expdate
 }
 
@@ -81,7 +82,7 @@ s3.getFiles = async function (bucket) {
 s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFile = false) {
   return new Promise(function (resolve, reject) {
     let expdate
-    if (!adminFile) expdate = s3.getExpireDate(new Date())
+    expdate = s3.getExpireDate(new Date(), adminFile)
     let params = {
       localFile: localPath,
 
