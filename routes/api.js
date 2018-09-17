@@ -155,6 +155,22 @@ const defaults = {
 	'auth': false,
 	'disabled': false,
 };
+
+
+const callHandlers = {
+	'success': function (req, res, next, callbackFunction, user) {
+		if(typeof(user) !== 'undefined') req.user = user;
+		callbackFunction(req, res, next);
+	},
+	'disabled': function(req, res, next) {
+		return res.json({ 'success': false, 'description': 'This API call is disabled' })
+	},
+	'adminOnly': function(req, res, next, user) {
+		if (config.admins.indexOf(name) > -1) return true
+		return false
+	},
+};
+
 function setRoutes (routes, log = true) {
   let i = 0
   for (let type in map) {
@@ -171,16 +187,28 @@ function setRoutes (routes, log = true) {
 		  
 				  
 		  if(typeof(obj['function']) === 'function') {
+			  
 			  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
-				 console.log(_options);
-				  // Handle auth
 				  
+				  // Handle disabled
+				  if(_options.disabled === true) return callHandlers.disabled(req, res, next);
+				  
+				  // Handle auth
+				  let user;
+				  if(_options.auth === true || _options.admin === true) { 
+					user = await utils.authorize(req, res)
+					if(!user.id) return;
+				  }
+				  
+				  if(_options.admin === true) {
+					if(callHandlers.adminOnly(req, res, next, user)) return;
+				  }
+
 				  _callbackFunction(req, res, next);
 			  }
 			  
 			  let _opts = shallowCopy(obj);
 			  delete _opts['function'];
-			  console.log(_opts);
 			  
 			  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
 			  if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
