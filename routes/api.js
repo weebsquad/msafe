@@ -6,13 +6,12 @@ let authController = require('../controllers/authController')
 let utils = require('../controllers/utilsController')
 let route = require('express').Router()
 
-
-function shallowCopy(obj) {
-    var result = {};
-    for (var i in obj) {
-        result[i] = obj[i];
-    }
-    return result;
+function shallowCopy (obj) {
+  var result = {}
+  for (var i in obj) {
+    result[i] = obj[i]
+  }
+  return result
 }
 
 let api = {}
@@ -28,192 +27,186 @@ function check (req, res, next) {
   })
 }
 
-
-
 const map = {
   'get': {
     'check': {
-		'function': check,
-		'auth': false,
-	},
+      'function': check,
+      'auth': false
+    },
     'admins': {
-		'function': authController.listAdmins,
-		'auth': true,
-		'admin': true,
-	},
-	'admincheck': {
-		'function': authController.adminCheck,
-		'auth': true,
-	},
+      'function': authController.listAdmins,
+      'auth': true,
+      'admin': true
+    },
+    'admincheck': {
+      'function': authController.adminCheck,
+      'auth': true
+    },
     'account/list': {
-		'function': authController.listAccounts,
-		'auth': true,
-		'admin': true,
-	},
+      'function': authController.listAccounts,
+      'auth': true,
+      'admin': true
+    },
     'uploads': {
-		'function': uploadController.list,
-		'auth': true,
-	},
+      'function': uploadController.list,
+      'auth': true
+    },
     'uploads/:page': {
-		'function': uploadController.list,
-		'auth': true,
-	},
-	'uploads/info/:id': {
-		'function': uploadController.fileInfo,
-		'auth': true,
-	},
+      'function': uploadController.list,
+      'auth': true
+    },
+    'uploads/info/:id': {
+      'function': uploadController.fileInfo,
+      'auth': true
+    },
     'gdelete/:deletekey': {
-		'function': uploadController.delete,
-	},
+      'function': uploadController.delete
+    },
     'album/get/:identifier': {
-		'function': albumsController.get,
-	},
+      'function': albumsController.get
+    },
     'album/zip/:identifier': {
-		'function': albumsController.generateZip,
-		'disabled': !config.uploads.generateZips,
-	},
+      'function': albumsController.generateZip,
+      'disabled': !config.uploads.generateZips
+    },
     'album/:id': {
-		'function': uploadController.list,
-		'auth': true,
-	},
+      'function': uploadController.list,
+      'auth': true
+    },
     'album/:id/:page': {
-		'function': uploadController.list,
-		'auth': true,
-	},
+      'function': uploadController.list,
+      'auth': true
+    },
     'albums': {
-		'function': albumsController.list,
-		'auth': true,
-	},
+      'function': albumsController.list,
+      'auth': true
+    },
     'albums/:sidebar': {
-		'function': albumsController.list,
-		'auth': true,
-	},
+      'function': albumsController.list,
+      'auth': true
+    },
     'tokens': {
-		'function': tokenController.list,
-		'auth': true,
-	},
-	
-	// base call
+      'function': tokenController.list,
+      'auth': true
+    },
+
+    // base call
     '': {
-		'function': function (req, res, next) {
+      'function': function (req, res, next) {
 		  return res.send('Nothing here!')
-		}
-	},
-	
+      }
+    }
+
   },
   'post': {
     'login': {
-		'function': authController.verify,
-		'auth': false,
-	},
+      'function': authController.verify,
+      'auth': false
+    },
     'register': {
-		'function': authController.register,
-		'auth': false,
-	},
+      'function': authController.register,
+      'auth': false
+    },
     'account/delete': {
-		'function': authController.deleteAccount,
-		'auth': true,
-	},
+      'function': authController.deleteAccount,
+      'auth': true
+    },
     'account/disable': {
-		'function': authController.disableAccount,
-		'auth': true,
-	},
+      'function': authController.disableAccount,
+      'auth': true
+    },
     'password/change': {
-		'function': authController.changePassword,
-		'auth': true,
-	},
+      'function': authController.changePassword,
+      'auth': true
+    },
     'upload': {
-		'function': uploadController.upload,
-		'auth': config.private,
-	},
+      'function': uploadController.upload,
+      'auth': config.private
+    },
     'upload/delete': {
-		'function': uploadController.delete,
-		'auth': true,
-	},
+      'function': uploadController.delete,
+      'auth': true
+    },
     'upload/:albumid': {
-		'function': uploadController.upload,
-		'auth': true,
-	},
+      'function': uploadController.upload,
+      'auth': true
+    },
     'albums': {
-		'function': albumsController.create,
-		'auth': true,
-	},
+      'function': albumsController.create,
+      'auth': true
+    },
     'albums/delete': {
-		'function': albumsController.delete,
-		'auth': true,
-	},
+      'function': albumsController.delete,
+      'auth': true
+    },
     'albums/rename': {
-		'function': albumsController.rename,
-		'auth': true,
-	},
+      'function': albumsController.rename,
+      'auth': true
+    },
     'tokens/verify': {
-		'function': tokenController.verify,
-	},
+      'function': tokenController.verify
+    },
     'tokens/change': {
-		'function': tokenController.change,
-		'auth': true,
-	}
+      'function': tokenController.change,
+      'auth': true
+    }
   }
 }
 const defaults = {
-	'admin': false,
-	'auth': false,
-	'disabled': false,
-};
-
+  'admin': false,
+  'auth': false,
+  'disabled': false
+}
 
 const callHandlers = {
-	'success': function (req, res, next, callbackFunction, user) {
-		if(typeof(user) !== 'undefined') req.user = user;
-		callbackFunction(req, res, next);
-	},
-};
+  'success': function (req, res, next, callbackFunction, user) {
+    if (typeof (user) !== 'undefined') req.user = user
+    callbackFunction(req, res, next)
+  }
+}
 
 function setRoutes (routes, log = true) {
   let i = 0
   for (let type in map) {
 	  for (let key in map[type]) {
 		  let obj = map[type][key]
-		  let _objc = shallowCopy(obj);
+		  let _objc = shallowCopy(obj)
 
-		  for(var key2 in defaults) { 
-			if(typeof(_objc[key2]) !== typeof(defaults[key2])) _objc[key2] = defaults[key2]; 
+		  for (var key2 in defaults) {
+        if (typeof (_objc[key2]) !== typeof (defaults[key2])) _objc[key2] = defaults[key2]
 		  }
 
-		  _objc.function = obj.function;
-		  obj = _objc;
-		  
-				  
-		  if(typeof(obj['function']) === 'function') {
-			  
-			  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
-				  
+		  _objc.function = obj.function
+		  obj = _objc
+
+		  if (typeof (obj['function']) === 'function') {
+			  let _handleCall = async function (req, res, next, _callbackFunction, _options) {
 				  // Handle disabled
-				  if(_options.disabled === true) return res.json({ 'success': false, 'description': 'This API call is disabled' })
-				  
+				  if (_options.disabled === true) return res.json({ 'success': false, 'description': 'This API call is disabled' })
+
 				  // Handle auth
-				  let user;
-				  if(_options.auth === true || _options.admin === true) { 
-					user = await utils.authorize(req, res)
-					if(!user.id) return;
-				  }
-				  
-				  if(_options.admin === true) {
-					if(!utils.isAdmin(user.username)) return res.json({ 'success': false, 'description': 'This API call is reserved for administration' })
+				  let user
+				  if (_options.auth === true || _options.admin === true) {
+            user = await utils.authorize(req, res)
+            if (!user.id) return
 				  }
 
-				  callHandlers.success(req, res, next, _callbackFunction, user);
+				  if (_options.admin === true) {
+            if (!utils.isAdmin(user.username)) return res.json({ 'success': false, 'description': 'This API call is reserved for administration' })
+				  }
+
+				  callHandlers.success(req, res, next, _callbackFunction, user)
 			  }
-			  
-			  let _opts = shallowCopy(obj);
-			  delete _opts['function'];
-			  
+
+			  let _opts = shallowCopy(obj)
+			  delete _opts['function']
+
 			  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
 			  if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 			  i++
 		  } else {
-			  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`);
-			}
+			  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`)
+      }
 	  }
   }
   console.log(`Loaded ${i} API routes!`)

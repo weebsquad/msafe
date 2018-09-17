@@ -81,7 +81,7 @@ s3.getFiles = async function (bucket) {
 s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFile = false) {
   return new Promise(function (resolve, reject) {
     let expdate
-	if(!adminFile) expdate = s3.getExpireDate(new Date());
+    if (!adminFile) expdate = s3.getExpireDate(new Date())
     let params = {
       localFile: localPath,
 
@@ -94,9 +94,9 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
         // ContentType: 'application/octet-stream',
 	    }
     }
-	
-	if(typeof(expdate) !== 'undefined') params.s3Params.Expires = expdate; 
-	
+
+    if (typeof (expdate) !== 'undefined') params.s3Params.Expires = expdate
+
     // console.log(params)
     let uploader = s3.client.uploadFile(params)
     uploader.on('error', function (err) {
@@ -225,18 +225,17 @@ s3.fixDb = async function () {
 
   // Handle file expire no db value
   let filesNoExpire = await db.table('files').where('timestampExpire', 0).select('name', 'id', 'userid', 'original', 'timestamp', 'timestampExpire')
-  
-  
+
   if (filesNoExpire && filesNoExpire.length > 0) {
-	  let allUsers = await db.table('users').select('id', 'username');
-	  let adminIds = new Array();
-	  allUsers.forEach(function (vl) { if(config.admins.indexOf(vl.username) > -1) adminIds.push(vl.id); });
-	  for(var i = 0; i < filesNoExpire.length; i++) {
-		  let obj = filesNoExpire[i];
-		  if(adminIds.indexOf(obj.userid) > -1) filesNoExpire.splice(i, 1);
+	  let allUsers = await db.table('users').select('id', 'username')
+	  let adminIds = new Array()
+	  allUsers.forEach(function (vl) { if (config.admins.indexOf(vl.username) > -1) adminIds.push(vl.id) })
+	  for (var i = 0; i < filesNoExpire.length; i++) {
+		  let obj = filesNoExpire[i]
+		  if (adminIds.indexOf(obj.userid) > -1) filesNoExpire.splice(i, 1)
 	  }
   }
-  
+
   if (filesNoExpire && filesNoExpire.length > 0) {
 	  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`)
 		  filesNoExpire.forEach(async function (vl) {

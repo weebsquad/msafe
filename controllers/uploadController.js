@@ -67,35 +67,34 @@ const upload = multer({
   }
 }).array('files[]')
 
+uploadsController.fileInfo = async (req, res, next) => {
+  const user = req.user
+  const fileId = req.params.id
+  const file = await db.table('files').where('name', fileId).first()
+  if (!file) return res.json({ success: false, description: 'File not found'})
+  const _usrUpl = await db.table('users').where('id', file.userid).first()
+  if (!_usrUpl) _usrUpl = '<UNKNOWN>'
+  let _fileInfo = {
+    'Uploader': _usrUpl.username,
+    'File Type': file.type
+    // 'Timestamp Upload': new Date(file.timestamp)
+  }
+  if (typeof (file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire)
 
-uploadsController.fileInfo = async(req, res, next) => {
-	const user = req.user;
-	const fileId = req.params.id;
-	const file = await db.table('files').where('name', fileId).first();
-	if(!file) return res.json({ success: false, description: 'File not found'});
-	const _usrUpl = await db.table('users').where('id', file.userid).first();
-	if(!_usrUpl) _usrUpl = '<UNKNOWN>';
-	let _fileInfo = {
-		'Uploader': _usrUpl.username,
-		'File Type': file.type,
-		//'Timestamp Upload': new Date(file.timestamp)
-	};
-	if(typeof(file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire);
-	
-	if(utils.isAdmin(user.username) || file.userid === user.id) {
-		_fileInfo['Original Name'] = file.original;
-		_fileInfo['Uploader\'s IP'] = file.ip;
-		if(file.deletekey) _fileInfo['Delete Key'] = file.deletekey;
-		if(file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion;
-	}
-	if(utils.isAdmin(user.username)) {
-		if(file.encodedString) _fileInfo['Encoded String'] = file.encodedString;
-		_fileInfo['Hash'] = file.hash;
-		_fileInfo['Size'] = file.size;
-		if(file.albumid) _fileInfo['Album ID'] = file.albumid;
-	}
-	
-	return res.json({ success: true, fileData: _fileInfo});
+  if (utils.isAdmin(user.username) || file.userid === user.id) {
+    _fileInfo['Original File Name'] = file.original
+    _fileInfo['Uploader\'s IP'] = file.ip
+    if (file.deletekey) _fileInfo['Delete Key'] = file.deletekey
+    if (file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion
+  }
+  if (utils.isAdmin(user.username)) {
+    if (file.encodedString) _fileInfo['Encoded String'] = file.encodedString
+    _fileInfo['Hash'] = file.hash
+    _fileInfo['Size'] = file.size
+    if (file.albumid) _fileInfo['Album ID'] = file.albumid
+  }
+
+  return res.json({ success: true, fileData: _fileInfo})
 }
 
 uploadsController.upload = async (req, res, next) => {
@@ -131,10 +130,10 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
       // console.error(err)
       return res.json({ success: false, description: err })
     }
-    
+
     if (req.files.length === 0) return res.json({ success: false, description: 'no-files' })
-	let userAdmin = false;
-    if (userid !== undefined) userAdmin = utils.isAdmin(userid.username);
+    let userAdmin = false
+    if (userid !== undefined) userAdmin = utils.isAdmin(userid.username)
     const files = []
     const existingFiles = []
     let iteration = 1
@@ -354,9 +353,9 @@ uploadsController.deleteFile = function (file) {
 }
 
 uploadsController.list = async (req, res) => {
-  //const user = await utils.authorize(req, res)
-  //if (!user.id) return
-  const user = req.user;
+  // const user = await utils.authorize(req, res)
+  // if (!user.id) return
+  const user = req.user
   let offset = req.params.page
   if (offset === undefined) offset = 0
 

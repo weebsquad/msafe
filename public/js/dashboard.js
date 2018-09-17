@@ -6,8 +6,8 @@ panel.token = localStorage.token
 panel.filesView = localStorage.filesView
 panel.onAdminP = false
 panel.loadedAt
-panel.adminacc = false;
-panel.fetchedAdmin = false;
+panel.adminacc = false
+panel.fetchedAdmin = false
 
 panel.stringifyError = function (err, filter, space) {
   var plainObject = {}
@@ -85,14 +85,14 @@ panel.errorHandler = async function (err) {
 
 panel.admins = new Array()
 panel.isAdmin = async function (name) {
-  if(!panel.fetchedAdmin) { 
-	await panel.checkAdmin();
-	await panel.fetchAdmins();
-	panel.fetchedAdmin = true;
+  if (!panel.fetchedAdmin) {
+    await panel.checkAdmin()
+    await panel.fetchAdmins()
+    panel.fetchedAdmin = true
   }
-  return panel.adminacc;
-  //if (panel.admins.length < 1) await panel.fetchAdmins()
-  //if (panel.admins.indexOf(name) > -1) return true
+  return panel.adminacc
+  // if (panel.admins.length < 1) await panel.fetchAdmins()
+  // if (panel.admins.indexOf(name) > -1) return true
   return false
 }
 
@@ -101,7 +101,7 @@ panel.fetchAdmins = async function () {
   return new Promise(function (resolve) {
     axios.get('/api/admins').then(function (response) {
       if (response.data.success === false) {
-        //panel.errorHandler(response.data.description)
+        // panel.errorHandler(response.data.description)
         resolve()
         return
       }
@@ -114,17 +114,16 @@ panel.fetchAdmins = async function () {
   })
 }
 
-panel.checkAdmin = async function() {
-	
-	panel.adminacc = false;
-	return new Promise(function (resolve) {
+panel.checkAdmin = async function () {
+  panel.adminacc = false
+  return new Promise(function (resolve) {
     axios.get('/api/admincheck').then(function (response) {
       if (response.data.success === false) {
         panel.errorHandler(response.data.description)
         resolve()
         return
       }
-	  panel.adminacc = response.data.admin;
+	  panel.adminacc = response.data.admin
       resolve()
     }).catch(function (error) {
       panel.errorHandler(error)
@@ -201,9 +200,6 @@ panel.logout = function () {
   location.reload('/')
 }
 
-
-
-
 panel.getUploads = function (album = undefined, page = undefined) {
   panel.onAdminP = false
   if (page === undefined) page = 0
@@ -270,7 +266,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
       var albumOrUser = 'Album'
 	  const _adm = await panel.isAdmin(panel.username)
       if (_adm) { albumOrUser = 'User' }
-      
+
 	  let _thehtml = `
 				${pagination}
 				<hr>
@@ -290,7 +286,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
 				<hr>
 				${pagination}
 			`
-	  container.innerHTML = _thehtml;
+	  container.innerHTML = _thehtml
       panel.page.appendChild(container)
       var table = document.getElementById('table')
 
@@ -564,8 +560,6 @@ panel.getAlbum = function (item) {
   panel.getUploads(item.id)
 }
 
-
-
 panel.changeToken = function () {
   panel.onAdminP = false
   axios.get('/api/tokens')
@@ -685,9 +679,6 @@ panel.sendNewPassword = function (pass, username = panel.username, random = fals
 	  panel.errorHandler(error)
     })
 }
-
-
-
 
 panel.updateAdminPage = function (pw = '') {
   if (!panel.onAdminP) return
@@ -926,48 +917,49 @@ panel.registerNewUser = function (username, pass, adminpw = '') {
     })
 }
 
-
-panel.lookupFile = function(txt = '') {
-	document.getElementById('filedata').innerHTML = ``;
-	if(txt.length < 4 || txt.indexOf('.') < 1) return;
-	axios.get(`/api/uploads/info/${txt}`).then(function(response) {
-		if (response.data.success === false) {
+panel.lookupFile = function (txt = '') {
+  document.getElementById('filedata').innerHTML = ``
+  if (txt.length < 4 || txt.indexOf('.') < 1) return
+  axios.get(`/api/uploads/info/${txt}`).then(function (response) {
+    if (response.data.success === false) {
 		  if (response.data.description === 'No token provided') return panel.verifyToken(panel.token)
 		  else return swal('An error ocurred', response.data.description, 'error')
-		}
-		if(typeof(response.data.fileData) !== 'undefined') {
-			let tables = {};
-			let itemcount = 0;
-			let tablecount = 1;
-			const itemsPerTable = 9999;
-			for(var key in response.data.fileData) { 
-			    let obj = response.data.fileData[key];
-				itemcount++; 
-				if(typeof(tables[tablecount]) !== 'object') tables[tablecount] = {
-					'headers': '',
-					'body': '',
-					'rows': '',
-				};
-				tables[tablecount][key] = obj;
-				tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`;
-				tables[tablecount]['body'] = tables[tablecount]['body'] + `<td>${obj}</td>`;
-				tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr><th>${key}</th><td>${obj}</td></tr>`;
-				if(itemcount%itemsPerTable === 0) {
-					tablecount++;
-				}
-			}
-			//console.log(tables);
+    }
+    if (typeof (response.data.fileData) !== 'undefined') {
+      let tables = {}
+      let itemcount = 0
+      let tablecount = 1
+      const itemsPerTable = 9999
+      for (var key in response.data.fileData) {
+			    let obj = response.data.fileData[key]
+        itemcount++
+        if (typeof (tables[tablecount]) !== 'object') {
+          tables[tablecount] = {
+            'headers': '',
+            'body': '',
+            'rows': ''
+          }
+        }
+        tables[tablecount][key] = obj
+        tables[tablecount]['headers'] = tables[tablecount]['headers'] + `<th>${key}</th>`
+        tables[tablecount]['body'] = tables[tablecount]['body'] + `<td>${obj}</td>`
+        tables[tablecount]['rows'] = tables[tablecount]['rows'] + `<tr><th>${key}</th><td>${obj}</td></tr>`
+        if (itemcount % itemsPerTable === 0) {
+          tablecount++
+        }
+      }
+      // console.log(tables);
 
-			let txt = `<br><br><h2 class="subtitle"><u>File Info</u></h2><br>
+      let txt = `<br><br><h2 class="subtitle"><u>File Info</u></h2><br>
 				<hr>
-			`;
-			for(var key in tables) {
-				let obj = tables[key];
-				let headers = obj['headers'];
-				let body = obj['body'];
-				body = obj['rows'];
-				headers = `<th><b>Key</b></th><th>Value</th>`;
-				let _tablehtml = `
+			`
+      for (var key in tables) {
+        let obj = tables[key]
+        let headers = obj['headers']
+        let body = obj['body']
+        body = obj['rows']
+        headers = `<th><b>Key</b></th><th>Value</th>`
+        let _tablehtml = `
 				<table class="table is-striped is-narrow is-left is-fullwidth is-hoverable is-bordered">
 				<thead>
 					<tr>
@@ -978,46 +970,45 @@ panel.lookupFile = function(txt = '') {
 					${body}
 				</tbody>
 				</table>
-				`;
-				
-				txt = `${txt} ${_tablehtml}`;
-			}
-			
-			for(var key in response.data.fileData) {
-				let obj = response.data.fileData[key];
-				//txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label>${obj}`;
-			}
-			txt = `${txt}</table>`;
-			document.getElementById('filedata').innerHTML = txt;
-			/*let _tbody = document.getElementById('tableLookup');
+				`
+
+        txt = `${txt} ${_tablehtml}`
+      }
+
+      for (var key in response.data.fileData) {
+        let obj = response.data.fileData[key]
+        // txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label>${obj}`;
+      }
+      txt = `${txt}</table>`
+      document.getElementById('filedata').innerHTML = txt
+      /* let _tbody = document.getElementById('tableLookup');
 			var tr = document.createElement('tr');
 			tr.innerHTML = `
 				<tr>
 				${_txtbody}
 				</tr>
 			`
-			_tbody.appendChild(tr);*/
-			
-		}
-	}).catch(function(error) {
-		panel.errorHandler(error);
-	});
-};
-
-let _tm = false
-panel.lookupBoxUpdated = function() {
-	document.getElementById('filedata').innerHTML = ``;
-	if(typeof(_tm) !== 'boolean') { clearTimeout(_tm); _tm = false;}
-	_tm = setTimeout(function() {
-		panel.lookupFile(document.getElementById('filelookupid').value);
-		clearTimeout(_tm);
-		_tm = false;
-	}, 1500);
+			_tbody.appendChild(tr); */
+    }
+  }).catch(function (error) {
+    panel.errorHandler(error)
+  })
 }
 
-panel.fileLookupScreen = function() {
-	panel.onAdminP = false
-	panel.page.innerHTML = ''
+let _tm = false
+panel.lookupBoxUpdated = function () {
+  document.getElementById('filedata').innerHTML = ``
+  if (typeof (_tm) !== 'boolean') { clearTimeout(_tm); _tm = false }
+  _tm = setTimeout(function () {
+    panel.lookupFile(document.getElementById('filelookupid').value)
+    clearTimeout(_tm)
+    _tm = false
+  }, 1500)
+}
+
+panel.fileLookupScreen = function () {
+  panel.onAdminP = false
+  panel.page.innerHTML = ''
 	  var container = document.createElement('div')
 	  container.className = 'container'
 	  container.innerHTML = `
@@ -1029,9 +1020,7 @@ panel.fileLookupScreen = function() {
 			
 			<div id="filedata"></div>
 		`
-	panel.page.appendChild(container)
-	
-
+  panel.page.appendChild(container)
 }
 
 panel.accountScreen = function () {

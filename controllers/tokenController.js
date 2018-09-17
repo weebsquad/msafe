@@ -22,16 +22,16 @@ tokenController.verify = async (req, res, next) => {
 }
 
 tokenController.list = async (req, res, next) => {
-  //const user = await utils.authorize(req, res)
-  //if (!user.id) return
-  const user = req.user;
+  // const user = await utils.authorize(req, res)
+  // if (!user.id) return
+  const user = req.user
   return res.json({ success: true, token: user.token })
 }
 
 tokenController.change = async (req, res, next) => {
-  //const user = await utils.authorize(req, res)
-  //if (!user.id) return
-  const user = req.user;
+  // const user = await utils.authorize(req, res)
+  // if (!user.id) return
+  const user = req.user
   const newtoken = randomstring.generate(64)
 
   await db.table('users').where('token', user.token).update({
