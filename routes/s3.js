@@ -96,7 +96,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
     }
 	
 	if(typeof(expdate) !== 'undefined') { params.s3Params.Expires = expdate; } else {
-		console.log(`uploaded admin file, no expire date! ${filename}`);
+		console.log(`uploaded admin file, no expire date! ${fileName}`);
 	}
 	
     // console.log(params)
