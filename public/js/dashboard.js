@@ -946,9 +946,14 @@ panel.lookupFile = function(txt) {
 	});
 };
 
-
+let _tm = false
 panel.lookupBoxUpdated = function() {
-	console.log('hi');
+	if(typeof(_tm) !== 'boolean') { clearTimeout(_tm); _tm = false;}
+	_tm = setTimeout(function() {
+		panel.lookupFile(document.getElementById('filelookupid').value);
+		clearTimeout(_tm);
+		_tm = false;
+	}, 1000);
 }
 
 panel.fileLookupScreen = function() {
@@ -967,9 +972,7 @@ panel.fileLookupScreen = function() {
 		`
 	panel.page.appendChild(container)
 	
-	$("#filelookupid").on('change keydown paste input', function(){
-		console.log('hi');
-	});
+
 }
 
 panel.accountScreen = function () {
