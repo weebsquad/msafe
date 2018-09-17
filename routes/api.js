@@ -162,7 +162,7 @@ function setRoutes (routes, log = true) {
 	  for (let key in map[type]) {
 		  let obj = map[type][key]
 		  
-		  for(var ky in _options) {
+		  for(var ky in obj) {
 			let _found = false;
 			for(var key2 in defaults) { if(key2 === ky) _found = true; }
 			if(!_found) { obj[ky] = defaults[ky]; map[type][key] = obj; }
@@ -171,7 +171,7 @@ function setRoutes (routes, log = true) {
 				  
 		  if(typeof(obj['function']) === 'function') {
 			  let _handleCall = async function(req, res, next, _callbackFunction, _options) {
-					console.log(_options);
+				 console.log(_options);
 				  // Handle auth
 				  
 				  _callbackFunction(req, res, next);
