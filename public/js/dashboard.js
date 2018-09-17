@@ -937,7 +937,7 @@ panel.lookupFile = function(txt) {
 			let txt = `File Info`;
 			for(var key in response.data.fileData) {
 				let obj = response.data.fileData[key];
-				txt = `${txt}<br>${key} > ${obj}`;
+				txt = `${txt}<br><label class="label"><b><u>${key}</b></u></label> > <label class="label">${obj}</label>`;
 			}
 			document.getElementById('filedata').innerHTML = txt;
 		}
@@ -956,14 +956,14 @@ panel.fileLookupScreen = function() {
 			<h2 class="subtitle">Lookup some file infos</h2>
 
 			<p class="control has-addons">
-				<input id="filelookupid" class="input is-expanded" type="password" placeholder="File name/id">
+				<input id="filelookupid" class="input is-expanded" type="text" placeholder="File name/id">
 			</p>
 			
 			<div id="filedata"></div>
 		`
 	panel.page.appendChild(container)
 	
-	document.getElementById('filelookupid').addEventListener('onchange', function () {
+	$("#filelookupid").on('change keydown paste input', function(){
 		console.log('hi');
 	});
 }
