@@ -29,7 +29,7 @@ function check (req, res, next) {
 
 
 
-let map = {
+const map = {
   'get': {
     'check': {
 		'function': check,
@@ -38,7 +38,6 @@ let map = {
     'admins': {
 		'function': authController.listAdmins,
 		'auth': true,
-		'disabled': false,
 		'admin': true,
 	},
 	'admincheck': {
@@ -170,7 +169,6 @@ function setRoutes (routes, log = true) {
 				_objc[ky] = defaults[ky]; 
 				_objc.function = obj.function;
 				obj = _objc;
-				map[type][key] = obj;
 			}
 		  }
 		  
@@ -185,6 +183,7 @@ function setRoutes (routes, log = true) {
 			  
 			  let _opts = shallowCopy(obj);
 			  delete _opts['function'];
+			  console.log(_opts);
 			  
 			  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
 			  if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
