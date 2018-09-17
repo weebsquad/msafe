@@ -100,9 +100,10 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
       // console.error(err)
       return res.json({ success: false, description: err })
     }
-
+    
     if (req.files.length === 0) return res.json({ success: false, description: 'no-files' })
-
+	let userAdmin = false;
+    if (userid !== undefined) userAdmin = utils.isAdmin(userid.username);
     const files = []
     const existingFiles = []
     let iteration = 1
@@ -161,7 +162,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
           }
 
           if (iteration === req.files.length) {
-            return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString, deletekey)
+            return uploadsController.processFilesForDisplay(req, res, files, existingFiles, albumid, encodeVersion, encodeString, deletekey, userAdmin)
           }
           iteration++
         })
@@ -170,7 +171,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
   })
 }
 
-uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid, encodeVersion = 0, encodeString = '', deleteKey = '') => {
+uploadsController.processFilesForDisplay = async (req, res, files, existingFiles, albumid, encodeVersion = 0, encodeString = '', deleteKey = '', userAdmin = false) => {
   let basedomain = config.domain
   if (files.length === 0) {
     return res.json({
@@ -200,7 +201,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       await utils.generateThumbs(file)
     }
     const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
-    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name)
+    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin)
   }
 
   let albumSuccess = true

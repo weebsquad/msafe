@@ -78,9 +78,10 @@ s3.getFiles = async function (bucket) {
   })
 }
 
-s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
+s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFile = false) {
   return new Promise(function (resolve, reject) {
-    let expdate = s3.getExpireDate(new Date())
+    let expdate
+	if(!adminFile) expdate = s3.getExpireDate(new Date());
     let params = {
       localFile: localPath,
 
@@ -89,11 +90,15 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
         Key: `${optionsS3.uploadsFolder}/${fileName}`,
         ACL: 'public-read',
         // Body: fs.createReadStream(localPath),
-        ServerSideEncryption: 'AES256',
-        Expires: expdate
+        ServerSideEncryption: 'AES256'
         // ContentType: 'application/octet-stream',
 	    }
     }
+	
+	if(typeof(expdate) !== 'undefined') { params.s3Params.Expires = expdate; } else {
+		console.log(`uploaded admin file, no expire date! ${filename}`);
+	}
+	
     // console.log(params)
     let uploader = s3.client.uploadFile(params)
     uploader.on('error', function (err) {
@@ -120,10 +125,10 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '') {
   })
 }
 
-s3.convertFile = async function (bucket, localPath, remotePath, id) {
+s3.convertFile = async function (bucket, localPath, remotePath, id, adminFile = false) {
   return new Promise(function (resolve, reject) {
     // const fileName = localPath.split('.').reverse().splice(1).reverse().join('.')
-    s3.uploadFile(bucket, remotePath, localPath, id).then(r => {
+    s3.uploadFile(bucket, remotePath, localPath, id, adminFile).then(r => {
       fs.unlinkSync(localPath)
       resolve(r)
     }).catch(e => { reject(e) })
