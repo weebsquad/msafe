@@ -228,31 +228,34 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 
     var prevPage = 0
     var nextPage = page + 1
-
+	
+	let txtNext = `Next (${nextPage})`;
+	
     if (response.data.files.length < 25) { 
 		nextPage = page; 
-		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.innerHTML = ' '; });
-	} else {
-		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.innerHTML = `Next Page (${nextPage})`; });
+		txtNext = '';
 	}
 
+	let txtPrev = '';
     if (page > 0) {
 		prevPage = page - 1
-		document.querySelectorAll('[id=paginate-prev]').forEach(function(vl) { vl.innerHTML = `Previous Page (${prevPage})`; });
-	} else {
-		document.querySelectorAll('[id=paginate-prev]').forEach(function(vl) { vl.innerHTML = ' '; });
+		txtPrev = `Previous (${prevPage})`;
 	}
 	
 	let _valSearch = "";
 	if(search) _valSearch = search;
+	
+	let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )">`;
+	let _evenNext = ` onclick="panel.getUploads(${album}, ${NextPage}, ${search} )">`;
+	if(txtPrev === '') _evenPrev = '';
+	if(txtNext === '') _evenNext = '';
 
     panel.page.innerHTML = ''
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
-					  		<a class="pagination-previous" id="paginate-prev" onclick="panel.getUploads(${album}, ${prevPage}, ${search} )">Previous</a>
-					  		<a class="pagination-next" id="paginate-next" onclick="panel.getUploads(${album}, ${nextPage}, ${search} )">Next page</a>
-						</nav><br>
-						<input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>`
+					  		<a class="pagination-previous" id="paginate-prev"${_evenPrev}>${txtPrev}</a>
+					  		<a class="pagination-next" id="paginate-next"${_evenNext}">${txtNext}</a>
+						</nav>`
     var listType = `
 		<div class="columns">
 			<div class="column">
@@ -272,6 +275,7 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     if (panel.filesView === 'thumbs') {
       container.innerHTML = `
 				${pagination}
+				<br><input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>
 				<hr>
 				${listType}
 				<div class="columns is-multiline is-mobile" id="table">
