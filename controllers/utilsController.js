@@ -84,7 +84,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 				folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
 				size: '200x?'
 			  })
-			  .on('error', error => { console.log('Error - ', error.message)) fulfill(); }
+			  .on('error', error => { console.log('Error - ', error.message); fulfill(); }
 			  .on('end', async function () {
 				await tryS3('.png')
 			  })
