@@ -99,7 +99,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 			  .extent(size.width, size.height)
 			  .background('transparent')
 			  .write(thumbname, async function(error) {
-				if (error) { console.log('Error - ', error) fulfill(); return; }
+				if (error) { console.log('Error - ', error); fulfill(); return; }
 				await tryS3(ext)
 			  })
 		  }
