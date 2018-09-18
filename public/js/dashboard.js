@@ -277,7 +277,6 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     if (panel.filesView === 'thumbs') {
       container.innerHTML = `
 				${pagination}
-				<br><input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>
 				<hr>
 				${listType}
 				<div class="columns is-multiline is-mobile" id="table">
@@ -302,6 +301,7 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 
 	  let _thehtml = `
 				${pagination}
+				<br><input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>
 				<hr>
 				${listType}
 				<table class="table is-striped is-narrow is-left">
