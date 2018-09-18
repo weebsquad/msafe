@@ -240,9 +240,9 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
 					  		<a class="pagination-previous" onclick="panel.getUploads(${album}, ${prevPage} )">Previous</a>
-							<input id="uploadsSearch" class="input" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>
 					  		<a class="pagination-next" onclick="panel.getUploads(${album}, ${nextPage} )">Next page</a>
-						</nav>`
+						</nav><br>
+						<input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>`
     var listType = `
 		<div class="columns">
 			<div class="column">
