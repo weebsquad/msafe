@@ -47,62 +47,67 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
+  return new Promise(async function(fulfill, reject) {
 
-  async function tryS3 (_extension) {
-	  if (s3.enabledCheck()) {
-      let extt = `${_extension}`
-	  if (utilsController.noThumbnail.includes(_extension) || (!utilsController.videoExtensions.includes(_extension) && !utilsController.imageExtensions.includes(_extension))) return
-      // if (utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png'
-	  extt = '.png' // Apparently it's always png lol
-      let fn = file.name.split(_extension)[0]
-      fn = `${fn}${extt}`
+	  async function tryS3 (_extension) {
+		  if (s3.enabledCheck()) {
+		  let extt = `${_extension}`
+		  if (utilsController.noThumbnail.includes(_extension) || (!utilsController.videoExtensions.includes(_extension) && !utilsController.imageExtensions.includes(_extension))) return
+		  // if (utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png'
+		  extt = '.png' // Apparently it's always png lol
+		  let fn = file.name.split(_extension)[0]
+		  fn = `${fn}${extt}`
 
-      const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
-      let tries = 0
-      let interv = setInterval(async function () {
-        if (fs.existsSync(_thumbs)) {
-          clearInterval(interv)
-		  setTimeout(function() {
-			s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
-		  }, 100);
-        }
-        tries++
-        if (tries > 500) clearInterval(interv)
-      }, 50)
-    }
-  }
-  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
-  fs.access(thumbname, err => {
-    if (err && err.code === 'ENOENT') {
-      if (utilsController.videoExtensions.includes(ext)) {
-        ffmpeg(path.join(__dirname, '..', config.uploads.folder, file.name))
-          .thumbnail({
-            timestamps: [0],
-            filename: '%b.png',
-            folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
-            size: '200x?'
-          })
-          .on('error', error => console.log('Error - ', error.message))
-		  .on('end', function () {
-            tryS3('.png')
-		  })
-      } else {
-        let size = {
-          width: 200,
-          height: 200
-        }
-        gm(path.join(__dirname, '..', config.uploads.folder, file.name))
-          .resize(size.width, size.height + '>')
-          .gravity('Center')
-          .extent(size.width, size.height)
-          .background('transparent')
-          .write(thumbname, error => {
-            if (error) return console.log('Error - ', error)
-            tryS3(ext)
-          })
-      }
-    }
-  })
+		  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
+		  let tries = 0
+		  let interv = setInterval(async function () {
+			if (fs.existsSync(_thumbs)) {
+			  clearInterval(interv)
+			  setTimeout(async function() {
+				await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
+				fulfill();
+			  }, 100);
+			}
+			tries++
+			if (tries > 500) { clearInterval(interv); fulfill(); }
+		  }, 50)
+		}
+	  }
+	  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
+	  fs.access(thumbname, err => {
+		if (err && err.code === 'ENOENT') {
+		  if (utilsController.videoExtensions.includes(ext)) {
+			ffmpeg(path.join(__dirname, '..', config.uploads.folder, file.name))
+			  .thumbnail({
+				timestamps: [0],
+				filename: '%b.png',
+				folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
+				size: '200x?'
+			  })
+			  .on('error', error => { console.log('Error - ', error.message)) fulfill(); }
+			  .on('end', async function () {
+				await tryS3('.png')
+			  })
+		  } else {
+			let size = {
+			  width: 200,
+			  height: 200
+			}
+			gm(path.join(__dirname, '..', config.uploads.folder, file.name))
+			  .resize(size.width, size.height + '>')
+			  .gravity('Center')
+			  .extent(size.width, size.height)
+			  .background('transparent')
+			  .write(thumbname, async function(error) {
+				if (error) { console.log('Error - ', error) fulfill(); return; }
+				await tryS3(ext)
+			  })
+		  }
+		} else {
+			fulfill();
+		}
+	})
+  });
 }
 
 utilsController.isNumeric = function (n) {
