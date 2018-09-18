@@ -226,6 +226,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
 					  		<a class="pagination-previous" onclick="panel.getUploads(${album}, ${prevPage} )">Previous</a>
+							<input id="uploadsSearch" class="input" type="text" placeholder="Search">
 					  		<a class="pagination-next" onclick="panel.getUploads(${album}, ${nextPage} )">Next page</a>
 						</nav>`
     var listType = `
@@ -833,10 +834,10 @@ panel.updateAdminPage = function (pw = '') {
 		  const _test = document.getElementById(key)
 		  if (_test) {
 			  clearInterval(_int)
-			  // setTimeout(function () { obj(key, _test) }, 25)
+			  setTimeout(function () { obj(key, _test) }, 75)
 			  obj(key, _test)
 		  }
-	  }, 25)
+	  }, 40)
   }
 }
 
@@ -1022,7 +1023,7 @@ panel.fileLookupScreen = function () {
 			<h2 class="subtitle">Lookup some file infos</h2>
 
 			<p class="control has-addons">
-				<input id="filelookupid" class="input is-expanded" type="text" placeholder="File name/id" oninput="panel.lookupBoxUpdated()">
+				<input id="filelookupid" class="input is-expanded" type="text" placeholder="name.extension" oninput="panel.lookupBoxUpdated()">
 			</p>
 			
 			<div id="filedata"></div>
