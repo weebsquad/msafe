@@ -202,10 +202,21 @@ panel.logout = function () {
   location.reload('/')
 }
 
-panel.getUploads = function (album = undefined, page = undefined) {
-  panel.onAdminP = false
-  if (page === undefined) page = 0
+let tmsearch = false
+panel.searchbarUpdated = function() {
+  document.getElementById('uploadsSearch').innerHTML = ``
+  if (typeof (tmsearch) !== 'boolean') { clearTimeout(tmsearch); tmsearch = false }
+  tmsearch = setTimeout(function () {
+    panel.getUploads(undefined, undefined, document.getElementById('uploadsSearch').value)
+    clearTimeout(tmsearch)
+    tmsearch = false
+  }, 1500)
+};
 
+
+panel.getUploads = function (album = undefined, page = undefined, search = undefined) {
+  if (page === undefined) page = 0
+  if(search) console.log(search);
   let url = '/api/uploads/' + page
   if (album !== undefined) { url = '/api/album/' + album + '/' + page }
 
@@ -226,7 +237,7 @@ panel.getUploads = function (album = undefined, page = undefined) {
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
 					  		<a class="pagination-previous" onclick="panel.getUploads(${album}, ${prevPage} )">Previous</a>
-							<input id="uploadsSearch" class="input" type="text" placeholder="Search">
+							<input id="uploadsSearch" class="input" type="text" placeholder="Search" oninput="panel.searchbarUpdated()">
 					  		<a class="pagination-next" onclick="panel.getUploads(${album}, ${nextPage} )">Next page</a>
 						</nav>`
     var listType = `
