@@ -47,7 +47,7 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
-  console.log(`genning thumb ${file}`);
+  //console.log(`genning thumb ${file}`);
   return new Promise(async function(fulfill, reject) {
 
 	  async function tryS3 (_extension) {
@@ -58,14 +58,14 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		  extt = '.png' // Apparently it's always png lol
 		  let fn = file.name.split('.')[0]
 		  fn = `${fn}${extt}`
-		  console.log(`waiting for thumb ${fn}`);
+		  //console.log(`waiting for thumb ${fn}`);
 		  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
 		  let tries = 0
 		  let interv = setInterval(async function () {
 			if (fs.existsSync(_thumbs)) {
 			  clearInterval(interv)
 			  setTimeout(async function() {
-				  console.log(`uploading thumb ${fn}`);
+				  //console.log(`uploading thumb ${fn}`);
 				await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
 				fulfill();
 			  }, 100);
