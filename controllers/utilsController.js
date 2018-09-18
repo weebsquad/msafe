@@ -71,8 +71,8 @@ utilsController.generateThumbs = async function (file, basedomain) {
 			  }, 100);
 			}
 			tries++
-			if (tries > 500) { clearInterval(interv); fulfill(); }
-		  }, 50)
+			if (tries > 5000) { clearInterval(interv); fulfill(); }
+		  }, 10)
 		}
 	  }
 	  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
