@@ -56,7 +56,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		  if (utilsController.noThumbnail.includes(_extension) || (!utilsController.videoExtensions.includes(_extension) && !utilsController.imageExtensions.includes(_extension))) return
 		  // if (utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png'
 		  extt = '.png' // Apparently it's always png lol
-		  let fn = file.name.split(_extension)[0]
+		  let fn = file.name.split('.')[0]
 		  fn = `${fn}${extt}`
 		  console.log(`waiting for thumb ${fn}`);
 		  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
@@ -88,7 +88,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 			  })
 			  .on('error', error => { console.log('Error - ', error.message); fulfill(); })
 			  .on('end', async function () {
-				await tryS3('.png')
+				await tryS3(ext)
 			  })
 		  } else {
 			let size = {
