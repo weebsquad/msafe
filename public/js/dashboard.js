@@ -232,12 +232,15 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     if (response.data.files.length < 25) { nextPage = page }
 
     if (page > 0) prevPage = page - 1
+	
+	let _valSearch = "";
+	if(search) _valSearch = search;
 
     panel.page.innerHTML = ''
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
 					  		<a class="pagination-previous" onclick="panel.getUploads(${album}, ${prevPage} )">Previous</a>
-							<input id="uploadsSearch" class="input" type="text" placeholder="Search" oninput="panel.searchbarUpdated()">
+							<input id="uploadsSearch" class="input" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}">
 					  		<a class="pagination-next" onclick="panel.getUploads(${album}, ${nextPage} )">Next page</a>
 						</nav>`
     var listType = `
