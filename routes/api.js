@@ -59,6 +59,10 @@ const map = {
       'function': uploadController.fileInfo,
       'auth': true
     },
+	'uploads/search/:query': {
+		'auth': true,
+		// todo
+	},
     'gdelete/:deletekey': {
       'function': uploadController.delete
     },

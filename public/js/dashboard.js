@@ -231,16 +231,16 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 
     if (response.data.files.length < 25) { 
 		nextPage = page; 
-		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.style.display = 'none'; });
+		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.innerHTML = ' '; });
 	} else {
-		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.style.display = 'block'; });
+		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.innerHTML = 'Next Page'; });
 	}
 
     if (page > 0) {
 		prevPage = page - 1
-		document.querySelectorAll('[id=paginate-previous]').forEach(function(vl) { vl.style.display = 'block'; });
+		document.querySelectorAll('[id=paginate-prev]').forEach(function(vl) { vl.innerHTML = 'Previous Page'; });
 	} else {
-		document.querySelectorAll('[id=paginate-previous]').forEach(function(vl) { vl.style.display = 'none'; });
+		document.querySelectorAll('[id=paginate-prev]').forEach(function(vl) { vl.innerHTML = ' '; });
 	}
 	
 	let _valSearch = "";
