@@ -246,7 +246,7 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 	if(search) _valSearch = search;
 	
 	let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )">`;
-	let _evenNext = ` onclick="panel.getUploads(${album}, ${NextPage}, ${search} )">`;
+	let _evenNext = ` onclick="panel.getUploads(${album}, ${nextPage}, ${search} )">`;
 	if(txtPrev === '') _evenPrev = '';
 	if(txtNext === '') _evenNext = '';
 
