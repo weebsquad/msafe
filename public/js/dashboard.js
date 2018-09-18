@@ -247,8 +247,8 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 	let _valSearch = "";
 	if(search) _valSearch = search;
 	
-	let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )">`;
-	let _evenNext = ` onclick="panel.getUploads(${album}, ${nextPage}, ${search} )">`;
+	let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )"`;
+	let _evenNext = ` onclick="panel.getUploads(${album}, ${nextPage}, ${search} )"`;
 	if(txtPrev === '') _evenPrev = '';
 	if(txtNext === '') _evenNext = '';
 
@@ -1082,13 +1082,39 @@ panel.accountScreen = function () {
 
   document.getElementById('sendDeleteAcc').addEventListener('click', function () {
     if (document.getElementById('password')) {
-      panel.deleteAccount(document.getElementById('password').value)
+		swal({
+			title: 'Are you sure you want to delete your account?',
+			text: 'You wont be able to recover it!',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#ff3860',
+			confirmButtonText: 'Yes, delete',
+			closeOnConfirm: false,
+			dangerMode: true,
+			closeOnClickOutside: true,
+		  },
+		  function () {
+			panel.deleteAccount(document.getElementById('password').value)
+		  });
     }
   })
 
   document.getElementById('sendDeleteFiles').addEventListener('click', function () {
     if (document.getElementById('password')) {
-      panel.deleteAccount(document.getElementById('password').value, panel.username, true)
+		swal({
+			title: 'Are you sure your files?',
+			text: 'You wont be able to recover your files!',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#ff3860',
+			confirmButtonText: 'Yes, delete',
+			closeOnConfirm: false,
+			dangerMode: true,
+			closeOnClickOutside: true,
+		  },
+		  function () {
+			panel.deleteAccount(document.getElementById('password').value, panel.username, true)
+		});
     }
   })
 }
