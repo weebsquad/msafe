@@ -65,8 +65,8 @@ utilsController.generateThumbs = async function (file, basedomain) {
           await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
         }
         tries++
-        if (tries > 2000) clearInterval(interv)
-      }, 10)
+        if (tries > 500) clearInterval(interv)
+      }, 50)
     }
   }
   let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
