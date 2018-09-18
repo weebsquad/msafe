@@ -254,7 +254,7 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
 					  		<a class="pagination-previous" id="paginate-prev"${_evenPrev}>${txtPrev}</a>
-					  		<a class="pagination-next" id="paginate-next"${_evenNext}">${txtNext}</a>
+					  		<a class="pagination-next" id="paginate-next"${_evenNext}>${txtNext}</a>
 						</nav>`
     var listType = `
 		<div class="columns">
