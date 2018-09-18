@@ -65,7 +65,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
           await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
         }
         tries++
-        if (tries > 20) clearInterval(interv)
+        if (tries > 2000) clearInterval(interv)
       }, 10)
     }
   }
