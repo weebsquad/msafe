@@ -229,7 +229,9 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     var prevPage = 0
     var nextPage = page + 1
 	
-	let txtNext = `Next (${nextPage})`;
+	let prevDisp = prevPage+1;
+	let nextDisp = nextPage+1;
+	let txtNext = `Next (${nextDisp})`;
 	
     if (response.data.files.length < 25) { 
 		nextPage = page; 
@@ -239,7 +241,7 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 	let txtPrev = '';
     if (page > 0) {
 		prevPage = page - 1
-		txtPrev = `Previous (${prevPage})`;
+		txtPrev = `Previous (${prevDisp})`;
 	}
 	
 	let _valSearch = "";
