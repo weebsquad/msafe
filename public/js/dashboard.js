@@ -216,7 +216,7 @@ panel.searchbarUpdated = function() {
 
 panel.getUploads = function (album = undefined, page = undefined, search = undefined) {
   if (page === undefined) page = 0
-  if(search) console.log(search);
+
   let url = '/api/uploads/' + page
   if (album !== undefined) { url = '/api/album/' + album + '/' + page }
 
@@ -229,9 +229,19 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     var prevPage = 0
     var nextPage = page + 1
 
-    if (response.data.files.length < 25) { nextPage = page }
+    if (response.data.files.length < 25) { 
+		nextPage = page; 
+		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.style.display = 'none'; });
+	} else {
+		document.querySelectorAll('[id=paginate-next]').forEach(function(vl) { vl.style.display = 'block'; });
+	}
 
-    if (page > 0) prevPage = page - 1
+    if (page > 0) {
+		prevPage = page - 1
+		document.querySelectorAll('[id=paginate-previous]').forEach(function(vl) { vl.style.display = 'block'; });
+	} else {
+		document.querySelectorAll('[id=paginate-previous]').forEach(function(vl) { vl.style.display = 'none'; });
+	}
 	
 	let _valSearch = "";
 	if(search) _valSearch = search;
@@ -239,8 +249,8 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
     panel.page.innerHTML = ''
     var container = document.createElement('div')
     var pagination = `<nav class="pagination is-centered">
-					  		<a class="pagination-previous" onclick="panel.getUploads(${album}, ${prevPage} )">Previous</a>
-					  		<a class="pagination-next" onclick="panel.getUploads(${album}, ${nextPage} )">Next page</a>
+					  		<a class="pagination-previous" id="paginate-prev" onclick="panel.getUploads(${album}, ${prevPage}, ${search} )">Previous</a>
+					  		<a class="pagination-next" id="paginate-next" onclick="panel.getUploads(${album}, ${nextPage}, ${search} )">Next page</a>
 						</nav><br>
 						<input id="uploadsSearch" class="input is-centered" type="text" placeholder="Search" oninput="panel.searchbarUpdated()" value="${_valSearch}"></input>`
     var listType = `
