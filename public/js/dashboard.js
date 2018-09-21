@@ -1102,7 +1102,7 @@ panel.accountScreen = function () {
   document.getElementById('sendDeleteFiles').addEventListener('click', function () {
     if (document.getElementById('password')) {
 		swal({
-			title: 'Are you sure your files?',
+			title: 'Are you sure you want to delete your files?',
 			text: 'You wont be able to recover your files!',
 			type: 'warning',
 			showCancelButton: true,
