@@ -329,6 +329,8 @@ s3.initialize = async function (upldir, files) {
   if(optionsS3.queryAllOnBoot) {
 	console.log('[S3] Startup - Getting Files');
 	await s3.getFiles(optionsS3.bucket)
+  } else {
+	  s3.files = new Array();
   }
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
   console.log('[S3] Startup - Merging Files');
