@@ -168,12 +168,12 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 			  if(typeof(data) !== 'object' || typeof(data) === 'null' || data === null) {
 				resolve(false);
 			  } else {
-				  resolve(true)
 				  cacheExistsPartials[uploadFolderTextCheck] = true;
 				  let _ex = false;
 				  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; return true; }});
 				  let p = {'Key': `${optionsS3.uploadsFolder}/${fileName}`};
 				  if(!_ex) s3.files.push(p);
+				  resolve(true)
 			  }
 		  })
 	  }
