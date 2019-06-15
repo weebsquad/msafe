@@ -1,8 +1,3 @@
-
-	if(typeof(content) === 'string') content = fixConsoleLogPrefix(content, moduleName);
-	_ogLog(content); 
-}
-
 let config = require('./config.js')
 let api = require('./routes/api.js')
 let album = require('./routes/album.js')

@@ -1,8 +1,3 @@
-
-	if(typeof(content) === 'string') content = fixConsoleLogPrefix(content, moduleName);
-	_ogLog(content); 
-}
-
 const config = require('../config.js')
 const RateLimit = require('../lib/express-rate-limit')
 const db = require('knex')(config.database)

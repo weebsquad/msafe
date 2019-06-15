@@ -1,4 +1,3 @@
-
 let config = require('../config.js')
 let db = require('knex')(config.database)
 let utils = require('./utilsController.js')
