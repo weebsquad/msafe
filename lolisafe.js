@@ -1,8 +1,17 @@
 const _ogLog = console.log;
-console.log = function(txt) { 
-	_ogLog(`[${__filename}] - ${txt}`); 
+const moduleName = 'CORE';
+fixConsoleLogPrefix = function(txt, mname) {
+	if(txt.indexOf('] - ') > -1) {
+		txt = txt.split(' - ');
+		txt = txt[txt.length-1];
+	}
+	txt = `[${mname}] - ${txt}`;
+	return txt;
 }
-
+console.log = function(content) {
+	if(typeof(content) === 'string') content = fixConsoleLogPrefix(content, moduleName);
+	_ogLog(content); 
+}
 
 let config = require('./config.js')
 let api = require('./routes/api.js')
@@ -197,11 +206,11 @@ let init = async function (reload = false) {
 	  doCrons();
   }
   await require('./database/db.js')(db)
-  console.log('[CORE] Loaded DB');
+  console.log('Loaded DB');
   const _path = path.join(__dirname, config.uploads.folder)
   let fl = await db.table('files').select('name')
   await s3.initialize(_path, fl)
-  console.log('[CORE] Loaded S3');
+  console.log('Loaded S3');
   setupExpress(_safenew, reload);
   if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
