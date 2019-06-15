@@ -6,7 +6,7 @@ console.log = function(content) {
 			content = content.split('] - ');
 			content = content[content.length-1];
 		}
-		content = `[${mname}] - ${txt}`;
+		content = `[${moduleName}] - ${content}`;
 	}
 	_ogLog(content); 
 }
