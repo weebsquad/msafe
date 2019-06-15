@@ -134,7 +134,7 @@ s3.convertFile = async function (bucket, localPath, remotePath, id, adminFile = 
   })
 }
 
-const cacheChecks = new Date()
+let cacheChecks = {};
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
@@ -146,21 +146,30 @@ s3.fileExists = async function (bucket, fileName) {
     if (optionsS3.permanentInternalCache) {
       resolve(cachedCheck())
     } else {
-      let diff = new Date() - cacheChecks
-      if (diff < 60 * 1000) { resolve(cachedCheck()) }
-      cacheChecks = new Date()
-      s3.client.s3.headObject({
+	  let _resolveNoCache = function () {
+		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: `${optionsS3.uploadsFolder}/${fileName}`
-      }, function (err, data) {
-		  if (err) {
-          // file does not exist (err.statusCode == 404)
-          // reject(false);
-          resolve(false)
-		  }
-		  // file exists
-		  resolve(true)
-      })
+		  }, function (err, data) {
+			  if (err) {
+			  // file does not exist (err.statusCode == 404)
+			  // reject(false);
+			  resolve(false)
+			  }
+			  // file exists
+			  resolve(true)
+		  })
+	  }
+	  let _resolveCached = function() {
+		resolve(cachedCheck())
+	  }
+	  if(cacheChecks[fileName]) {
+		let diff = new Date() - cacheChecks;
+		if (diff < 60 * 1000) { _resolveCached(); } else { _resolveNoCache(); }
+	  } else {
+		_resolveNoCache();
+	  }
+	  cacheChecks[fileName] = new Date()
     }
   })
 }
