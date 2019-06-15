@@ -6,7 +6,9 @@ const path = require('path')
 let rateLimiting = {}
 let userCache = []
 
-let log = function(text) { console.log(`[RATELIMIT] - ${text}`); }
+const moduleName = 'RATELIMIT';
+const _ogLog = console.log;
+console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 rateLimiting.keyGen = async function (req, res) {
   let key = req.ip
@@ -92,10 +94,10 @@ rateLimiting.load = function (safe, nolog = false) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	  // if (!nolog) log(`Loaded ratelimit for ${key}`)
+	  // if (!nolog) console.log(`Loaded ratelimit for ${key}`)
 	  i++
   }
-  if (!nolog) log(`Loaded ${i} ratelimits!`)
+  if (!nolog) console.log(`Loaded ${i} ratelimits!`)
 }
 
 module.exports = rateLimiting

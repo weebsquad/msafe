@@ -10,7 +10,9 @@ const crypto = require('crypto')
 const fs = require('fs')
 const bcrypt = require('bcrypt')
 
-let log = function(text) { console.log(`[UPL-CONT] - ${text}`); }
+const moduleName = 'UPL-CONT';
+const _ogLog = console.log;
+console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 const uploadsController = {}
 
@@ -39,13 +41,13 @@ const storage = multer.diskStorage({
 			  if (vl['Key'] === `${s3.options.uploadsFolder}/${name}`) _ex = true
 		  })
 		  if (!_ex) return cb(null, name)
-		   log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
+		   console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
 		   if (i < maxTries) return access(i)
 		   return cb('Could not allocate a unique file name. Try again?')
 	  } else {
 		  fs.access(path.join(uploadDir, name), err => {
           if (err) return cb(null, name)
-          log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
+          console.log(`A file named "${name}" already exists (${++i}/${maxTries}).`)
           if (i < maxTries) return access(i)
           return cb('Could not allocate a unique file name. Try again?')
 		  })
@@ -168,7 +170,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
         bcrypt.hash(txtHash, 10, async (err, hash) => {
           let deletekey = ''
           if (err) {
-			  log(err)
+			  console.log(err)
           } else {
 			  deletekey = hash.toLowerCase().split('/').join('')
           }
@@ -232,13 +234,13 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     if (config.uploads.generateThumbnails === true) {
 		if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
 		  file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
-		  //log(`Start thumb ${file.name}`);
+		  //console.log(`Start thumb ${file.name}`);
 		  await utils.generateThumbs(file)
-		  //log(`Done thumb ${file.name}`);
+		  //console.log(`Done thumb ${file.name}`);
 		}
 	}
     const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
-	//log(`Uploading file ${file.name}`);
+	//console.log(`Uploading file ${file.name}`);
     let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin)
   }
 
@@ -250,7 +252,7 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
       .update('editedAt', editedAt)
       .then(() => true)
       .catch(error => {
-        log(error)
+        console.log(error)
         return false
       })
   }
@@ -291,10 +293,10 @@ uploadsController.delete = async (req, res) => {
 		.whereNotNull('deletekey')
 		.whereNot('deletekey', '')
 	let fl = filesdel.find(function(el) {
-		log(`${deleteKey} | ${el.deletekey}`)
+		console.log(`${deleteKey} | ${el.deletekey}`)
 		return el.deletekey === deleteKey;
 	});
-	log(fl);
+	console.log(fl);
 
   } */
 
@@ -313,7 +315,7 @@ uploadsController.delete = async (req, res) => {
       await db.table('albums').where('id', file.albumid).update('editedAt', Math.floor(Date.now() / 1000))
     }
   } catch (err) {
-    log(err)
+    console.log(err)
   }
 
   return res.json({ success: true })

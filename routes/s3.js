@@ -16,9 +16,7 @@ s3.noThumbnail = config.noThumbnail
 
 const moduleName = 'S3';
 const _ogLog = console.log;
-console.log = function(txt) {
-	_ogLog(`[${moduleName}] - ${txt}`);
-}
+console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default
@@ -74,7 +72,7 @@ s3.getFiles = async function (bucket) {
 
       contents.forEach(function (vl) {
         if (vl.Key === optionsS3.uploadsFolder + '/') return
-        // log(vl);
+        // console.log(vl);
         flnew.push(vl)
       })
     })
@@ -104,14 +102,14 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 
     if (typeof (expdate) !== 'undefined') params.s3Params.Expires = expdate
 
-    // log(params)
+    // console.log(params)
     let uploader = s3.client.uploadFile(params)
     uploader.on('error', function (err) {
 		  console.error('unable to upload:', err.stack)
 		  reject(err)
     })
     uploader.on('end', async function () {
-		  // log('done uploading')
+		  // console.log('done uploading')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(s3.options.bucket)
 		  if (!optionsS3.listRequestsOnFileChanges) {
 			  let p = {
@@ -123,7 +121,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 		  if (fl && fl.length > 0) {
 			  await await db.table('files').where('name', dbId).update({ timestampExpire: expdate })
 			  fl = await db.table('files').where('name', dbId).first()
-			  // log(fl);
+			  // console.log(fl);
 		  }
 		  resolve(true)
     })
@@ -144,7 +142,7 @@ let cacheChecks = {};
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
-		  // log('Returning cached answer to fileExists!');
+		  // console.log('Returning cached answer to fileExists!');
 		  let exists = false
 		  s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) exists = true })
 		  return exists
@@ -153,7 +151,7 @@ s3.fileExists = async function (bucket, fileName) {
       resolve(cachedCheck())
     } else {
 	  let _resolveNoCache = function () {
-		  log(`Resolving ${fileName} uncached`);
+		  console.log(`Resolving ${fileName} uncached`);
 		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: `${optionsS3.uploadsFolder}/${fileName}`
@@ -200,24 +198,24 @@ s3.deleteFiles = async function (bucket, files) {
       Bucket: bucket
     }
 
-    // log(params);
+    // console.log(params);
     let deleter = s3.client.deleteObjects(params)
     deleter.on('error', function (err) {
 		  console.error('unable to delete:', err.stack)
 		  reject(err)
     })
     deleter.on('end', async function () {
-		  // log('done deleting')
+		  // console.log('done deleting')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
 		  if (!optionsS3.listRequestsOnFileChanges) {
-			  // log(s3.files.length)
+			  // console.log(s3.files.length)
 			  for (var i = 0; i < s3.files.length; i++) {
 				  let vl = s3.files[i]
 				  let _del = false
 				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
 				  if (_del) s3.files.splice(i, 1)
 			  }
-			  // log(s3.files.length)
+			  // console.log(s3.files.length)
 		  }
 
 		  resolve(true)
@@ -255,11 +253,11 @@ s3.fixDb = async function () {
   }
 
   if (filesNoExpire && filesNoExpire.length > 0) {
-	  log(`Found ${filesNoExpire.length} files with no expire dates set!`)
+	  console.log(`Found ${filesNoExpire.length} files with no expire dates set!`)
 		  filesNoExpire.forEach(async function (vl) {
 			  let expd = s3.getExpireDate(vl.timestamp)
 			  await db.table('files').where('id', vl.id).update({ timestampExpire: expd })
-			  log(`Fixed ${vl.name}'s expire date!`)
+			  console.log(`Fixed ${vl.name}'s expire date!`)
 		  })
   }
 }
@@ -315,12 +313,12 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 			break;
 		}
 	}
-	log(nextp);
+	console.log(nextp);
 	ports.push(nextp);
 	setTimeout(function() {
 		ports.slice(1);
 	}, 1000*60*5);
-	log(_url);
+	console.log(_url);
 	http.createServer(function(req, res) {
 		res.setHeader("content-disposition", `attachment; filename=${fileId}`);
 		request(_url).pipe(res);
@@ -336,21 +334,21 @@ s3.getFile = async function(req, res, next, fileId) {
 s3.initialize = async function (upldir, files) {
   if (!s3.enabledCheck() || initialized === true) return
   initialized = true
-  log('Startup - Initializing');
+  console.log('Startup - Initializing');
   delete clientOpts['s3Options']
   clientOpts['s3Client'] = s3.awsS3Client
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
   if(optionsS3.queryAllOnBoot) {
-	log('Startup - Getting Files');
+	console.log('Startup - Getting Files');
 	await s3.getFiles(optionsS3.bucket)
   } else {
 	  s3.files = new Array();
   }
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
-  log('Startup - Merging Files');
+  console.log('Startup - Merging Files');
   await s3.mergeFiles(s3.options.bucket, files, upldir)
-  log('Startup - Fixing Database');
+  console.log('Startup - Fixing Database');
   await s3.fixDb()
 }
 
