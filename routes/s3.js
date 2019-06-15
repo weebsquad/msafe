@@ -160,13 +160,14 @@ s3.fileExists = async function (bucket, fileName) {
 		  s3.files.forEach(function (fl) { if (fl.Key === uploadFolderTextCheck) exists = true })
 		  // Check our partial
 	      if(cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true;
+		  console.log(`Resolving ${fileName} file check cached`);
 		  return exists
 	  }
     if (optionsS3.permanentInternalCache) {
       resolve(cachedCheck())
     } else {
 	  let _resolveNoCache = function () {
-		  console.log(`Resolving ${fileName} uncached`);
+		  console.log(`Resolving ${fileName} file check uncached`);
 		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: uploadFolderTextCheck,
