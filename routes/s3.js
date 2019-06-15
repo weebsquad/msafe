@@ -1,13 +1,11 @@
 const _ogLog = console.log;
 const moduleName = 'S3';
 fixConsoleLogPrefix = function(txt, mname) {
-	_ogLog(txt);
 	if(txt.indexOf('] - ') > -1) {
 		txt = txt.split(' - ');
 		txt = txt[txt.length-1];
 	}
 	txt = `[${mname}] - ${txt}`;
-	_ogLog(txt);
 	return txt;
 }
 console.log = function(content) {
