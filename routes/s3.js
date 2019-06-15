@@ -137,7 +137,7 @@ s3.convertFile = async function (bucket, localPath, remotePath, id, adminFile = 
 
 let cacheChecks = {};
 let cacheExistsPartials = {};
-s3.fileExists = async function (bucket, fileName) {
+s3.fileExists = async function (bucket, fileName, bypassCache = false) {
   let uploadFolderTextCheck = `${optionsS3.uploadsFolder}/${fileName}`;
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
@@ -150,7 +150,7 @@ s3.fileExists = async function (bucket, fileName) {
 		  //console.log(`Resolving ${fileName} file check cached`);
 		  return exists
 	  }
-    if (optionsS3.permanentInternalCache) {
+    if (optionsS3.permanentInternalCache && !bypassCache) {
       resolve(cachedCheck())
     } else {
 	  let _resolveNoCache = function () {
@@ -168,12 +168,16 @@ s3.fileExists = async function (bucket, fileName) {
 			  if(typeof(data) !== 'object' || typeof(data) === 'null' || data === null) {
 				resolve(false);
 			  } else {
-				  cacheExistsPartials[uploadFolderTextCheck] = true;
 				  resolve(true)
+				  cacheExistsPartials[uploadFolderTextCheck] = true;
+				  let _ex = false;
+				  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; return true; }});
+				  let p = {'Key': `${optionsS3.uploadsFolder}/${fileName}`};
+				  if(!_ex) s3.files.push(p);
 			  }
 		  })
 	  }
-	  if(typeof(cacheChecks[fileName]) !== 'undefined') {
+	  if(typeof(cacheChecks[fileName]) !== 'undefined' && !bypassCache) {
 		let diff = new Date() - cacheChecks[fileName];
 		if (diff < 10 * 60 * 1000) { resolve(cachedCheck()) } else { _resolveNoCache(); }
 	  } else {
@@ -185,58 +189,67 @@ s3.fileExists = async function (bucket, fileName) {
 }
 
 s3.deleteFiles = async function (bucket, files) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     let flbuild = new Array()
+	let promises = new Array();
     files.forEach(function (vl) {
-      let _ex = false
-      s3.files.forEach(function (vl2) { if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true })
-      if (_ex) {
-        flbuild.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
-      }
+	  promises.push(new Promise(async function (resolve2, reject2) {
+		  let _ex = false
+		  //s3.files.forEach(function (vl2) { if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true })
+		  let _ex = await s3.fileExists(bucket, vl, true);
+		  if (_ex) flbuild.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
+		  console.log(`done ${vl}`);
+		  resolve2();
+	  }));
     })
-    const flnew = flbuild
-    const params = {
-      Delete: {
-        Objects: flnew,
-        Quiet: false
-      },
-      Bucket: bucket
-    }
-	
-    // console.log(params);
-    let deleter = s3.client.deleteObjects(params)
-    deleter.on('error', function (err) {
-		  console.error('unable to delete:', err.stack)
-		  reject(err)
-    })
-	
-	// Clear cache
-	flnew.forEach(function(vl) {
-		console.log(vl);
-		if(typeof(cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl];
-		if(typeof(cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl];
-		if(typeof(internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl];
-	});
-	
-    deleter.on('end', async function () {
-		  // console.log('done deleting')
-		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
-		  if (!optionsS3.listRequestsOnFileChanges) {
-			  // console.log(s3.files.length)
-			  for (var i = 0; i < s3.files.length; i++) {
-				  let vl = s3.files[i]
-				  let _del = false
-				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
-				  if (_del) { 
-					s3.files.splice(i, 1)
+	Promise.all(promises).then(function() {
+		if(flbuild.length === 0) {
+			reject('No items to delete');
+		}
+		const flnew = flbuild
+		const params = {
+		  Delete: {
+			Objects: flnew,
+			Quiet: false
+		  },
+		  Bucket: bucket
+		}
+		
+		// console.log(params);
+		let deleter = s3.client.deleteObjects(params)
+		deleter.on('error', function (err) {
+			  console.error('unable to delete:', err.stack)
+			  reject(err)
+		})
+		
+		// Clear cache
+		flnew.forEach(function(vl) {
+			console.log(vl);
+			if(typeof(cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl];
+			if(typeof(cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl];
+			if(typeof(internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl];
+		});
+		
+		deleter.on('end', async function () {
+			  // console.log('done deleting')
+			  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
+			  if (!optionsS3.listRequestsOnFileChanges) {
+				  // console.log(s3.files.length)
+				  for (var i = 0; i < s3.files.length; i++) {
+					  let vl = s3.files[i]
+					  let _del = false
+					  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
+					  if (_del) { 
+						s3.files.splice(i, 1)
+					  }
 				  }
+				  // console.log(s3.files.length)
 			  }
-			  // console.log(s3.files.length)
-		  }
 
-		  resolve(true)
-    })
-  })
+			  resolve(true)
+		})
+	  })
+  });
 }
 
 s3.fixDb = async function () {
