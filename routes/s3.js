@@ -281,7 +281,9 @@ s3.proxyPipe = async function (req, res, next, fileId) {
   _url = _url.split('https://').join('http://')
   try {
     if (s3.options.proxyFiles) {
-      request(_url).pipe(res)
+      let reqUrl = request(_url);
+	  reqUrl.pipe(res);
+	  console.log(reqUrl);
     } else {
       res.redirect(_url)
     }
@@ -309,7 +311,7 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 	*/
 }
 
-
+let internalFileCache = {};
 s3.getFile = async function(req, res, next, fileId) {
 	await s3.proxyPipe(req, res, next, fileId)
 }
