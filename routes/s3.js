@@ -326,6 +326,7 @@ s3.proxyPipe = async function (req, res, next, fileId) {
   try {
     if (s3.options.proxyFiles) {
       let reqUrl = request(_url);
+	  console.log(reqUrl);
 	  reqUrl.pipe(res);
     } else {
       res.redirect(_url)
