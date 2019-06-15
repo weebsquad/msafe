@@ -19,6 +19,8 @@ const CronJob=require('cron').CronJob;
 let serv;
 let boot = new Date();
 
+let log = function(text) { console.log(`[CORE] - ${text}`); }
+
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
 fs.existsSync('./' + config.uploads.folder) || fs.mkdirSync('./' + config.uploads.folder)
