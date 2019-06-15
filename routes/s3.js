@@ -2,11 +2,9 @@ const _ogLog = console.log;
 const moduleName = 'S3';
 console.log = function(content) {
 	if(typeof(content) === 'string') {
-		if(content.indexOf('] - ') > -1) {
-			content = content.split('] - ');
-			content = content[content.length-1];
-		}
 		content = `[${moduleName}] - ${content}`;
+		//content = content.split('] - ');
+		//content = content[content.length-1];
 	}
 	_ogLog(content); 
 }
