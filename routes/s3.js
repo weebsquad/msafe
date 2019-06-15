@@ -1,15 +1,13 @@
 const _ogLog = console.log;
 const moduleName = 'S3';
-fixConsoleLogPrefix = function(txt, mname) {
-	if(txt.indexOf('] - ') > -1) {
-		txt = txt.split(' - ');
-		txt = txt[txt.length-1];
-	}
-	txt = `[${mname}] - ${txt}`;
-	return txt;
-}
 console.log = function(content) {
-	if(typeof(content) === 'string') content = fixConsoleLogPrefix(content, moduleName);
+	if(typeof(content) === 'string') {
+		if(content.indexOf('] - ') > -1) {
+			content = content.split('] - ');
+			content = content[content.length-1];
+		}
+		content = `[${mname}] - ${txt}`;
+	}
 	_ogLog(content); 
 }
 
@@ -180,8 +178,8 @@ s3.fileExists = async function (bucket, fileName) {
 	  let _resolveCached = function() {
 		resolve(cachedCheck())
 	  }
-	  if(cacheChecks[fileName]) {
-		let diff = new Date() - cacheChecks;
+	  if(typeof(cacheChecks[fileName]) !== 'undefined') {
+		let diff = new Date() - cacheChecks[fileName];
 		if (diff < 60 * 1000) { _resolveCached(); } else { _resolveNoCache(); }
 	  } else {
 		_resolveNoCache();
