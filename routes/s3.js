@@ -155,9 +155,9 @@ s3.fileExists = async function (bucket, fileName) {
 		  // console.log('Returning cached answer to fileExists!');
 		  let exists = false
 		  // Check our full file-store
-		  s3.files.forEach(function (fl) { if (fl.Key === uploadFolderTextCheck) exists = true })
+		  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; return true; }})
 		  // Check our partial
-	      if(cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true;
+	      if(!exists && cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true;
 		  //console.log(`Resolving ${fileName} file check cached`);
 		  return exists
 	  }
