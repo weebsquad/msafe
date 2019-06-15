@@ -165,7 +165,7 @@ s3.fileExists = async function (bucket, fileName) {
 			  resolve(false)
 			  }
 			  // file exists
-			  if(typeof(data) !== 'object' && typeof(data) !== 'null' && data !== null) {
+			  if(typeof(data) !== 'object' || typeof(data) === 'null' || data === null) {
 				resolve(false);
 			  } else {
 				  cacheExistsPartials[uploadFolderTextCheck] = true;
