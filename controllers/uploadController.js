@@ -10,7 +10,6 @@ const crypto = require('crypto')
 const fs = require('fs')
 const bcrypt = require('bcrypt')
 
-
 const uploadsController = {}
 
 // Let's default it to only 1 try
@@ -89,7 +88,7 @@ uploadsController.fileInfo = async (req, res, next) => {
     if (file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion
   }
   if (utils.isAdmin(user.username)) {
-	_fileInfo['Uploader\'s IP'] = file.ip
+    _fileInfo['Uploader\'s IP'] = file.ip
     if (file.encodedString) _fileInfo['Encoded String'] = file.encodedString
     _fileInfo['Hash'] = file.hash
     _fileInfo['Size'] = file.size
@@ -227,17 +226,17 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 
   for (let file of files) {
     let ext = path.extname(file.name).toLowerCase()
-	
+
     if (config.uploads.generateThumbnails === true) {
-		if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
+      if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
 		  file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`
-		  //console.log(`Start thumb ${file.name}`);
+		  // console.log(`Start thumb ${file.name}`);
 		  await utils.generateThumbs(file)
-		  //console.log(`Done thumb ${file.name}`);
-		}
-	}
+		  // console.log(`Done thumb ${file.name}`);
+      }
+    }
     const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
-	//console.log(`Uploading file ${file.name}`);
+    // console.log(`Uploading file ${file.name}`);
     let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin)
   }
 

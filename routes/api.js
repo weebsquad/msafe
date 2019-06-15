@@ -7,8 +7,6 @@ let authController = require('../controllers/authController')
 let utils = require('../controllers/utilsController')
 let route = require('express').Router()
 
-
-
 function shallowCopy (obj) {
   var result = {}
   for (var i in obj) {
@@ -62,10 +60,10 @@ const map = {
       'function': uploadController.fileInfo,
       'auth': true
     },
-	'uploads/search/:query': {
-		'auth': true,
-		// todo
-	},
+    'uploads/search/:query': {
+      'auth': true
+      // todo
+    },
     'gdelete/:deletekey': {
       'function': uploadController.delete
     },
@@ -209,14 +207,14 @@ function setRoutes (routes, log = true) {
 			  delete _opts['function']
 
 			  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
-			  //if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+			  // if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 			  i++
 		  } else {
-			  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`)
+			  console.log(`[API] Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`)
       }
 	  }
   }
-  console.log(`Loaded ${i} API routes!`)
+  console.log(`[API] Loaded ${i} API routes!`)
   api.routes = routes
 }
 
@@ -233,7 +231,7 @@ api.reloadModules = function () {
   authController.reloadModules()
   route = require('express').Router()
   setRoutes(route, false)
-  console.log('Reloaded')
+  console.log('[API] Reloaded')
 }
 
 setRoutes(route, true)

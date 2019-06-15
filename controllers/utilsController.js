@@ -47,9 +47,8 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
-  //console.log(`genning thumb ${file}`);
-  return new Promise(async function(fulfill, reject) {
-
+  // console.log(`genning thumb ${file}`);
+  return new Promise(async function (resolve, reject) {
 	  async function tryS3 (_extension) {
 		  if (s3.enabledCheck()) {
 		  let extt = `${_extension}`
@@ -58,58 +57,58 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		  extt = '.png' // Apparently it's always png lol
 		  let fn = file.name.split('.')[0]
 		  fn = `${fn}${extt}`
-		  //console.log(`waiting for thumb ${fn}`);
+		  // console.log(`waiting for thumb ${fn}`);
 		  const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`
 		  let tries = 0
 		  let interv = setInterval(async function () {
-			if (fs.existsSync(_thumbs)) {
+          if (fs.existsSync(_thumbs)) {
 			  clearInterval(interv)
-			  setTimeout(async function() {
-				  //console.log(`uploading thumb ${fn}`);
-				await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
-				fulfill();
-			  }, 100);
-			}
-			tries++
-			if (tries > 5000) { clearInterval(interv); fulfill(); }
+			  setTimeout(async function () {
+				  // console.log(`uploading thumb ${fn}`);
+              await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`)
+              fulfill()
+			  }, 100)
+          }
+          tries++
+          if (tries > 5000) { clearInterval(interv); fulfill() }
 		  }, 10)
-		}
+      }
 	  }
 	  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
 	  fs.access(thumbname, err => {
-		if (err && err.code === 'ENOENT') {
+      if (err && err.code === 'ENOENT') {
 		  if (utilsController.videoExtensions.includes(ext)) {
-			ffmpeg(path.join(__dirname, '..', config.uploads.folder, file.name))
+          ffmpeg(path.join(__dirname, '..', config.uploads.folder, file.name))
 			  .thumbnail({
-				timestamps: [0],
-				filename: '%b.png',
-				folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
-				size: '200x?'
+              timestamps: [0],
+              filename: '%b.png',
+              folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
+              size: '200x?'
 			  })
-			  .on('error', error => { console.log('Error - ', error.message); fulfill(); })
+			  .on('error', error => { console.log('Error - ', error.message); fulfill() })
 			  .on('end', async function () {
-				await tryS3(ext)
+              await tryS3(ext)
 			  })
 		  } else {
-			let size = {
+          let size = {
 			  width: 200,
 			  height: 200
-			}
-			gm(path.join(__dirname, '..', config.uploads.folder, file.name))
+          }
+          gm(path.join(__dirname, '..', config.uploads.folder, file.name))
 			  .resize(size.width, size.height + '>')
 			  .gravity('Center')
 			  .extent(size.width, size.height)
 			  .background('transparent')
-			  .write(thumbname, async function(error) {
-				if (error) { console.log('Error - ', error); fulfill(); return; }
-				await tryS3(ext)
+			  .write(thumbname, async function (error) {
+              if (error) { console.log('Error - ', error); fulfill(); return }
+              await tryS3(ext)
 			  })
 		  }
-		} else {
-			fulfill();
-		}
-	})
-  });
+      } else {
+        fulfill()
+      }
+    })
+  })
 }
 
 utilsController.isNumeric = function (n) {

@@ -203,7 +203,7 @@ panel.logout = function () {
 }
 
 let tmsearch = false
-panel.searchbarUpdated = function() {
+panel.searchbarUpdated = function () {
   document.getElementById('uploadsSearch').innerHTML = ``
   if (typeof (tmsearch) !== 'boolean') { clearTimeout(tmsearch); tmsearch = false }
   tmsearch = setTimeout(function () {
@@ -211,8 +211,7 @@ panel.searchbarUpdated = function() {
     clearTimeout(tmsearch)
     tmsearch = false
   }, 1500)
-};
-
+}
 
 panel.getUploads = function (album = undefined, page = undefined, search = undefined) {
   if (page === undefined) page = 0
@@ -228,29 +227,29 @@ panel.getUploads = function (album = undefined, page = undefined, search = undef
 
     var prevPage = 0
     var nextPage = page + 1
-	
-	let nextDisp = nextPage+1;
-	let txtNext = `Next (${nextDisp})`;
-	
-    if (response.data.files.length < 25) { 
-		nextPage = page; 
-		txtNext = '';
-	}
 
-	let txtPrev = '';
+    let nextDisp = nextPage + 1
+    let txtNext = `Next (${nextDisp})`
+
+    if (response.data.files.length < 25) {
+      nextPage = page
+      txtNext = ''
+    }
+
+    let txtPrev = ''
     if (page > 0) {
-		prevPage = page - 1
-		let prevDisp = prevPage+1;
-		txtPrev = `Previous (${prevDisp})`;
-	}
-	
-	let _valSearch = "";
-	if(search) _valSearch = search;
-	
-	let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )"`;
-	let _evenNext = ` onclick="panel.getUploads(${album}, ${nextPage}, ${search} )"`;
-	if(txtPrev === '') _evenPrev = '';
-	if(txtNext === '') _evenNext = '';
+      prevPage = page - 1
+      let prevDisp = prevPage + 1
+      txtPrev = `Previous (${prevDisp})`
+    }
+
+    let _valSearch = ''
+    if (search) _valSearch = search
+
+    let _evenPrev = ` onclick="panel.getUploads(${album}, ${prevPage}, ${search} )"`
+    let _evenNext = ` onclick="panel.getUploads(${album}, ${nextPage}, ${search} )"`
+    if (txtPrev === '') _evenPrev = ''
+    if (txtNext === '') _evenNext = ''
 
     panel.page.innerHTML = ''
     var container = document.createElement('div')
@@ -775,7 +774,7 @@ panel.updateAdminPage = function (pw = '') {
       var tr = document.createElement('tr')
       let disabledTxt = 'Enable'
       let disableButtonType = 'is-success'
-	  let enabledisp = '';
+	  let enabledisp = ''
 	  if (item.enabled === 1) item.enabled = true
 	  if (item.enabled === 0) item.enabled = false
       if (item.enabled === 1 || item.enabled === true) { disabledTxt = 'Disable'; disableButtonType = 'is-warning' }
@@ -810,19 +809,16 @@ panel.updateAdminPage = function (pw = '') {
 	</a>
 	  `
 	  enabledisp = enableButton
-	  
+
 	  if (item.admin === true) {
         buttons = ''
         item.admin = '<i class="fa fa-check fa-2x"></i>'
-		enabledisp = ''
+        enabledisp = ''
 	  }
 
 	  if (item.admin === false) item.admin = '<i class="fa fa-times-circle fa-2x"></i>'
 
 	  if (item.username === panel.username) item.username = `(self) ${item.username}`
-
-	  
-
 
       tr.innerHTML = `
 				<tr>
@@ -1082,39 +1078,39 @@ panel.accountScreen = function () {
 
   document.getElementById('sendDeleteAcc').addEventListener('click', function () {
     if (document.getElementById('password')) {
-		swal({
-			title: 'Are you sure you want to delete your account?',
-			text: 'You wont be able to recover it!',
-			type: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#ff3860',
-			confirmButtonText: 'Yes, delete',
-			closeOnConfirm: false,
-			dangerMode: true,
-			closeOnClickOutside: true,
+      swal({
+        title: 'Are you sure you want to delete your account?',
+        text: 'You wont be able to recover it!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff3860',
+        confirmButtonText: 'Yes, delete',
+        closeOnConfirm: false,
+        dangerMode: true,
+        closeOnClickOutside: true
 		  },
 		  function () {
-			panel.deleteAccount(document.getElementById('password').value)
-		  });
+        panel.deleteAccount(document.getElementById('password').value)
+		  })
     }
   })
 
   document.getElementById('sendDeleteFiles').addEventListener('click', function () {
     if (document.getElementById('password')) {
-		swal({
-			title: 'Are you sure you want to delete your files?',
-			text: 'You wont be able to recover your files!',
-			type: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#ff3860',
-			confirmButtonText: 'Yes, delete',
-			closeOnConfirm: false,
-			dangerMode: true,
-			closeOnClickOutside: true,
+      swal({
+        title: 'Are you sure you want to delete your files?',
+        text: 'You wont be able to recover your files!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff3860',
+        confirmButtonText: 'Yes, delete',
+        closeOnConfirm: false,
+        dangerMode: true,
+        closeOnClickOutside: true
 		  },
 		  function () {
-			panel.deleteAccount(document.getElementById('password').value, panel.username, true)
-		});
+        panel.deleteAccount(document.getElementById('password').value, panel.username, true)
+      })
     }
   })
 }
