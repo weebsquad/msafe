@@ -1,14 +1,4 @@
-const _ogLog = console.log;
-const moduleName = 'CORE';
-fixConsoleLogPrefix = function(txt, mname) {
-	if(txt.indexOf('] - ') > -1) {
-		txt = txt.split(' - ');
-		txt = txt[txt.length-1];
-	}
-	txt = `[${mname}] - ${txt}`;
-	return txt;
-}
-console.log = function(content) {
+
 	if(typeof(content) === 'string') content = fixConsoleLogPrefix(content, moduleName);
 	_ogLog(content); 
 }

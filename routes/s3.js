@@ -1,13 +1,4 @@
-const _ogLog = console.log;
-const moduleName = 'S3';
-console.log = function(content) {
-	if(typeof(content) === 'string') {
-		content = `[${moduleName}] - ${content}`;
-		//content = content.split('] - ');
-		//content = content[content.length-1];
-	}
-	_ogLog(content); 
-}
+
 
 const config = require('../config.js')
 const fs = require('fs')
@@ -176,6 +167,7 @@ s3.fileExists = async function (bucket, fileName) {
 			  resolve(false)
 			  }
 			  // file exists
+			  console.log(data):
 			  cacheExistsPartials[uploadFolderTextCheck] = true;
 			  resolve(true)
 		  })
