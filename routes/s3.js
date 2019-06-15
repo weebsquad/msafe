@@ -216,6 +216,15 @@ s3.deleteFiles = async function (bucket, files) {
 		  console.error('unable to delete:', err.stack)
 		  reject(err)
     })
+	
+	// Clear cache
+	flnew.forEach(function(vl) {
+		console.log(vl);
+		if(typeof(cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl];
+		if(typeof(cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl];
+		if(typeof(internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl];
+	});
+	
     deleter.on('end', async function () {
 		  // console.log('done deleting')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
@@ -227,11 +236,6 @@ s3.deleteFiles = async function (bucket, files) {
 				  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) _del = true })
 				  if (_del) { 
 					s3.files.splice(i, 1)
-					// Delete our internal cache as well
-					console.log(vl);
-					if(typeof(cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl];
-					if(typeof(cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl];
-					if(typeof(internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl];
 				  }
 			  }
 			  // console.log(s3.files.length)
