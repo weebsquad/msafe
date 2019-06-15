@@ -14,7 +14,7 @@ s3.imageExtensions = config.imageExtensions
 s3.videoExtensions = config.videoExtensions
 s3.noThumbnail = config.noThumbnail
 
-let log = function(text) { console.log(`[S3] - ${text}`); }
+function log(text) { console.log(`[S3] - ${text}`); }
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default
@@ -149,7 +149,7 @@ s3.fileExists = async function (bucket, fileName) {
       resolve(cachedCheck())
     } else {
 	  let _resolveNoCache = function () {
-		  log(`Resolving ${fileName} uncached..`);
+		  log(`Resolving ${fileName} uncached`);
 		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: `${optionsS3.uploadsFolder}/${fileName}`
