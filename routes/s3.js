@@ -165,9 +165,12 @@ s3.fileExists = async function (bucket, fileName) {
 			  resolve(false)
 			  }
 			  // file exists
-			  console.log(data);
-			  cacheExistsPartials[uploadFolderTextCheck] = true;
-			  resolve(true)
+			  if(typeof(data) !== 'object' && typeof(data) !== 'null' && data !== null) {
+				resolve(false);
+			  } else {
+				  cacheExistsPartials[uploadFolderTextCheck] = true;
+				  resolve(true)
+			  }
 		  })
 	  }
 	  if(typeof(cacheChecks[fileName]) !== 'undefined') {
