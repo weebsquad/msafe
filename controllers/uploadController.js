@@ -10,9 +10,6 @@ const crypto = require('crypto')
 const fs = require('fs')
 const bcrypt = require('bcrypt')
 
-const moduleName = 'UPL-CONT';
-const _ogLog = console.log;
-console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 const uploadsController = {}
 

@@ -6,9 +6,6 @@ let authController = require('../controllers/authController')
 let utils = require('../controllers/utilsController')
 let route = require('express').Router()
 
-const moduleName = 'API';
-const _ogLog = console.log;
-console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 
 function shallowCopy (obj) {

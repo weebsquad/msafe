@@ -6,9 +6,6 @@ const path = require('path')
 let rateLimiting = {}
 let userCache = []
 
-const moduleName = 'RATELIMIT';
-const _ogLog = console.log;
-console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 rateLimiting.keyGen = async function (req, res) {
   let key = req.ip

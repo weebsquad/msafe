@@ -14,9 +14,6 @@ s3.imageExtensions = config.imageExtensions
 s3.videoExtensions = config.videoExtensions
 s3.noThumbnail = config.noThumbnail
 
-const moduleName = 'S3';
-const _ogLog = console.log;
-console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 const clientOpts = {
   maxAsyncS3: 30, // this is the default

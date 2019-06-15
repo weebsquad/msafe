@@ -1,3 +1,9 @@
+const _ogLog = console.log;
+console.log = function(txt) { 
+	_ogLog(`[${__filename}] - ${txt}`); 
+}
+
+
 let config = require('./config.js')
 let api = require('./routes/api.js')
 let album = require('./routes/album.js')
@@ -19,9 +25,6 @@ const CronJob=require('cron').CronJob;
 let serv;
 let boot = new Date();
 
-const moduleName = 'CORE';
-const _ogLog = console.log;
-console.log = function(txt) { _ogLog(`[${moduleName}] - ${txt}`); }
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
 fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
