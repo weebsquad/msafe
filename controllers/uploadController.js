@@ -85,11 +85,11 @@ uploadsController.fileInfo = async (req, res, next) => {
 
   if (utils.isAdmin(user.username) || file.userid === user.id) {
     _fileInfo['Original File Name'] = file.original
-    _fileInfo['Uploader\'s IP'] = file.ip
     if (file.deletekey) _fileInfo['Delete Key'] = file.deletekey
     if (file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion
   }
   if (utils.isAdmin(user.username)) {
+	_fileInfo['Uploader\'s IP'] = file.ip
     if (file.encodedString) _fileInfo['Encoded String'] = file.encodedString
     _fileInfo['Hash'] = file.hash
     _fileInfo['Size'] = file.size
