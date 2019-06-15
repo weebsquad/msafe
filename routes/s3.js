@@ -273,6 +273,8 @@ s3.mergeFiles = async function (bucket, files, uploadsFolder) {
   // handle stuck files
 }
 
+
+
 let ports = new Array()
 s3.proxyPipe = async function (req, res, next, fileId) {
   let _url = `${s3.url}/${fileId}`
@@ -305,6 +307,11 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 		request(_url).pipe(res);
 	}).listen(nextp);
 	*/
+}
+
+
+s3.getFile = async function(req, res, next, fileId) {
+	await s3.proxyPipe(req, res, next, fileId)
 }
 
 s3.initialize = async function (upldir, files) {

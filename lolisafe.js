@@ -95,7 +95,7 @@ let setupExpress = function(safe, reload = false) {
 			  let _testex = await s3.fileExists(config.s3.bucket, `${vl}/${id}`)
 			  if (_testex) {
 				_s3 = true
-				await s3.proxyPipe(req, res, next, `${vl}/${id}`)
+				await s3.getFile(req, res, next, `${vl}/${id}`)
 			  }
 			}
 			if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
@@ -132,7 +132,7 @@ let setupExpress = function(safe, reload = false) {
 			let _testex = await s3.fileExists(config.s3.bucket, id)
 			if (_testex) {
 			  _s3 = true
-			  await s3.proxyPipe(req, res, next, id)
+			  await s3.getFile(req, res, next, id)
 			}
 		  }
 		  if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
