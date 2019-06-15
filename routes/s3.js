@@ -149,12 +149,17 @@ s3.convertFile = async function (bucket, localPath, remotePath, id, adminFile = 
 }
 
 let cacheChecks = {};
+let cacheExistsPartials = {};
 s3.fileExists = async function (bucket, fileName) {
+  let uploadFolderTextCheck = `${optionsS3.uploadsFolder}/${fileName}`;
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
 		  // console.log('Returning cached answer to fileExists!');
 		  let exists = false
-		  s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) exists = true })
+		  // Check our full file-store
+		  s3.files.forEach(function (fl) { if (fl.Key === uploadFolderTextCheck) exists = true })
+		  // Check our partial
+	      if(cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true;
 		  return exists
 	  }
     if (optionsS3.permanentInternalCache) {
@@ -164,7 +169,7 @@ s3.fileExists = async function (bucket, fileName) {
 		  console.log(`Resolving ${fileName} uncached`);
 		s3.client.s3.headObject({
 		  Bucket: bucket,
-		  Key: `${optionsS3.uploadsFolder}/${fileName}`
+		  Key: uploadFolderTextCheck,
 		  }, function (err, data) {
 			  if (err) {
 			  // file does not exist (err.statusCode == 404)
@@ -172,15 +177,13 @@ s3.fileExists = async function (bucket, fileName) {
 			  resolve(false)
 			  }
 			  // file exists
+			  cacheExistsPartials[uploadFolderTextCheck] = true;
 			  resolve(true)
 		  })
 	  }
-	  let _resolveCached = function() {
-		resolve(cachedCheck())
-	  }
 	  if(typeof(cacheChecks[fileName]) !== 'undefined') {
 		let diff = new Date() - cacheChecks[fileName];
-		if (diff < 60 * 1000) { _resolveCached(); } else { _resolveNoCache(); }
+		if (diff < 60 * 1000) { resolve(cachedCheck()) } else { _resolveNoCache(); }
 	  } else {
 		_resolveNoCache();
 	  }
