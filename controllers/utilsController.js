@@ -48,7 +48,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
   if (config.uploads.generateThumbnails !== true) return
   const ext = path.extname(file.name).toLowerCase()
   // console.log(`genning thumb ${file}`);
-  return new Promise(async function (resolve, reject) {
+  return new Promise(async function (fulfill, reject) {
 	  async function tryS3 (_extension) {
 		  if (s3.enabledCheck()) {
 		  let extt = `${_extension}`
