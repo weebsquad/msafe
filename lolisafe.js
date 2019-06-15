@@ -200,6 +200,6 @@ let init = async function (reload = false) {
   if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
   let diffboot = ((new Date() - boot)/1000).toFixed(2);
-  serv = safeog.listen(config.port, () => { if(!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`) })
+  serv = safeog.listen(config.port, () => { if(!reload) console.log(`Started within ${diffboot}s on port ${config.port}`) })
 }
 init()
