@@ -6,6 +6,8 @@ const path = require('path')
 let rateLimiting = {}
 let userCache = []
 
+let log = function(text) { console.log(`[RATELIMIT] - ${text}`); }
+
 rateLimiting.keyGen = async function (req, res) {
   let key = req.ip
   const token = req.headers.token
@@ -90,10 +92,10 @@ rateLimiting.load = function (safe, nolog = false) {
 	  }
 	  let rl = new RateLimit(obj)
 	  safe.use(key, rl)
-	  // if (!nolog) console.log(`Loaded ratelimit for ${key}`)
+	  // if (!nolog) log(`Loaded ratelimit for ${key}`)
 	  i++
   }
-  if (!nolog) console.log(`Loaded ${i} ratelimits!`)
+  if (!nolog) log(`Loaded ${i} ratelimits!`)
 }
 
 module.exports = rateLimiting
