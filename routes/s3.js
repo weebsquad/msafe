@@ -198,7 +198,6 @@ s3.deleteFiles = async function (bucket, files) {
 		  //s3.files.forEach(function (vl2) { if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true })
 		  let _ex = await s3.fileExists(bucket, vl, true);
 		  if (_ex) flbuild.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
-		  console.log(`done ${vl}`);
 		  resolve2();
 	  }));
     })
@@ -224,7 +223,7 @@ s3.deleteFiles = async function (bucket, files) {
 		
 		// Clear cache
 		flnew.forEach(function(vl) {
-			console.log(vl);
+			vl = vl.Key;
 			if(typeof(cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl];
 			if(typeof(cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl];
 			if(typeof(internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl];
