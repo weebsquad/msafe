@@ -52,7 +52,7 @@ s3.getExpireDate = function (start, adminFile = false) {
 s3.getFiles = async function (bucket) {
   var params = {
     'Bucket': bucket,
-    'MaxKeys': 999999999,
+    'MaxKeys': 99999999999,
     'Prefix': optionsS3.uploadsFolder + '/'
   }
 
@@ -135,7 +135,6 @@ s3.convertFile = async function (bucket, localPath, remotePath, id, adminFile = 
 }
 
 const cacheChecks = new Date()
-const fileExistsUseDelays = false // If false will simply return from cached files
 s3.fileExists = async function (bucket, fileName) {
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
@@ -144,7 +143,7 @@ s3.fileExists = async function (bucket, fileName) {
 		  s3.files.forEach(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) exists = true })
 		  return exists
 	  }
-    if (!fileExistsUseDelays) {
+    if (optionsS3.permanentInternalCache) {
       resolve(cachedCheck())
     } else {
       let diff = new Date() - cacheChecks
@@ -316,8 +315,10 @@ s3.initialize = async function (upldir, files) {
   clientOpts['s3Client'] = s3.awsS3Client
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
-  console.log('[S3] Startup - Getting Files');
-  await s3.getFiles(optionsS3.bucket)
+  if(optionsS3.queryAllOnBoot) {
+	console.log('[S3] Startup - Getting Files');
+	await s3.getFiles(optionsS3.bucket)
+  }
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
   console.log('[S3] Startup - Merging Files');
   await s3.mergeFiles(s3.options.bucket, files, upldir)
