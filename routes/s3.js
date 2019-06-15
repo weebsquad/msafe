@@ -311,13 +311,17 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 s3.initialize = async function (upldir, files) {
   if (!s3.enabledCheck() || initialized === true) return
   initialized = true
+  console.log('[S3] Startup - Initializing');
   delete clientOpts['s3Options']
   clientOpts['s3Client'] = s3.awsS3Client
   s3['client'] = libs3.createClient(clientOpts)
   s3['url'] = libs3.getPublicUrl(optionsS3.bucket, optionsS3.uploadsFolder, optionsS3.region)
+  console.log('[S3] Startup - Getting Files');
   await s3.getFiles(optionsS3.bucket)
   // await s3.deleteFiles(optionsS3.bucket, ['pagebg.jpg']);
+  console.log('[S3] Startup - Merging Files');
   await s3.mergeFiles(s3.options.bucket, files, upldir)
+  console.log('[S3] Startup - Fixing Database');
   await s3.fixDb()
 }
 

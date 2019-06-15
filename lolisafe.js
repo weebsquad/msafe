@@ -190,15 +190,15 @@ let init = async function (reload = false) {
 	  doCrons();
   }
   await require('./database/db.js')(db)
-  console.log('Loaded DB');
+  console.log('[CORE] Loaded DB');
   const _path = path.join(__dirname, config.uploads.folder)
   let fl = await db.table('files').select('name')
   await s3.initialize(_path, fl)
-  console.log('Loaded S3');
+  console.log('[CORE] Loaded S3');
   setupExpress(_safenew, reload);
   if(reload && serv) { serv.close(); delete serv; delete safeog; }
   safeog = _safenew
   let diffboot = ((new Date() - boot)/1000).toFixed(2);
-  serv = safeog.listen(config.port, () => { if(!reload) console.log(`uploader started within ${diffboot}s on port ${config.port}`) })
+  serv = safeog.listen(config.port, () => { if(!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`) })
 }
 init()
