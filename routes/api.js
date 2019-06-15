@@ -206,7 +206,7 @@ function setRoutes (routes, log = true) {
 			  delete _opts['function']
 
 			  routes[type](`/${key}`, (req, res, next) => _handleCall(req, res, next, obj['function'], _opts))
-			  if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
+			  //if (log) console.log(`Loaded API ${type.toUpperCase()} route '/${key}'`)
 			  i++
 		  } else {
 			  console.log(`Error with API call ${type.toUpperCase()} - '/${key}' - No callback func defined!`)
