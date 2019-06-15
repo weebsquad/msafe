@@ -149,6 +149,7 @@ s3.fileExists = async function (bucket, fileName) {
       resolve(cachedCheck())
     } else {
 	  let _resolveNoCache = function () {
+		  log(`Resolving ${fileName} uncached..`);
 		s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: `${optionsS3.uploadsFolder}/${fileName}`
