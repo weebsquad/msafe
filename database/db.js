@@ -87,7 +87,7 @@ let init = async function(db){
 			await db.schema.createTable(tableName, function(tableObject) {
 				if(tableDef['incrementid'] === true) tableObject.increments();
 				for(let columnName in tableDef.columns) {
-					const columnType = tableDef.columns.columnName;
+					const columnType = tableDef.columns[columnName];
 					tableObject[columnType](columnName);
 				}
 				console.log(`(re)Created table ${tableName}`);
