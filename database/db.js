@@ -58,7 +58,11 @@ let init = async function(db){
 								password: hash,
 								token: require('randomstring').generate(64),
 								timestamp: Math.floor(Date.now() / 1000)
-							}).then(() => {});
+							}).then(() => {
+								console.log(`Created root account with password 'root'`);
+							}).catch(e => {
+								console.error(e);
+							});
 						});
 					});
 				},
