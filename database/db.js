@@ -81,7 +81,7 @@ let init = async function(db){
 		function handleActions(tableName) {
 			for(var _key in actions) {
 				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') {
-					console.log(`Running table function ${_key} - ${tableDef['functions'][_key]} on table ${tableName} `);
+					console.log(`Running table function ${_key} on table ${tableName} `);
 					tableDef['functions'][_key](tableName);
 				}
 			}
@@ -92,11 +92,14 @@ let init = async function(db){
 		if(!tableExists) {
 			actions.create = true;
 			await db.schema.createTable(tableName, function(tableObject) {
-				if(tableDef['incrementid'] === true) tableObject.increments();
+				if(tableDef['incrementid'] === true) {
+					tableObject.increments();
+					console.log(`${tableName} - Adding ID increments`);
+				}
 				for(let columnName in tableDef.columns) {
 					const columnType = tableDef.columns[columnName];
 					tableObject[columnType](columnName);
-					console.log(`Adding column ${columnName}(${columnType})`);
+					console.log(`${tableName} - Adding column ${columnName}(${columnType})`);
 				}
 				console.log(`(re)Created table ${tableName}`);
 			});
@@ -111,8 +114,8 @@ let init = async function(db){
 				actions.update = true;
 				await db.schema.table(tableName, function(tableObject) {
 					tableObject[columnType](columnName);
+					console.log(`${tableName} - Adding missing column ${columnName}(${columnType})`);
 				});
-				console.log(`Added ${tableName}/${columnName} - ${columnType}`);
 			}
 		}
 		
