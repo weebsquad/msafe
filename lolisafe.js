@@ -118,9 +118,11 @@ let setupExpress = function(safe, reload = false) {
 		const _path = path.join(__dirname, config.uploads.folder)
 		const host = req.get('host')
 		// Check encoding
-		const encFile = await db.table('files')
-		  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
-		if (encFile) id = encFile['name']
+		if(config.allowEncoding) {
+			const encFile = await db.table('files')
+			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
+			if (encFile) id = encFile['name']
+		}
 
 		// Finally handle the actual ID
 		const file = `${_path}/${id}`
