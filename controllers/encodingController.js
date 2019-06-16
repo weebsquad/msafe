@@ -1,9 +1,13 @@
 const requireUncached = require('require-uncached')
-const charmap = requireUncached('../charmap.js')
-
+const fs = require('fs');
 const encodingController = {}
 
 encodingController.decode = function (string, version) {
+  if(!fs.existsSync('../charmap.js')) {
+	  console.error(`Can't accept encoded uploads, charmap.js does not exist`);
+	  return;
+  }
+  let charmap = requireUncached('../charmap.js');
   let decoded = ''
   const vchar = charmap[version]
   let prefix = vchar['prefix']
@@ -33,6 +37,11 @@ encodingController.decode = function (string, version) {
 }
 
 encodingController.encode = function (string, version) {
+  if(!fs.existsSync('../charmap.js')) {
+	console.error(`Can't accept encoded uploads, charmap.js does not exist`);
+	return;
+  }
+  let charmap = requireUncached('../charmap.js');
   let encoded = ''
   let sepperator = ''
   let vchar = charmap[version]
