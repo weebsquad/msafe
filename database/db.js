@@ -80,7 +80,10 @@ let init = async function(db){
 		
 		function handleActions() {
 			for(var _key in actions) {
-				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') tableDef['functions'][_key](tableName);
+				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') {
+					console.log(`Running table function ${_key} - ${tableDef['functions'][_key]} on table ${tableName} `);
+					tableDef['functions'][_key](tableName);
+				}
 			}
 		}
 		
