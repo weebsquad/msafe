@@ -4,7 +4,6 @@ const encodingController = {}
 
 encodingController.decode = function (string, version) {
   if(!fs.existsSync('./charmap.js')) {
-	  console.log(__filename);
 	  console.error(`Can't accept encoded uploads, charmap.js does not exist`);
 	  return;
   }
@@ -39,7 +38,6 @@ encodingController.decode = function (string, version) {
 
 encodingController.encode = function (string, version) {
   if(!fs.existsSync('./charmap.js')) {
-	  console.log(__filename);
 	console.error(`Can't accept encoded uploads, charmap.js does not exist`);
 	return;
   }
