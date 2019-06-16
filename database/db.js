@@ -78,7 +78,7 @@ let init = async function(db){
 			'delete': false,
 		};
 		
-		function handleActions() {
+		function handleActions(tableName) {
 			for(var _key in actions) {
 				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') {
 					console.log(`Running table function ${_key} - ${tableDef['functions'][_key]} on table ${tableName} `);
@@ -96,6 +96,7 @@ let init = async function(db){
 				for(let columnName in tableDef.columns) {
 					const columnType = tableDef.columns[columnName];
 					tableObject[columnType](columnName);
+					console.log(`Adding column ${columnName}(${columnType})`);
 				}
 				console.log(`(re)Created table ${tableName}`);
 			});
@@ -117,7 +118,7 @@ let init = async function(db){
 		
 		
 		
-		handleActions();
+		handleActions(tableName);
 	}
 	
 	/*
