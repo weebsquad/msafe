@@ -73,7 +73,7 @@ let init = async function(db){
 	for(let tableName in tables) {
 		const tableDef = tables[tableName];
 		let actions = {
-			'update': false,
+			'update': true,
 			'create': false,
 			'delete': false,
 		};
