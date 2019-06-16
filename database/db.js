@@ -4,7 +4,7 @@ let init = async function(db){
 	// Table defs
 	const tables = {
 		'albums': {
-			'incrementid': false,
+			'incrementid': true,
 			'columns': {
 				'userid': 'integer',
 				'name': 'string',
