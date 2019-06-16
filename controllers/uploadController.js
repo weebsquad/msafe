@@ -1,7 +1,8 @@
 let config = require('../config.js')
 let db = require('knex')(config.database)
 let utils = require('./utilsController.js')
-let encoding = require('./encodingController')
+let encoding
+if(config.allowEncoding) encoding = require('./encodingController')
 const s3 = require('../routes/s3.js')
 const path = require('path')
 const multer = require('multer')
