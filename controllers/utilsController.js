@@ -74,6 +74,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		  }, 10)
       }
 	  }
+	  
 	  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png')
 	  fs.access(thumbname, err => {
       if (err && err.code === 'ENOENT') {
@@ -104,6 +105,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
               await tryS3(ext)
 			  })
 		  }
+		  fulfill()
       } else {
         fulfill()
       }
