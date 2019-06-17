@@ -238,7 +238,9 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
     }
     const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`
     // console.log(`Uploading file ${file.name}`);
-    let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin)
+	if (s3.enabledCheck()) {
+		let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin)
+	}
   }
 
   let albumSuccess = true
@@ -335,16 +337,21 @@ uploadsController.deleteFile = function (file) {
       })
     } else {
       // Nothing from S3 found
-
-      fs.stat(path.join(__dirname, '..', config.uploads.folder, file), (err, stats) => {
+	  
+      fs.access(path.join(__dirname, '..', config.uploads.folder, file), (err) => {
+		  // Just resolve promise if file doesn't exist
+		  if (err && err.code === 'ENOENT') { return resolve() }
+		  
 		  if (err) { return reject(err) }
+		  
 		  fs.unlink(path.join(__dirname, '..', config.uploads.folder, file), err => {
           if (err) { return reject(err) }
           if (!utils.imageExtensions.includes(ext) && !utils.videoExtensions.includes(ext)) {
 			  return resolve()
           }
+		  
           file = file.substr(0, file.lastIndexOf('.')) + '.png'
-          fs.stat(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err, stats) => {
+          fs.access(path.join(__dirname, '..', config.uploads.folder, 'thumbs/', file), (err) => {
 			  if (err) {
               return resolve()
 			  }
