@@ -860,10 +860,10 @@ panel.updateAdminPage = function (pw = '') {
 		  const _test = document.getElementById(key)
 		  if (_test) {
 			  clearInterval(_int)
-			  setTimeout(function () { obj(key, _test) }, 75)
-			  obj(key, _test)
+			  setTimeout(function () { obj(key, _test) }, 150)
+			  //obj(key, _test)
 		  }
-	  }, 40)
+	  }, 100)
   }
 }
 
