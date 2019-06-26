@@ -192,12 +192,12 @@ s3.deleteFiles = async function (bucket, files) {
     let flbuild = new Array()
     let promises = new Array()
     files.forEach(function (vl) {
-	  promises.push(new Promise(async function (resolve, reject) {
+	  promises.push(new Promise(async function (resolveAlt, reject) {
 		  // let _ex = false
 		  // s3.files.forEach(function (vl2) { if (vl2['Key'] === `${optionsS3.uploadsFolder}/${vl}`) _ex = true })
 		  let _ex = await s3.fileExists(bucket, vl, true)
 		  if (_ex) flbuild.push({ 'Key': `${optionsS3.uploadsFolder}/${vl}` })
-		  resolve2()
+		  resolveAlt()
 	  }))
     })
     Promise.all(promises).then(function () {
