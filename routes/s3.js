@@ -140,11 +140,13 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
   let uploadFolderTextCheck = `${optionsS3.uploadsFolder}/${fileName}`
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
-		  // console.log('Returning cached answer to fileExists!');
+		  console.log('Returning cached answer to fileExists for ' + fileName);
 		  let exists = false
 		  // Check our full file-store
-		  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; return true } })
+		  console.log('Check general full-file storage');
+		  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; } })
 		  // Check our partial
+		  console.log('Check partials');
 	      if (!exists && cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true
 		  // console.log(`Resolving ${fileName} file check cached`);
 		  return exists
@@ -217,12 +219,9 @@ s3.deleteFiles = async function (bucket, files) {
       })
 
       // Clear cache
-      console.log(flnew);
       flnew.forEach(function (vl) {
         vl = vl.Key
-	console.log(cacheExistsPartials[vl]);
         if (typeof (cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl]
-	console.log(cacheExistsPartials[vl]);
         if (typeof (cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl]
         if (typeof (internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl]
       })
@@ -232,7 +231,8 @@ s3.deleteFiles = async function (bucket, files) {
 			  // console.log('done deleting')
 			  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
 			  if (!optionsS3.listRequestsOnFileChanges) {
-				  // console.log(s3.files.length)
+				  console.log(s3.files.length)
+				  
 				  for (var i = 0; i < s3.files.length; i++) {
 					  let vl = s3.files[i]
 					  let _del = false
@@ -241,7 +241,7 @@ s3.deleteFiles = async function (bucket, files) {
               s3.files.splice(i, 1)
 					  }
 				  }
-				  // console.log(s3.files.length)
+				  console.log(s3.files.length)
 			  }
 
 			  resolve(true)
