@@ -251,7 +251,7 @@ s3.deleteFiles = async function (bucket, files) {
 						  }
 					  });
 					  if(typeof(_del) === 'number') {
-						  console.log(`Splicing ${s3.files[_del]}`);
+						  console.log(JSON.stringify(s3.files[_del]));
 						  s3.files.splice(_del, 1);
 						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!')}});
 					  }
