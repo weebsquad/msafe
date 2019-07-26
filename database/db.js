@@ -52,7 +52,7 @@ let init = async function(db){
 					db.table(tableName).where({username: 'root'}).then((user) => {
 						if(user.length > 0) return;
 						require('bcrypt').hash('root', 10, function(err, hash) {
-							if(err) console.error('Error generating password hash for root');
+							if(err) console.error('[DB] Error generating password hash for root');
 
 							db.table(tableName).insert({
 								username: 'root',
@@ -60,7 +60,7 @@ let init = async function(db){
 								token: require('randomstring').generate(64),
 								timestamp: Math.floor(Date.now() / 1000)
 							}).then(() => {
-								console.log(`Created root account with password 'root'`);
+								console.log(`[DB] Created root account with password 'root'`);
 							}).catch(e => {
 								console.error(e);
 							});
@@ -82,7 +82,7 @@ let init = async function(db){
 		function handleActions(tableName) {
 			for(var _key in actions) {
 				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') {
-					console.log(`Running table function ${_key} on table ${tableName} `);
+					console.log(`[DB] Running table function ${_key} on table ${tableName} `);
 					tableDef['functions'][_key](tableName);
 				}
 			}
@@ -95,14 +95,14 @@ let init = async function(db){
 			await db.schema.createTable(tableName, function(tableObject) {
 				if(tableDef['incrementid'] === true) {
 					tableObject.increments();
-					console.log(`${tableName} - Adding ID increments`);
+					console.log(`[DB] ${tableName} - Adding ID increments`);
 				}
 				for(let columnName in tableDef.columns) {
 					const columnType = tableDef.columns[columnName];
 					tableObject[columnType](columnName);
-					console.log(`${tableName} - Adding column ${columnName}(${columnType})`);
+					console.log(`[DB] ${tableName} - Adding column ${columnName}(${columnType})`);
 				}
-				console.log(`(re)Created table ${tableName}`);
+				console.log(`[DB] (re)Created table ${tableName}`);
 			});
 		}
 		
@@ -115,7 +115,7 @@ let init = async function(db){
 				actions.update = true;
 				await db.schema.table(tableName, function(tableObject) {
 					tableObject[columnType](columnName);
-					console.log(`${tableName} - Adding missing column ${columnName}(${columnType})`);
+					console.log(`[DB] ${tableName} - Adding missing column ${columnName}(${columnType})`);
 				});
 			}
 		}
@@ -124,7 +124,7 @@ let init = async function(db){
 		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
 			await db.schema.table(tableName, function(tableObject) {
 				tableObject.index(tableDef['indexes']);
-				console.log(`${tableName} - Adding indexes`);
+				console.log(`[DB] ${tableName} - Adding indexes`);
 			});
 		}
 		
