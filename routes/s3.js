@@ -217,7 +217,7 @@ s3.deleteFiles = async function (bucket, files) {
       })
 
       // Clear cache
-      console.log(vl);
+      console.log(flnew);
       flnew.forEach(function (vl) {
         vl = vl.Key
 	console.log(delete cacheExistsPartials[vl]);
