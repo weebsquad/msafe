@@ -74,7 +74,7 @@ let init = async function(db){
 	for(let tableName in tables) {
 		const tableDef = tables[tableName];
 		let actions = {
-			'update': true,
+			'update': false,
 			'create': false,
 			'delete': false,
 		};
@@ -125,7 +125,7 @@ let init = async function(db){
 		handleActions(tableName);
 		
 		// Do indexes
-		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
+		if((actions.update === true || actions.create === true ) && typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
 			await db.schema.table(tableName, function(tableObject) {
 				tableDef['indexes'].forEach(function(obj) {
 					if(typeof(obj) === 'string') obj = new Array(obj);
