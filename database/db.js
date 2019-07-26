@@ -36,6 +36,7 @@ let init = async function(db){
 			},
 			'functions': {
 			},
+			'indexes': ['hash', 'encodeVersion', 'encodedString', 'deletekey'],
 		},
 		'users': {
 			'incrementid': true,
@@ -119,7 +120,13 @@ let init = async function(db){
 			}
 		}
 		
-		
+		// Do indexes
+		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
+			await db.schema.table(tableName, function(tableObject) {
+				tableObject.index(tableDef['indexes']);
+				console.log(`${tableName} - Adding indexes`);
+			});
+		}
 		
 		handleActions(tableName);
 	}
