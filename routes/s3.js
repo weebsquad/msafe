@@ -175,7 +175,7 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 	  }
 	  if (typeof (cacheChecks[fileName]) !== 'undefined' && !bypassCache) {
         let diff = new Date() - cacheChecks[fileName]
-        if (diff < 10 * 60 * 1000 || optionsS3.permanentInternalCache) { resolve(cachedCheck()) } else { _resolveNoCache() }
+        if (diff < 5 * 60 * 1000 || optionsS3.permanentInternalCache) { resolve(cachedCheck()) } else { _resolveNoCache() }
 	  } else {
         _resolveNoCache()
 	  }
@@ -217,12 +217,16 @@ s3.deleteFiles = async function (bucket, files) {
       })
 
       // Clear cache
+      console.log(vl);
       flnew.forEach(function (vl) {
         vl = vl.Key
+	console.log(delete cacheExistsPartials[vl]);
         if (typeof (cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl]
+	console.log(delete cacheExistsPartials[vl]);
         if (typeof (cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl]
         if (typeof (internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl]
       })
+      
 
       deleter.on('end', async function () {
 			  // console.log('done deleting')
