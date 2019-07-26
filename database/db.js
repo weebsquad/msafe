@@ -124,6 +124,7 @@ let init = async function(db){
 		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
 			await db.schema.table(tableName, function(tableObject) {
 				//tableObject.index(tableDef['indexes']);
+				tableObject.dropIndex(tableDef['indexes']);
 				//console.log(`[DB] ${tableName} - Adding indexes`);
 			});
 		}
