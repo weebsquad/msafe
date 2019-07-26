@@ -127,10 +127,19 @@ let init = async function(db){
 		// Do indexes
 		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
 			await db.schema.table(tableName, function(tableObject) {
-				console.log(tableObject.column);
+				tableDef['indexes'].forEach(function(obj) {
+					if(typeof(obj) === 'string') obj = new Array(obj);
+					try {
+						tableObject.index(obj);
+						let columnnames = obj.join(';');
+						console.log(`[DB] Index added for ${tableName}-${columnnames}`);
+					} catch(e) {
+						console.error(e);
+					}
+				});
 				//tableObject.index(tableDef['indexes']);
 				//tableObject.dropIndex(tableDef['indexes']);
-				//console.log(`[DB] ${tableName} - Adding indexes`);
+				console.log(`[DB] ${tableName} - Adding indexes`);
 			});
 		}
 	}
