@@ -124,7 +124,7 @@ let setupExpress = function(safe, reload = false) {
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
 			if (encFile) id = encFile['name']
 			msstart = new Date() - msstart;
-			console.log(`SQL Query for ${id} took ${msstart}ms`);
+			//console.log(`SQL Query for ${id} took ${msstart}ms`);
 		}
 
 		// Finally handle the actual ID
