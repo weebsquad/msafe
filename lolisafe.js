@@ -107,9 +107,10 @@ let setupExpress = function(safe, reload = false) {
 	  })
 
 	  safe.get('*/:id', async (req, res, next) => {
+		let msstart = new Date();
 		let id = req.params.id
 
-		// Check blacklisted files first
+		// Check whitelisted files first
 		for (let key in config.whitelistedQueries) {
 		  let obj = config.whitelistedQueries[key]
 		  if (id === key) return res.sendFile(path.join(__dirname, obj))
@@ -142,6 +143,8 @@ let setupExpress = function(safe, reload = false) {
 		}
 
 		if (!_s3) res.sendFile(id, { root: _path })
+		msstart = new Date() - msstart;
+		console.log(`Query for ${file} took ${msstart}ms`);
 	  })
 	}
 
