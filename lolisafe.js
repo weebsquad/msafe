@@ -128,7 +128,8 @@ let setupExpress = function(safe, reload = false) {
 		// Finally handle the actual ID
 		const file = `${_path}/${id}`
 		const ex = fs.existsSync(file)
-
+		msstart = new Date() - msstart;
+		console.log(`Query for ${file} took ${msstart}ms`);
 		// Handle S3
 		let _s3 = false
 		if (!ex) {
@@ -143,8 +144,6 @@ let setupExpress = function(safe, reload = false) {
 		}
 
 		if (!_s3) res.sendFile(id, { root: _path })
-		msstart = new Date() - msstart;
-		console.log(`Query for ${file} took ${msstart}ms`);
 	  })
 	}
 
