@@ -140,15 +140,14 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
   let uploadFolderTextCheck = `${optionsS3.uploadsFolder}/${fileName}`
   return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
-		  // console.log('Returning cached answer to fileExists for ' + fileName);
+		  console.log('Returning cached answer to fileExists for ' + fileName);
 		  let exists = false
 		  // Check our full file-store
-		  console.log('Check general full-file storage');
 		  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; } })
+		  console.log(`Checked general ffs for ${fileName}: ${exists}`);
 		  // Check our partial
-		  console.log('Check partials');
 	      if (!exists && cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true
-		  console.log(`Resolving ${fileName} file check cached, result: ${exists}`);
+		  console.log(`Checked partials for ${fileName}: ${exists}`);
 		  return exists
 	  }
 	  let _resolveNoCache = function () {
