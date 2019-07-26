@@ -1,196 +1,206 @@
-let init = async function(db){
+let config = require('./config.js')
+let api = require('./routes/api.js')
+let album = require('./routes/album.js')
+let rateLimiting = require('./routes/ratelimit.js')
+let obfuscation = require('./routes/obfuscate.js')
+let s3 = require('./routes/s3.js')
+let db = require('knex')(config.database)
+const fs = require('fs')
+const exphbs = require('express-handlebars')
+const express = require('express')
+let safeog = express()
+const path = require('path')
+const MimeLookup = require('mime-lookup')
+const mime = new MimeLookup(require('mime-db'))
+const helmet = require('helmet')
+const bodyParser = require('body-parser')
+const requireUncached = require('require-uncached');
+const CronJob=require('cron').CronJob;
+let serv;
+let boot = new Date();
 
 
-	// Table defs
-	const tables = {
-		'albums': {
-			'incrementid': true,
-			'columns': {
-				'userid': 'integer',
-				'name': 'string',
-				'identifier': 'string',
-				'enabled': 'integer',
-				'timestamp': 'integer',
-				'editedAt': 'integer',
-				'zipGeneratedAt': 'integer',
-			},
-			'functions': {
-			},
-		},
-		'files': {
-			'incrementid': true,
-			'columns': {
-				'userid': 'integer',
-				'name': 'string',
-				'original': 'string',
-				'type': 'string',
-				'size': 'string', 
-				'hash': 'string',
-				'ip': 'string',
-				'albumid': 'integer',
-				'timestamp': 'integer',
-				'timestampExpire': 'integer',
-				'encodeVersion': 'integer',
-				'encodedString': 'string',
-				'deletekey': 'string',
-			},
-			'functions': {
-			},
-			'indexes': ['hash', 'encodeVersion', 'encodedString', 'deletekey'],
-		},
-		'users': {
-			'incrementid': true,
-			'columns': {
-				'username': 'string',
-				'password': 'string',
-				'token': 'string',
-				'enabled': 'integer',
-				'timestamp': 'integer',
-			},
-			'functions': {
-				'update': function(tableName) {
-					db.table(tableName).where({username: 'root'}).then((user) => {
-						if(user.length > 0) return;
-						require('bcrypt').hash('root', 10, function(err, hash) {
-							if(err) console.error('[DB] Error generating password hash for root');
+fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom')
+fs.existsSync('./' + config.logsFolder) || fs.mkdirSync('./' + config.logsFolder)
+fs.existsSync('./' + config.uploads.folder) || fs.mkdirSync('./' + config.uploads.folder)
+fs.existsSync('./' + config.uploads.folder + '/thumbs') || fs.mkdirSync('./' + config.uploads.folder + '/thumbs')
+fs.existsSync('./' + config.uploads.folder + '/zips') || fs.mkdirSync('./' + config.uploads.folder + '/zips')
 
-							db.table(tableName).insert({
-								username: 'root',
-								password: hash,
-								token: require('randomstring').generate(64),
-								timestamp: Math.floor(Date.now() / 1000)
-							}).then(() => {
-								console.log(`[DB] Created root account with password 'root'`);
-							}).catch(e => {
-								console.error(e);
-							});
-						});
-					});
-				},
-			},
-		}
-	};
-	
-	for(let tableName in tables) {
-		const tableDef = tables[tableName];
-		let actions = {
-			'update': true,
-			'create': false,
-			'delete': false,
-		};
-		
-		function handleActions(tableName) {
-			for(var _key in actions) {
-				if(actions[_key] === true && typeof(tableDef['functions'][_key]) === 'function') {
-					console.log(`[DB] Running table function ${_key} on table ${tableName} `);
-					tableDef['functions'][_key](tableName);
-				}
-			}
-		}
-		
-		// Handle missing tables
-		let tableExists = await db.schema.hasTable(tableName);
-		if(!tableExists) {
-			actions.create = true;
-			await db.schema.createTable(tableName, function(tableObject) {
-				if(tableDef['incrementid'] === true) {
-					tableObject.increments();
-					console.log(`[DB] ${tableName} - Adding ID increments`);
-				}
-				for(let columnName in tableDef.columns) {
-					const columnType = tableDef.columns[columnName];
-					tableObject[columnType](columnName);
-					console.log(`[DB] ${tableName} - Adding column ${columnName}(${columnType})`);
-				}
-				console.log(`[DB] (re)Created table ${tableName}`);
-			});
-		}
-		
-		// Handle missing columns
-		for(let columnName in tableDef.columns) {
-			const columnType = tableDef.columns[columnName];
-			let hasColumn = await db.schema.hasColumn(tableName, columnName);
-			//console.log(`Checking ${tableName}/${columnName} (${columnType})`);
-			if(!hasColumn && typeof(columnType) === 'string') {
-				actions.update = true;
-				await db.schema.table(tableName, function(tableObject) {
-					tableObject[columnType](columnName);
-					console.log(`[DB] ${tableName} - Adding missing column ${columnName}(${columnType})`);
-				});
-			}
-		}
-		
+let setupExpress = function(safe, reload = false) {
+	safe.use(helmet())
+	safe.set('trust proxy', 1)
 
-		
-		handleActions(tableName);
-		
-		// Do indexes
-		if(typeof(tableDef['indexes']) === 'object' && tableDef['indexes'].length > 0) {
-			await db.schema.table(tableName, function(tableObject) {
-				console.log(tableObject.columns);
-				//tableObject.index(tableDef['indexes']);
-				//tableObject.dropIndex(tableDef['indexes']);
-				//console.log(`[DB] ${tableName} - Adding indexes`);
-			});
+	safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+	safe.set('view engine', 'handlebars')
+	safe.enable('view cache')
+
+	rateLimiting.load(safe, reload) // Initialize ratelimits
+
+	safe.use(bodyParser.json({limit: '50mb'}))
+	safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+
+	if (config.serveFilesWithNode && !config.useAlternateViewing) safe.use('/', express.static(config.uploads.folder))
+
+	if (config.obfuscateClJs) {
+	  safe.get('/js/:id', async (req, res, next) => {
+		const id = req.params.id
+		const _p = path.join(__dirname, 'public') + `/js/${id}`
+		if (fs.existsSync(_p)) {
+		  res.setHeader('Content-Type', mime.lookup(req.url))
+		  return res.send(obfuscation.obfuscateFile(_p))
 		}
+		res.status(404).sendFile('404.html', { root: './pages/error/' })
+	  })
 	}
-	
+	safe.use('/', express.static('./public'))
+	safe.use('/', album)
+	safe.use('/api', api.routes)
+
 	/*
-	// Create the tables we need to store galleries and files
-	let _ex = await db.schema.hasTable('albums')
-	if(!_ex) db.schema.createTable('albums', function (table) {
-		table.increments();
-		table.integer('userid');
-		table.string('name');
-		table.string('identifier');
-		table.integer('enabled');
-		table.integer('timestamp');
-		table.integer('editedAt');
-		table.integer('zipGeneratedAt');
-	}).then(() => {});
 
-	_ex = await db.schema.hasTable('files')
-	if(!_ex) db.schema.createTableIfNotExists('files', function (table) {
-		table.increments();
-		table.integer('userid');
-		table.string('name');
-		table.string('original');
-		table.string('type');
-		table.string('size');
-		table.string('hash');
-		table.string('ip');
-		table.integer('albumid');
-		table.integer('timestamp');
-		table.integer('timestampExpire');
-		table.integer('encodeVersion');
-		table.string('encodedString');
-	}).then(() => {});
-	
-	_ex = await db.schema.hasTable('users')
-	if(!_ex) db.schema.createTableIfNotExists('users', function (table) {
-		table.increments();
-		table.string('username');
-		table.string('password');
-		table.string('token');
-		table.integer('enabled');
-		table.integer('timestamp');
-	}).then(() => {
-		db.table('users').where({username: 'root'}).then((user) => {
-			if(user.length > 0) return;
+			Load our pages
 
-			require('bcrypt').hash('root', 10, function(err, hash) {
-				if(err) console.error('Error generating password hash for root');
-
-				db.table('users').insert({
-					username: 'root',
-					password: hash,
-					token: require('randomstring').generate(64),
-					timestamp: Math.floor(Date.now() / 1000)
-				}).then(() => {});
-			});
-		});
-	});
 	*/
+
+	for (let page of config.pages) {
+	  let root = './pages/'
+	  if (fs.existsSync(`./pages/custom/${page}.html`)) root = './pages/custom/'
+
+	  function checkHost (req, res, next) {
+		const host = req.get('host')
+		const dom = config.domain.split('https://').join('').split('http://').join('')
+		let pagered = ''
+		if (page !== 'home') pagered = page
+		if (host !== dom) return res.redirect(config.domain + '/' + pagered)
+		res.sendFile(`${page}.html`, { root: root })
+	  }
+	  if (page === 'home') {
+		safe.get('/', (req, res, next) => checkHost(req, res, next))
+	  } else {
+		safe.get(`/${page}`, (req, res, next) => checkHost(req, res, next))
+	  }
+	}
+
+	if (config.serveFilesWithNode && config.useAlternateViewing) {
+	  let normalHandles = ['thumbs', 'zips']
+	  normalHandles.forEach(function (vl) {
+		  safe.get(`*/${vl}/:id`, async (req, res, next) => {
+		  const id = req.params.id
+		  const _path = `${path.join(__dirname, config.uploads.folder)}/${vl}`
+		  const file = `${_path}/${id}`
+		  const ex = fs.existsSync(file)
+		  // Handle S3
+		  let _s3 = false
+		  if (!ex) {
+			if (s3.enabledCheck()) {
+			  let _testex = await s3.fileExists(config.s3.bucket, `${vl}/${id}`)
+			  if (_testex) {
+				_s3 = true
+				await s3.getFile(req, res, next, `${vl}/${id}`)
+			  }
+			}
+			if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
+		  }
+
+		  if (!_s3) res.sendFile(id, { root: _path })
+		  })
+	  })
+
+	  safe.get('*/:id', async (req, res, next) => {
+		let id = req.params.id
+
+		// Check whitelisted files first
+		for (let key in config.whitelistedQueries) {
+		  let obj = config.whitelistedQueries[key]
+		  if (id === key) return res.sendFile(path.join(__dirname, obj))
+		}
+
+		const _path = path.join(__dirname, config.uploads.folder)
+		const host = req.get('host')
+		// Check encoding
+		if(config.allowEncoding) {
+			const encFile = await db.table('files')
+			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
+			if (encFile) id = encFile['name']
+		}
+
+		// Finally handle the actual ID
+		const file = `${_path}/${id}`
+		const ex = fs.existsSync(file)
+		// Handle S3
+		let _s3 = false
+		if (!ex) {
+		  if (s3.enabledCheck()) {
+			let _testex = await s3.fileExists(config.s3.bucket, id)
+			if (_testex) {
+			  _s3 = true
+			  await s3.getFile(req, res, next, id)
+			}
+		  }
+		  if (!_s3) return res.status(404).sendFile('404.html', { root: './pages/error/' })
+		}
+
+		if (!_s3) res.sendFile(id, { root: _path })
+	  })
+	}
+
+	safe.use((req, res, next) => res.status(404).sendFile('404.html', { root: './pages/error/' }))
+	safe.use((req, res, next) => res.status(500).sendFile('500.html', { root: './pages/error/' }))
+}
+
+let reloadModules = function() {
+	require.cache = new Array();
+	config = require('./config.js')
+	api = require('./routes/api.js')
+	album = require('./routes/album.js')
+	rateLimiting = require('./routes/ratelimit.js')
+	obfuscation = require('./routes/obfuscate.js')
+	//s3 = requireUncached('./routes/s3.js')
+	db = requireUncached('knex')(config.database)
+	api.reloadModules();
+	init(true);
 };
 
-module.exports = init;
+let restart = function() {
+	console.log('[CORE] AUTO RESTARTING!');
+	serv.close();
+	delete serv;
+	delete safeog;
+	setTimeout(function() {
+		process.exit(0);
+	}, 2000);
+}
+
+
+function doCrons() {
+	if(config.autoRestart !== '') {
+		try{
+		let cronJob1 = new CronJob({
+			cronTime: config.autoRestart,
+			onTick: restart,
+			start: true,
+			runOnInit: false
+		});
+		} catch(e) { console.error(e); }
+	}
+}
+
+let init = async function (reload = false) {
+  let _safenew = express();
+  if(!reload) {
+	  if(config.autoReload > 0) setInterval(reloadModules, config.autoReload);
+	  doCrons();
+  }
+  await require('./database/db.js')(db)
+  console.log('[CORE] Loaded DB');
+  const _path = path.join(__dirname, config.uploads.folder)
+  let fl = await db.table('files').select('name')
+  await s3.initialize(_path, fl)
+  console.log('[CORE] Loaded S3');
+  setupExpress(_safenew, reload);
+  if(reload && serv) { serv.close(); delete serv; delete safeog; }
+  safeog = _safenew
+  let diffboot = ((new Date() - boot)/1000).toFixed(2);
+  serv = safeog.listen(config.port, () => { if(!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`) })
+}
+init()
