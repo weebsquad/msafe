@@ -119,9 +119,12 @@ let setupExpress = function(safe, reload = false) {
 		const host = req.get('host')
 		// Check encoding
 		if(config.allowEncoding) {
+			let msstart = new Date();
 			const encFile = await db.table('files')
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
 			if (encFile) id = encFile['name']
+			msstart = new Date() - msstart;
+			console.log(`SQL Query for ${id} took ${msstart}ms`);
 		}
 
 		// Finally handle the actual ID
