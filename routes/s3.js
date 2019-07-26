@@ -230,13 +230,32 @@ s3.deleteFiles = async function (bucket, files) {
 			  // console.log('done deleting')
 			  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket)
 			  if (!optionsS3.listRequestsOnFileChanges) {
-				  console.log(s3.files.length)
-				  
+				  /*
+				  console.log(s3.files)
 				  for (var i = 0; i < s3.files.length; i++) {
 					  let vl = s3.files[i]
-					  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) s3.files.splice(i, 1) })
+					  let _del = false;
+					  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) { _del = true; }})
+					  if (_del === true) {
+						  s3.files.splice(i, 1)
+						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!')}});
+					  }
 				  }
-				  console.log(s3.files.length)
+				  console.log(s3.files)
+				  */
+				  flnew.forEach(function(vl) {
+					  let _del = false;
+					  s3.files.some(function(fl) {
+						  if(fl.Key === vl.Key) {
+						    _del = s3.files.indexOf(fl);
+						  }
+					  });
+					  if(typeof(_del) === 'number') {
+						  console.log(`Splicing ${s3.files[_del]}`);
+						  s3.files.splice(_del, 1);
+						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!')}});
+					  }
+				  });
 			  }
 
 			  resolve(true)
