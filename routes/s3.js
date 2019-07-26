@@ -243,6 +243,7 @@ s3.deleteFiles = async function (bucket, files) {
 				  }
 				  console.log(s3.files)
 				  */
+				  console.log(JSON.stringify(s3.files));
 				  flnew.forEach(function(vl) {
 					  let _del = false;
 					  s3.files.some(function(fl) {
@@ -256,6 +257,7 @@ s3.deleteFiles = async function (bucket, files) {
 						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!')}});
 					  }
 				  });
+				  console.log(JSON.stringify(s3.files));
 			  }
 
 			  resolve(true)
