@@ -111,7 +111,7 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 			let _ex = false
 			s3.files.some(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) { _ex = true;} })
 			let p = {'Key': `${optionsS3.uploadsFolder}/${fileName}`};
-			if (!_ex) s3.files.push(p)
+			if (!_ex) { s3.files.push(p); }
 		  }
 		  let fl = await db.table('files').where('name', dbId)
 		  if (fl && fl.length > 0) {
@@ -167,7 +167,7 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 			  } else {
 				  cacheExistsPartials[uploadFolderTextCheck] = true
 				  let _ex = false
-				  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; return true } })
+				  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { _ex = true; return true } })
 				  let p = {'Key': `${optionsS3.uploadsFolder}/${fileName}`}
 				  if (!_ex) s3.files.push(p)
 				  resolve(true)
