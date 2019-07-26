@@ -130,7 +130,8 @@ let init = async function(db){
 				tableDef['indexes'].forEach(function(obj) {
 					if(typeof(obj) === 'string') obj = new Array(obj);
 					try {
-						//tableObject.index(obj);
+						tableObject.dropIndex(obj)
+						tableObject.index(obj);
 						let columnnames = obj.join(';');
 						console.log(`[DB] Index added for ${tableName}-${columnnames}`);
 					} catch(e) {
