@@ -87,12 +87,13 @@ uploadsController.fileInfo = async (req, res, next) => {
     _fileInfo['Original File Name'] = file.original
     if (file.deletekey) _fileInfo['Delete Key'] = file.deletekey
     if (file.encodeVersion) _fileInfo['Encoding Version'] = file.encodeVersion
+    if (file.encodedString) _fileInfo['Encoded String'] = file.encodedString
   }
   if (utils.isAdmin(user.username)) {
     _fileInfo['Uploader\'s IP'] = file.ip
-    if (file.encodedString) _fileInfo['Encoded String'] = file.encodedString
     _fileInfo['Hash'] = file.hash
     _fileInfo['Size'] = file.size
+    if(typeof(file.timestamp) === 'number') _fileInfo['Upload Date'] = new Date(file.timestamp)
     if (file.albumid) _fileInfo['Album ID'] = file.albumid
   }
 
@@ -190,7 +191,8 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
             })
           } else {
             uploadsController.deleteFile(file.filename).then(() => {}).catch(err => console.error(err))
-            existingFiles.push(dbFile)
+	    dbFile.deletekey = deletekey;
+            existingFiles.push(dbFile);
           }
 
           if (iteration === req.files.length) {
