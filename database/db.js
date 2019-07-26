@@ -134,11 +134,10 @@ let init = async function(db){
 						let columnnames = obj.join(';');
 						console.log(`[DB] Index added for ${tableName}-${columnnames}`);
 					} catch(e) {
-						console.error(e);
+						console.log(e);
+						//tableObject.dropIndex(obj);
 					}
 				});
-				//tableObject.index(tableDef['indexes']);
-				//tableObject.dropIndex(tableDef['indexes']);
 				console.log(`[DB] ${tableName} - Adding indexes`);
 			});
 		}
