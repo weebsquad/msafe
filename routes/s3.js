@@ -149,9 +149,6 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 		  // console.log(`Resolving ${fileName} file check cached`);
 		  return exists
 	  }
-    if (optionsS3.permanentInternalCache && !bypassCache) {
-      resolve(cachedCheck())
-    } else {
 	  let _resolveNoCache = function () {
 		  // console.log(`Resolving ${fileName} file check uncached`);
         s3.client.s3.headObject({
@@ -178,12 +175,11 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 	  }
 	  if (typeof (cacheChecks[fileName]) !== 'undefined' && !bypassCache) {
         let diff = new Date() - cacheChecks[fileName]
-        if (diff < 10 * 60 * 1000) { resolve(cachedCheck()) } else { _resolveNoCache() }
+        if (diff < 10 * 60 * 1000 || optionsS3.permanentInternalCache) { resolve(cachedCheck()) } else { _resolveNoCache() }
 	  } else {
         _resolveNoCache()
 	  }
 	  cacheChecks[fileName] = new Date()
-    }
   })
 }
 
