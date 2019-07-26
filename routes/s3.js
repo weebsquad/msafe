@@ -220,9 +220,9 @@ s3.deleteFiles = async function (bucket, files) {
       console.log(flnew);
       flnew.forEach(function (vl) {
         vl = vl.Key
-	console.log(delete cacheExistsPartials[vl]);
+	console.log(cacheExistsPartials[vl]);
         if (typeof (cacheExistsPartials[vl]) !== 'undefined') delete cacheExistsPartials[vl]
-	console.log(delete cacheExistsPartials[vl]);
+	console.log(cacheExistsPartials[vl]);
         if (typeof (cacheChecks[vl]) !== 'undefined') delete cacheChecks[vl]
         if (typeof (internalFileCache[vl]) !== 'undefined') delete internalFileCache[vl]
       })
