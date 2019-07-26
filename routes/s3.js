@@ -108,10 +108,10 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 		  // console.log('done uploading')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(s3.options.bucket)
 		  if (!optionsS3.listRequestsOnFileChanges) {
-			  let p = {
-				  'Key': `${optionsS3.uploadsFolder}/${fileName}`
-			  }
-			  s3.files.push(p)
+			let _ex = false
+			s3.files.some(function (fl) { if (fl.Key === `${optionsS3.uploadsFolder}/${fileName}`) { exists = true;} })
+			let p = {'Key': `${optionsS3.uploadsFolder}/${fileName}`};
+			if (!_ex) s3.files.push(p)
 		  }
 		  let fl = await db.table('files').where('name', dbId)
 		  if (fl && fl.length > 0) {
