@@ -56,9 +56,19 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		charsnonenc = [...charsnonenc];
 		console.log(charsnonenc);
 		let realString = string.split('').join('');
-		charsnonenc.forEach(function(ele) { realString.split(ele).join(''); });
+		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
 		console.log(realString);
-		
+		let fileName = '';
+		const split = string.split(seperator)
+		  split.forEach(function (char) {
+			let decodedchar = ''
+			for (var key in vchar) {
+			  const obj = vchar[key]
+			  if (obj === char) decodedchar = key
+			}
+			fileName = fileName + decodedchar
+		  })
+		console.log(fileName);
 	}	
   } else {
 	  let charmap = requireUncached('../charmap.js');
