@@ -48,6 +48,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		});
 		if(teststr.length < 1 || string === teststr) continue;
 		console.log(`Version ${cVer} :`);
+		console.log(string);
 		console.log(chars);
 		console.log(teststr); // unique characters that dont belong to the encoding format
 		let charsnonenc = new Array();
