@@ -1,3 +1,4 @@
+let config = require('../config.js')
 const requireUncached = require('require-uncached')
 const fs = require('fs');
 let db = require('knex')(config.database)
