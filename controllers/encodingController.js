@@ -38,7 +38,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			} else {
 				toAdd.push(mapRes);
 			}
-			for(var i = 0; i < toAdd.length; i++) {
+			for(var i = 0; i < toAdd.length-1; i++) {
 				let _ex = chars.find(function(ele) {
 					if(ele === toAdd[i]) return true;
 				});
