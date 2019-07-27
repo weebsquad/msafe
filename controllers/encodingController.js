@@ -42,14 +42,22 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		chars.push(seperator);
 		chars = new Set(chars);
 		chars = [...chars];
-		console.log(`Version ${cVer} :`);
-		console.log(chars);
 		let teststr = string.split('').join(''); //lol
 		chars.forEach(function(charEnc) {
 			teststr = teststr.split(charEnc).join('');
 		});
 		if(teststr.length < 1 || string === teststr) continue;
-		console.log(teststr);
+		console.log(`Version ${cVer} :`);
+		console.log(chars);
+		console.log(teststr); // unique characters that dont belong to the encoding format
+		let charsnonenc = new Array();
+		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
+		charsnonenc = new Set(charsnonenc);
+		charsnonenc = [...charsnonenc];
+		
+		let realString = string.split('').join('');
+		charsnonenc.forEach(function(ele) { realString.split(ele).join(''); });
+		console.log(realString);
 		
 	}	
   } else {
