@@ -32,24 +32,25 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		for(var mapKey in obj) {
 			if(mapKey.length > 1) continue; // Skip stuff like prefix and sepperators.
 			let mapRes = obj[mapKey];
-			let toAdd = new Array();
 			if(mapRes.length > 1) {
 				let _charsm = mapRes.split('');
-				_charsm.forEach(function(ele) { toAdd.push(ele); });
+				_charsm.forEach(function(ele) { chars.push(ele); });
 			} else {
-				toAdd.push(mapRes);
-			}
-			for(var i = 0; i < toAdd.length; i++) {
-				let _ex = chars.find(function(ele) {
-					return ele === toAdd[i];
-				});
-				if(_ex !== true) chars.push(toAdd[i]);
+				chars.push(mapRes);
 			}
 		}
+		chars.push(seperator);
 		chars = new Set(chars);
 		chars = [...chars];
 		console.log(`Version ${cVer} :`);
 		console.log(chars);
+		let teststr = string.split('').join(''); //lol
+		chars.forEach(function(charEnc) {
+			teststr = teststr.replace(charEnc, '');
+		});
+		if(teststr.length < 1) continue;
+		console.log(teststr);
+		
 	}	
   } else {
 	  let charmap = requireUncached('../charmap.js');
