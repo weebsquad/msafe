@@ -121,8 +121,19 @@ let setupExpress = function(safe, reload = false) {
 		const host = req.get('host')
 		
 		
+		let skipEncoding = false;
+		const fileExtSeperator = '.';
+		if(id.indexOf(fileExtSeperator) > -1) { // Lets check if the query is for a normally formatted file name
+			let idcheck = id.split(fileExtSeperator);
+			if(idcheck.length === 2) {
+				if(idcheck[0].length > 0 && idcheck[1].length > 0) {
+					skipEncoding = true;
+				}
+			}
+		}
+			
 		// Check encoding
-		if(config.allowEncoding) {
+		if(config.allowEncoding) && !skipEncoding {
 
 			/*const encFile = await db.table('files')
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
