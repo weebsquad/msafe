@@ -14,7 +14,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	const encFile = await db.table('files').where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', string) }).first()
 	if (encFile) return encFile['name'];
 	const encFile2 = await db.table('files').where(function () { 
-		this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', 'like', string) 
+		this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', 'like', `%${string}%`) 
 	}).first()
 	console.log(encFile2);
 	
