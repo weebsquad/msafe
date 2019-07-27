@@ -111,7 +111,7 @@ let setupExpress = function(safe, reload = false) {
 	  safe.get('*/:id', async (req, res, next) => {
 		let id = req.params.id
 
-		// Check blacklisted files first
+		// Check whitelisted files first
 		for (let key in config.whitelistedQueries) {
 		  let obj = config.whitelistedQueries[key]
 		  if (id === key) return res.sendFile(path.join(__dirname, obj))
@@ -123,6 +123,7 @@ let setupExpress = function(safe, reload = false) {
 		
 		// Check encoding
 		if(config.allowEncoding) {
+
 			/*const encFile = await db.table('files')
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
 			if (encFile) id = encFile['name']*/
@@ -133,7 +134,6 @@ let setupExpress = function(safe, reload = false) {
 		// Finally handle the actual ID
 		const file = `${_path}/${id}`
 		const ex = fs.existsSync(file)
-
 		// Handle S3
 		let _s3 = false
 		if (!ex) {
