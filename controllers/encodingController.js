@@ -60,11 +60,11 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		console.log(realString);
 		let fileName = '';
 		const split = string.split(seperator)
-		  split.forEach(function (char) {
+		  split.forEach(function (charE) {
 			let decodedchar = ''
-			for (var key in vchar) {
-			  const obj = vchar[key]
-			  if (obj === char) decodedchar = key
+			for (var key in obj) {
+			  const obj2 = vchar[key]
+			  if (obj2 === charE) decodedchar = key
 			}
 			fileName = fileName + decodedchar
 		  })
