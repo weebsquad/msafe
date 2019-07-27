@@ -19,7 +19,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	}).first()
 	
 	console.log(encFile2);*/
-	console.log('Failed first decode check, looping formats');
+	//console.log('Failed first decode check, looping formats');
 	let charmap = requireUncached('../charmap.js');
 	let idf
 	for(var cVer in charmap) {
@@ -47,18 +47,18 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			teststr = teststr.split(charEnc).join('');
 		});
 		if(teststr.length < 1 || string === teststr) continue;
-		//console.log(`Version ${cVer} :`);
-		//console.log('string = ' + string);
-		//console.log(chars);
-		//console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
+		console.log(`Version ${cVer} :`);
+		console.log('string = ' + string);
+		console.log(chars);
+		console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
 		let charsnonenc = new Array();
 		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
 		charsnonenc = new Set(charsnonenc);
 		charsnonenc = [...charsnonenc];
-		//console.log(charsnonenc);
+		console.log(charsnonenc);
 		let realString = string.split('').join('');
 		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
-		//console.log('realString = ' + realString);
+		console.log('realString = ' + realString);
 		let fileName = '';
 		const splitDec = realString.split(seperator)
 		  splitDec.forEach(function (charE) {
@@ -69,7 +69,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			}
 			fileName = fileName + decodedchar
 		  })
-		//console.log('fileName = ' + fileName);
+		console.log('fileName = ' + fileName);
 		
 		// Check if its a valid filename i guess
 		if(fileName.indexOf('.') > -1) { // Lets check if the query is for a normally formatted file name
