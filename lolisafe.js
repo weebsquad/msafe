@@ -127,7 +127,7 @@ let setupExpress = function(safe, reload = false) {
 			/*const encFile = await db.table('files')
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
 			if (encFile) id = encFile['name']*/
-			let _encodetest = encoding.decode(id, 0, true);
+			let _encodetest = await encoding.decode(id, 0, true);
 			console.log(_encodetest);
 			if(typeof(_encodetest) === 'string' && _encodetest.indexOf('.') > 0) id = _encodetest
 		}
