@@ -46,7 +46,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		console.log(chars);
 		let teststr = string.split('').join(''); //lol
 		chars.forEach(function(charEnc) {
-			teststr = teststr.replace(charEnc, '');
+			teststr = teststr.split(charEnc).join('');
 		});
 		if(teststr.length < 1) continue;
 		console.log(teststr);
