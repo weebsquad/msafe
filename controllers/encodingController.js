@@ -13,11 +13,41 @@ encodingController.decode = async function (string, version, checkmysql = false)
   if(checkmysql || typeof(version) !== 'number') {
 	const encFile = await db.table('files').where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', string) }).first()
 	if (encFile) return encFile['name'];
+	/*
 	const encFile2 = await db.table('files').where(function () { 
 		this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', 'like', `%${string}%`) 
 	}).first()
-	console.log(encFile2);
 	
+	console.log(encFile2);*/
+	let charmap = requireUncached('../charmap.js');
+	let idf
+	for(var cVer in charmap) {
+		let obj = charmap[cVer];
+		// if it has prefix or suffix, skip
+		if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix'])) continue;
+		let seperator = obj['sepperator'];
+		// get a list of all chars on this format
+		let chars = new Array():
+		for(var mapKey in obj) {
+			if(mapKey.length > 1) continue; // Skip stuff like prefix and sepperators.
+			let mapRes = obj[mapKey];
+			let toAdd = new Array();
+			if(mapRes.length > 1) {
+				let _charsm = mapRes.split('');
+				_charsm.forEach(function(ele) { toAdd.push(ele); });
+			} else {
+				toAdd.push(mapRes);
+			}
+			for(var i = 0; i < toAdd.length; i++) {
+				let _ex = chars.find(function(ele) {
+					if(ele === toAdd[i]) return true;
+				});
+				if(_ex !== true) chars.push(toAdd[i]);
+			}
+		}
+		console.log(`Version ${cVer} :`);
+		console.log(chars);
+	}	
   } else {
 	  let charmap = requireUncached('../charmap.js');
 	  const vchar = charmap[version]
