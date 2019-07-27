@@ -27,7 +27,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix'])) continue;
 		let seperator = obj['sepperator'];
 		// get a list of all chars on this format
-		let chars = new Array():
+		let chars = new Array();
 		for(var mapKey in obj) {
 			if(mapKey.length > 1) continue; // Skip stuff like prefix and sepperators.
 			let mapRes = obj[mapKey];
