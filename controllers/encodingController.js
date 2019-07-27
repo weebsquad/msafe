@@ -62,7 +62,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		const split = string.split(seperator)
 		  split.forEach(function (charE) {
 			let decodedchar = ''
-			for (var key in obj2) {
+			for (var key in obj) {
 			  const obj2 = obj[key]
 			  if (obj2 === charE) decodedchar = key
 			}
