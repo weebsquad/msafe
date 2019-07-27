@@ -19,6 +19,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	}).first()
 	
 	console.log(encFile2);*/
+	console.log('Failed first decode check, looping formats');
 	let charmap = requireUncached('../charmap.js');
 	let idf
 	for(var cVer in charmap) {
@@ -38,7 +39,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			} else {
 				toAdd.push(mapRes);
 			}
-			for(var i = 0; i < toAdd.length-1; i++) {
+			for(var i = 0; i < toAdd.length; i++) {
 				let _ex = chars.find(function(ele) {
 					if(ele === toAdd[i]) return true;
 				});
