@@ -60,7 +60,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
 		console.log('realString = ' + realString);
 		let fileName = '';
-		const splitDec = string.split(seperator)
+		const splitDec = realString.split(seperator)
 		  splitDec.forEach(function (charE) {
 			let decodedchar = ''
 			for (var keyDecoded in obj) {
