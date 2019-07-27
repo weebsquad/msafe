@@ -46,6 +46,8 @@ encodingController.decode = async function (string, version, checkmysql = false)
 				if(_ex !== true) chars.push(toAdd[i]);
 			}
 		}
+		chars = new Set(chars);
+		chars = [...chars];
 		console.log(`Version ${cVer} :`);
 		console.log(chars);
 	}	
