@@ -60,13 +60,15 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
 		console.log(realString);
 		let fileName = '';
-		const split = string.split(seperator)
-		  split.forEach(function (charE) {
+		const splitDec = string.split(seperator)
+		  splitDec.forEach(function (charE) {
 			let decodedchar = ''
-			for (var key in obj) {
-			  const obj2 = obj[key]
-			  if (obj2 === charE) decodedchar = key
+			for (var keyDecoded in obj) {
+			  const obj2 = obj[keyDecoded]
+			  if (obj2 === charE) decodedchar = keyDecoded
 			}
+			console.log(charE);
+			console.log(decodedchar);
 			fileName = fileName + decodedchar
 		  })
 		console.log(fileName);
