@@ -3,7 +3,7 @@ const fs = require('fs');
 let db = require('knex')(config.database)
 const encodingController = {}
 
-encodingController.decode = function (string, version, checkmysql = false) {
+encodingController.decode = async function (string, version, checkmysql = false) {
   if(!fs.existsSync('./charmap.js')) {
 	  console.error(`Can't accept encoded uploads, charmap.js does not exist`);
 	  return;
