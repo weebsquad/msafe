@@ -48,9 +48,9 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		});
 		if(teststr.length < 1 || string === teststr) continue;
 		console.log(`Version ${cVer} :`);
-		console.log(string);
+		console.log('string = ' + string);
 		console.log(chars);
-		console.log(teststr); // unique characters that dont belong to the encoding format
+		console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
 		let charsnonenc = new Array();
 		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
 		charsnonenc = new Set(charsnonenc);
@@ -58,7 +58,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		console.log(charsnonenc);
 		let realString = string.split('').join('');
 		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
-		console.log(realString);
+		console.log('realString = ' + realString);
 		let fileName = '';
 		const splitDec = string.split(seperator)
 		  splitDec.forEach(function (charE) {
@@ -67,11 +67,11 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			  const obj2 = obj[keyDecoded]
 			  if (obj2 === charE) decodedchar = keyDecoded
 			}
-			console.log(charE);
-			console.log(decodedchar);
+			console.log('charE = ' + charE);
+			console.log('decodedchar = ' + decodedchar);
 			fileName = fileName + decodedchar
 		  })
-		console.log(fileName);
+		console.log('fileName = ' + fileName);
 		
 		// Check if its a valid filename i guess
 		if(fileName.indexOf('.') > -1) { // Lets check if the query is for a normally formatted file name
