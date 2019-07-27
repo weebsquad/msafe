@@ -25,7 +25,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	for(var cVer in charmap) {
 		let obj = charmap[cVer];
 		// if it has prefix or suffix, skip
-		if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix'])) continue;
+		if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix']) === 'string') continue;
 		let seperator = obj['sepperator'];
 		// get a list of all chars on this format
 		let chars = new Array();
