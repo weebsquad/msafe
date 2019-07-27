@@ -69,6 +69,17 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			fileName = fileName + decodedchar
 		  })
 		console.log(fileName);
+		
+		// Check if its a valid filename i guess
+		if(fileName.indexOf('.') > -1) { // Lets check if the query is for a normally formatted file name
+			let fccheck = fileName.split('.');
+			if(fccheck.length === 2) {
+				if(fccheck[0].length > 0 && fccheck[1].length > 0) {
+					return fileName;
+				}
+			}
+		}
+		return false;
 	}	
   } else {
 	  let charmap = requireUncached('../charmap.js');

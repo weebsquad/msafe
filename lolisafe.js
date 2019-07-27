@@ -139,7 +139,7 @@ let setupExpress = function(safe, reload = false) {
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
 			if (encFile) id = encFile['name']*/
 			let _encodetest = await encoding.decode(id, 0, true);
-			if(typeof(_encodetest) === 'string' && _encodetest.indexOf('.') > 0) id = _encodetest
+			if(typeof(_encodetest) === 'string' && _encodetest.indexOf('.') > 0 && _encodetest.length >= 3) id = _encodetest
 		}
 
 		// Finally handle the actual ID
