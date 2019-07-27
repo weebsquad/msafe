@@ -54,7 +54,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
 		charsnonenc = new Set(charsnonenc);
 		charsnonenc = [...charsnonenc];
-		
+		console.log(charsnonenc);
 		let realString = string.split('').join('');
 		charsnonenc.forEach(function(ele) { realString.split(ele).join(''); });
 		console.log(realString);
