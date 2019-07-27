@@ -16,6 +16,8 @@ const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const requireUncached = require('require-uncached');
 const CronJob=require('cron').CronJob;
+let encoding
+if(config.allowEncoding) encoding = require('./controllers/encodingController')
 let serv;
 let boot = new Date();
 
@@ -117,11 +119,15 @@ let setupExpress = function(safe, reload = false) {
 
 		const _path = path.join(__dirname, config.uploads.folder)
 		const host = req.get('host')
+		
+		
 		// Check encoding
 		if(config.allowEncoding) {
-			const encFile = await db.table('files')
+			/*const encFile = await db.table('files')
 			  .where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', id) }).first()
-			if (encFile) id = encFile['name']
+			if (encFile) id = encFile['name']*/
+			let _encodetest = encoding.decode(id, 0, true);
+			if(typeof(_encodetest) === 'string' && _encodetest.indexOf('.') > 0) id = _encodetest
 		}
 
 		// Finally handle the actual ID

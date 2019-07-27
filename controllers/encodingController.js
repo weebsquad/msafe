@@ -1,38 +1,48 @@
 const requireUncached = require('require-uncached')
 const fs = require('fs');
+let db = require('knex')(config.database)
 const encodingController = {}
 
-encodingController.decode = function (string, version) {
+encodingController.decode = function (string, version, checkmysql = false) {
   if(!fs.existsSync('./charmap.js')) {
 	  console.error(`Can't accept encoded uploads, charmap.js does not exist`);
 	  return;
   }
-  let charmap = requireUncached('../charmap.js');
   let decoded = ''
-  const vchar = charmap[version]
-  let prefix = vchar['prefix']
-  let suffix = vchar['suffix']
-  const sepp = vchar['sepperator']
-  if (typeof (prefix) !== 'string') prefix = ''
-  if (typeof (suffix) !== 'string') suffix = ''
+  if(checkmysql || typeof(version) !== 'number') {
+	const encFile = await db.table('files').where(function () { this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', string) }).first()
+	if (encFile) return encFile['name'];
+	const encFile2 = await db.table('files').where(function () { 
+		this.where('encodeVersion', '>', 0).andWhereNot('encodedString', '').andWhere('encodedString', 'like', string) 
+	}).first()
+	console.log(encFile2);
+	
+  } else {
+	  let charmap = requireUncached('../charmap.js');
+	  const vchar = charmap[version]
+	  let prefix = vchar['prefix']
+	  let suffix = vchar['suffix']
+	  const sepp = vchar['sepperator']
+	  if (typeof (prefix) !== 'string') prefix = ''
+	  if (typeof (suffix) !== 'string') suffix = ''
 
-  if (prefix !== '' && string.indexOf(prefix) > -1) {
-    // Has prefix
+	  if (prefix !== '' && string.indexOf(prefix) > -1) {
+		// Has prefix
+	  }
+	  if (suffix !== '' && string.indexOf(suffix) > -1) {
+		// Has suffix
+	  }
+
+	  const split = string.split(sepp)
+	  split.forEach(function (char) {
+		let decodedchar = ''
+		for (var key in vchar) {
+		  const obj = vchar[key]
+		  if (obj === char) decodedchar = key
+		}
+		decoded = decoded + decodedchar
+	  })
   }
-  if (suffix !== '' && string.indexOf(suffix) > -1) {
-    // Has suffix
-  }
-
-  const split = string.split(sepp)
-  split.forEach(function (char) {
-    let decodedchar = ''
-    for (var key in vchar) {
-      const obj = vchar[key]
-      if (obj === char) decodedchar = key
-    }
-    decoded = decoded + decodedchar
-  })
-
   return decoded
 }
 
