@@ -25,8 +25,12 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	for(var cVer in charmap) {
 		let obj = charmap[cVer];
 		// if it has prefix or suffix, skip
-		if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix']) === 'string') continue;
+		//if(typeof(obj['prefix']) === 'string' || typeof(obj['suffix']) === 'string') continue;
 		let seperator = obj['sepperator'];
+		let prefix = '';
+		let suffix = '';
+		if(typeof(obj['prefix']) === 'string') prefix = obj['prefix'];
+		if(typeof(obj['suffix']) === 'string') prefix = obj['suffix'];
 		// get a list of all chars on this format
 		let chars = new Array();
 		for(var mapKey in obj) {
@@ -40,6 +44,8 @@ encodingController.decode = async function (string, version, checkmysql = false)
 			}
 		}
 		chars.push(seperator);
+		if(prefix !== '') chars.push(prefix.split(''));
+		if(suffix !== '') chars.push(suffix.split(''));
 		chars = new Set(chars);
 		chars = [...chars];
 		let teststr = string.split('').join(''); //lol
