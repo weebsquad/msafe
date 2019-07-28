@@ -21,7 +21,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 	console.log(encFile2);*/
 	//console.log('Failed first decode check, looping formats');
 	let charmap = requireUncached('../charmap.js');
-	let idf
+	let idf = false;
 	for(var cVer in charmap) {
 		let obj = charmap[cVer];
 		// if it has prefix or suffix, skip
@@ -86,8 +86,8 @@ encodingController.decode = async function (string, version, checkmysql = false)
 				}
 			}
 		}
-		return false;
-	}	
+	}
+	return idf;
   } else {
 	  let charmap = requireUncached('../charmap.js');
 	  const vchar = charmap[version]
