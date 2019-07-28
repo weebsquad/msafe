@@ -30,7 +30,7 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		let prefix = '';
 		let suffix = '';
 		if(typeof(obj['prefix']) === 'string') prefix = obj['prefix'];
-		if(typeof(obj['suffix']) === 'string') prefix = obj['suffix'];
+		if(typeof(obj['suffix']) === 'string') suffix = obj['suffix'];
 		// get a list of all chars on this format
 		let chars = new Array();
 		for(var mapKey in obj) {
@@ -54,17 +54,21 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		});
 		if(teststr.length < 1 || string === teststr) continue;
 		console.log(`Version ${cVer} :`);
-		console.log('string = ' + string);
-		console.log(chars);
-		console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
+		//console.log('string = ' + string);
+		//console.log(chars);
+		//console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
 		let charsnonenc = new Array();
 		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
 		charsnonenc = new Set(charsnonenc);
 		charsnonenc = [...charsnonenc];
-		console.log(charsnonenc);
+		
+		//console.log(charsnonenc);
+		
 		let realString = string.split('').join('');
 		charsnonenc.forEach(function(ele) { realString = realString.split(ele).join(''); });
-		console.log('realString = ' + realString);
+		
+		//console.log('realString = ' + realString);
+		
 		let fileName = '';
 		const splitDec = realString.split(seperator)
 		  splitDec.forEach(function (charE) {
