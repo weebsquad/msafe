@@ -52,11 +52,11 @@ encodingController.decode = async function (string, version, checkmysql = false)
 		chars.forEach(function(charEnc) {
 			teststr = teststr.split(charEnc).join('');
 		});
-		if(teststr.length < 1 || string === teststr) continue;
 		console.log(`Version ${cVer} :`);
 		console.log('string = ' + string);
 		console.log(chars);
 		console.log('teststr = ' + teststr); // unique characters that dont belong to the encoding format
+		if(teststr.length < 1 || string === teststr) continue;
 		let charsnonenc = new Array();
 		teststr.split('').forEach(function(ele) { charsnonenc.push(ele); });
 		charsnonenc = new Set(charsnonenc);
