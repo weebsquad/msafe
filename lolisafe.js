@@ -217,12 +217,11 @@ const init = async function (reload = false) {
   console.log('[CORE] Loaded S3')
   setupExpress(_safenew, reload)
   if (reload && serv) serv.close()
-  if (process.env.GITHUB_TEST === true) process.exit(0)
   safeog = _safenew
   const diffboot = ((new Date() - boot) / 1000).toFixed(2)
   serv = safeog.listen(config.port, () => {
 	  if (!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`)
-	  if (process.env.GITHUB_TEST === true) process.exit(0)
+	  if (process.env.GITHUB_TEST) process.exit(0)
   })
 }
 init()
