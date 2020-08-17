@@ -2,12 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
 const fs = require('fs')
-let config
-if (fs.existsSync('./config.js')) {
-  config = require('./config.js')
-} else {
-  config = require('./config.sample.js')
-}
+const config = require('./config.js')
 let api = require('./routes/api.js')
 let album = require('./routes/album.js')
 let rateLimiting = require('./routes/ratelimit.js')
