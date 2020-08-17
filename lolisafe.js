@@ -220,5 +220,6 @@ let init = async function (reload = false) {
   safeog = _safenew
   let diffboot = ((new Date() - boot)/1000).toFixed(2);
   serv = safeog.listen(config.port, () => { if(!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`) })
+  if(process.env.GITHUB_TEST === true) process.exit(0);
 }
 init()
