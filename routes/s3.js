@@ -1,6 +1,6 @@
 const config = require('../config.js')
 const fs = require('fs')
-const libs3 = require('s3')
+const libs3 = require('@auth0/s3')
 const db = require('knex')(config.database)
 const path = require('path')
 const AWS = require('aws-sdk')
