@@ -1,4 +1,9 @@
-let config = require('./config.js')
+let config;
+if(!fs.existsSync('./config.js')) {
+	config = require('./config.js')
+} else {
+	config = require('./config.sample.js');
+}
 let api = require('./routes/api.js')
 let album = require('./routes/album.js')
 let rateLimiting = require('./routes/ratelimit.js')
