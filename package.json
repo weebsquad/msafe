@@ -1,8 +1,8 @@
 {
-  "name": "lolisafe",
+  "name": "msafe",
   "version": "3.0.0",
   "description": "Blazing fast file uploader and awesome bunker written in node! 🚀",
-  "author": "Pitu",
+  "author": "MetalRuller",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetalRuller/lolisafe"
@@ -31,7 +31,7 @@
     "http": "0.0.0",
     "javascript-obfuscator": "^0.17.0",
     "jszip": "^3.1.5",
-    "knex": "^0.14.4",
+    "knex": "^0.14.6",
     "mime-db": "^1.34.0",
     "mime-lookup": "0.0.2",
     "multer": "^1.3.0",
@@ -40,7 +40,7 @@
     "request": "^2.87.0",
     "require-uncached": "^1.0.3",
     "s3": "^4.4.0",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^4.18.1",
