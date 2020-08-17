@@ -24,6 +24,6 @@ jobs:
     - name: Install node_modules
       run: npm i
     - name: Start
-      run: npm run start --if-present
+      run: node lolisafe.js
       env:
         GITHUB_TEST: true
