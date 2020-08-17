@@ -3,7 +3,7 @@
 /* eslint-disable no-tabs */
 const fs = require('fs')
 let config
-if (!fs.existsSync('./config.js')) {
+if (fs.existsSync('./config.js')) {
   config = require('./config.js')
 } else {
   config = require('./config.sample.js')
