@@ -7,7 +7,6 @@ on: [push, create, pull_request]
 jobs:
   testrun:
     runs-on: ubuntu-latest
-#    needs: build
     strategy:
       matrix:
         node-version: [14.x]
@@ -18,7 +17,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
-      run: sudo apt-get install -y build-essential python
+      run: sudo apt-get install -y build-essential python && npm install --global --production windows-build-tools
     - name: Install node_modules
       run: npm i
     - name: Start
