@@ -7,16 +7,13 @@
     "type": "git",
     "url": "https://github.com/MetalRuller/lolisafe"
   },
-  "bugs": {
-    "url": "https://github.com/WeebDev/lolisafe/issues"
-  },
   "engines": {
     "node": ">=7.0.0"
   },
   "scripts": {
     "start": "git reset --hard && git pull --force && node lolisafe",
     "lint": "standard --fix controllers/*.js lolisafe.js routes/*.js public/js/*.js && echo done",
-    "update": "git reset -- hard && git pull --force"
+    "update": "git reset --hard && git pull --force"
   },
   "license": "MIT",
   "dependencies": {
