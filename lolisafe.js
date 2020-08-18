@@ -39,7 +39,7 @@ const setupExpress = function (safe, reload = false) {
         upgradeInsecureRequests: [],
       },
     }));
-  //safe.use(cors());
+  safe.use(cors());
   safe.set('trust proxy', 1)
 
   safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
