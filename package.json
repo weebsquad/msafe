@@ -11,7 +11,7 @@
     "node": ">=7.0.0"
   },
   "scripts": {
-    "start": "git reset --hard && git pull --force && node lolisafe",
+    "start": "git reset --hard && git pull --force && npm i && node lolisafe",
     "lint": "standard --fix controllers/*.js lolisafe.js routes/*.js public/js/*.js && echo done",
     "update": "git reset --hard && git pull --force"
   },
@@ -21,6 +21,7 @@
     "aws-sdk": "^2.734.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "cron": "^1.8.2",
     "defaults": "^1.0.3",
     "express": "^4.17.1",
