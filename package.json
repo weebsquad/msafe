@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@auth0/s3": "^1.0.0",
-    "aws-sdk": "^2.735.0",
+    "aws-sdk": "^2.736.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
