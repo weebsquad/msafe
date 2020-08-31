@@ -31,7 +31,7 @@
     "gm": "^1.23.1",
     "helmet": "^4.1.0",
     "http": "0.0.0",
-    "javascript-obfuscator": "^1.11.0",
+    "javascript-obfuscator": "^1.12.0",
     "jszip": "^3.5.0",
     "knex": "^0.21.5",
     "mime-db": "^1.44.0",
