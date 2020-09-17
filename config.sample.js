@@ -30,6 +30,7 @@ module.exports = {
   serveFilesWithNode: false,
   useAlternateViewing: false, // idk
   allowEncoding: false, // Allow clients to use encoding
+  listen: '0.0.0.0',
   domain: 'https://lolisafe.moe',
 
   /*
