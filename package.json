@@ -34,7 +34,7 @@
     "javascript-obfuscator": "^1.11.0",
     "jszip": "^3.5.0",
     "knex": "^0.21.5",
-    "mime-db": "^1.44.0",
+    "mime-db": "^1.45.0",
     "mime-lookup": "0.0.2",
     "multer": "^1.4.2",
     "path": "^0.12.7",
