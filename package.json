@@ -33,7 +33,7 @@
     "http": "0.0.0",
     "javascript-obfuscator": "^1.11.0",
     "jszip": "^3.5.0",
-    "knex": "^0.21.5",
+    "knex": "^0.21.6",
     "mime-db": "^1.45.0",
     "mime-lookup": "0.0.2",
     "multer": "^1.4.2",
