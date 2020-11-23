@@ -12,6 +12,7 @@ const s3 = require('./routes/s3.js');
 let db = require('knex')(config.database);
 
 const exphbs = require('express-handlebars');
+var cloudflare = require('cloudflare-express');
 const express = require('express');
 const cors = require('cors');
 let safeog = express();
@@ -51,6 +52,7 @@ const setupExpress = function (safe, reload = false) {
 
 	safe.use(bodyParser.json({ limit: '50mb' }));
 	safe.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+	safe.use(cloudflare.restore({update_on_start:true}));
 
 	if (config.serveFilesWithNode && !config.useAlternateViewing) safe.use('/', express.static(config.uploads.folder));
 

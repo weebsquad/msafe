@@ -179,7 +179,7 @@ uploadsController.actuallyUpload = async (req, res, userid, albumid, encodeVersi
 							type: file.mimetype,
 							size: file.size,
 							hash: fileHash,
-							ip: req.ip,
+							ip: req.cf_ip,
 							albumid: albumid,
 							userid: userid !== undefined ? userid.id : null,
 							timestamp: Math.floor(Date.now() / 1000),

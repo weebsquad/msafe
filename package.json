@@ -21,6 +21,7 @@
     "aws-sdk": "^2.737.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "cloudflare-express": "^1.0.1",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
     "defaults": "^1.0.3",

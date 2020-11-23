@@ -8,7 +8,7 @@ let rateLimiting = {};
 let userCache = [];
 
 rateLimiting.keyGen = async function (req, res) {
-	let key = req.ip;
+	let key = req.cf_ip;
 	const token = req.headers.token;
 	if (token) {
 		const user = await db.table('users').where('token', token).first();
