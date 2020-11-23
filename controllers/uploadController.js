@@ -82,7 +82,7 @@ uploadsController.fileInfo = async (req, res, next) => {
 		'File Type': file.type
 		// 'Timestamp Upload': new Date(file.timestamp)
 	};
-	if (typeof (file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire);
+	if (typeof (file.timestampExpire) === 'number') _fileInfo['Timestamp Expire'] = new Date(file.timestampExpire).toISOString();
 
 	if (utils.isAdmin(user.username) || file.userid === user.id) {
 		_fileInfo['Original File Name'] = file.original;
@@ -94,7 +94,7 @@ uploadsController.fileInfo = async (req, res, next) => {
 		_fileInfo['Uploader\'s IP'] = file.ip;
 		_fileInfo['Hash'] = file.hash;
 		_fileInfo['Size'] = file.size;
-		if (typeof (file.timestamp) === 'number') _fileInfo['Upload Date'] = new Date(file.timestamp);
+		if (typeof (file.timestamp) === 'number') _fileInfo['Upload Date'] = new Date(file.timestamp*1000).toISOString();
 		if (file.albumid) _fileInfo['Album ID'] = file.albumid;
 	}
 
