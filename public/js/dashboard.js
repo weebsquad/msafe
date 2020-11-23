@@ -861,7 +861,7 @@ panel.updateAdminPage = function (pw = '') {
 		  if (_test) {
 			  clearInterval(_int)
 			  setTimeout(function () { obj(key, _test) }, 150)
-			  //obj(key, _test)
+			  // obj(key, _test)
 		  }
 	  }, 100)
   }

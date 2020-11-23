@@ -12,7 +12,7 @@ let db = require('knex')(config.database)
 
 const exphbs = require('express-handlebars')
 const express = require('express')
-const cors = require('cors');
+const cors = require('cors')
 let safeog = express()
 const path = require('path')
 const MimeLookup = require('mime-lookup')
@@ -34,12 +34,12 @@ fs.existsSync('./' + config.uploads.folder + '/zips') || fs.mkdirSync('./' + con
 
 const setupExpress = function (safe, reload = false) {
   safe.use(helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'unsafe-inline'", "'self'", "ajax.cloudflare.com", "cdnjs.cloudflare.com", "use.fontawesome.com", config.url, "msafe.i0.tf"],
-        upgradeInsecureRequests: [],
-      },
-    }));
-  safe.use(cors());
+    directives: {
+      defaultSrc: ["'unsafe-inline'", "'self'", 'ajax.cloudflare.com', 'cdnjs.cloudflare.com', 'use.fontawesome.com', config.url, 'msafe.i0.tf'],
+      upgradeInsecureRequests: []
+    }
+  }))
+  safe.use(cors())
   safe.set('trust proxy', 1)
 
   safe.engine('handlebars', exphbs({ defaultLayout: 'main' }))
