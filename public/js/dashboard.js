@@ -851,7 +851,6 @@ panel.updateAdminPage = function (pw = '') {
 		   if (pw !== '' && rootpw) { rootpw.value = pw; }
 	  },
 	  'sendNewAccount': function (key, obj) {
-			console.log('sendnew', key, obj);
 		  obj.addEventListener('click', function () {
 				panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value, document.getElementById('passwordRoot').value);
 		  });
@@ -863,7 +862,6 @@ panel.updateAdminPage = function (pw = '') {
 			const _int = setInterval(() => {
 				const _test = document.getElementById(key);
 				if (_test) {
-					console.log('loading in ' + key);
 					obj(key, _test);
 					clearInterval(_int);
 				}
