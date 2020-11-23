@@ -50,7 +50,7 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
 	if (config.uploads.generateThumbnails !== true) return;
 	const ext = path.extname(file.name).toLowerCase();
-	// console.log(`genning thumb ${file}`);
+	console.log(`genning thumb ${file}`);
 	return new Promise(async function (resolve) {
 		async function tryS3 (_extension) {
 		  if (s3.enabledCheck()) {

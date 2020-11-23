@@ -121,7 +121,6 @@ uploadsController.upload = async (req, res, next) => {
 	const albumid = req.headers.albumid || req.params.albumid;
 
 	if (albumid && user) {
-		let test = await db.table('albums');
 		const album = await db.table('albums').where({ id: albumid, userid: user.id }).first();
 		if (!album) return res.status(401).json({ success: false, description: 'Album doesn\'t exist or it doesn\'t belong to the user' });
 
@@ -236,15 +235,15 @@ uploadsController.processFilesForDisplay = async (req, res, files, existingFiles
 		if (config.uploads.generateThumbnails === true) {
 			if ((utils.imageExtensions.includes(ext) || utils.videoExtensions.includes(ext)) && !utils.noThumbnail.includes(ext)) {
 		  file.thumb = `${basedomain}/thumbs/${file.name.slice(0, -ext.length)}.png`;
-		  // console.log(`Start thumb ${file.name}`);
+		  console.log(`Start thumb ${file.name}`);
 		  await utils.generateThumbs(file);
-		  // console.log(`Done thumb ${file.name}`);
+		  console.log(`Done thumb ${file.name}`);
 			}
 		}
 		const pathUploads = `${path.join(__dirname, '..', config.uploads.folder)}/${file.name}`;
 		// console.log(`Uploading file ${file.name}`);
 		if (s3.enabledCheck()) {
-			let fin = await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin);
+			await s3.convertFile(s3.options.bucket, pathUploads, file.name, file.name, userAdmin);
 		}
 	}
 
