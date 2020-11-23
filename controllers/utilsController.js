@@ -50,12 +50,12 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
 	if (config.uploads.generateThumbnails !== true) return;
 	const ext = path.extname(file.name).toLowerCase();
-	console.log(`genning thumb ${file}`);
-	return new Promise(async function (resolve) {
+	console.log(`genning thumb ${file.name}`);
+	await new Promise(async function (resolve) {
 		async function tryS3 (_extension) {
 		  if (s3.enabledCheck()) {
 				let extt = `${_extension}`;
-		  		if (utilsController.noThumbnail.includes(_extension) || (!utilsController.videoExtensions.includes(_extension) && !utilsController.imageExtensions.includes(_extension))) return;
+		  		if (utilsController.noThumbnail.includes(_extension) || (!utilsController.videoExtensions.includes(_extension) && !utilsController.imageExtensions.includes(_extension))) {resolve(); return;}
 		  		// if (utilsController.videoExtensions.includes(_extension) || _extension === '.gif') extt = '.png'
 		  		extt = '.png'; // Apparently it's always png lol
 		  		let fn = file.name.split('.')[0];
@@ -69,42 +69,41 @@ utilsController.generateThumbs = async function (file, basedomain) {
 					console.error('no thumb!!');
 				}
 				resolve();
+			} else {
+				resolve();
 			}
 	  }
 
 	  let thumbname = path.join(__dirname, '..', config.uploads.folder, 'thumbs', file.name.slice(0, -ext.length) + '.png');
 	  fs.access(thumbname, err => {
 			if (err && err.code === 'ENOENT') {
-		  if (utilsController.videoExtensions.includes(ext)) {
+		  		if (utilsController.videoExtensions.includes(ext)) {
 					ffmpeg(path.join(__dirname, '..', config.uploads.folder, file.name))
-			  .thumbnail({
+			  			.thumbnail({
 							timestamps: [0],
 							filename: '%b.png',
 							folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
 							size: '200x?'
-			  })
-			  .on('error', error => { console.log('Error - ', error.message); resolve(); })
-			  .on('end', async function () {
+			  			})
+			  			.on('error', error => { console.log('Error - ', error.message); return; })
+			  			.on('end', async function () {
 							await tryS3(ext);
-			  });
-		  } else {
-					let size = {
-			  width: 200,
-			  height: 200
+			  			});
+		  		} else {
+					const size = {
+			  			width: 200,
+			  			height: 200
 					};
 					gm(path.join(__dirname, '..', config.uploads.folder, file.name))
-			  .resize(size.width, size.height + '>')
-			  .gravity('Center')
-			  .extent(size.width, size.height)
-			  .background('transparent')
-			  .write(thumbname, async function (error) {
-							if (error) { console.log('Error - ', error); resolve(); return; }
+			  			.resize(size.width, size.height + '>')
+			  			.gravity('Center')
+			  			.extent(size.width, size.height)
+			  			.background('transparent')
+			  			.write(thumbname, async function (error) {
+							if (error) { console.log('Error - ', error); return; }
 							await tryS3(ext);
-			  });
-		  }
-		  resolve();
-			} else {
-				resolve();
+			  			});
+		 		}
 			}
 		});
 	});
