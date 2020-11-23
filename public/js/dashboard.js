@@ -849,21 +849,21 @@ panel.updateAdminPage = function (pw = '') {
 		   if (pw !== '' && rootpw) { rootpw.value = pw }
 	  },
 	  'sendNewAccount': function (key, obj) {
-		  document.getElementById(key).addEventListener('click', function () {
+		  obj.addEventListener('click', function () {
         panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value, document.getElementById('passwordRoot').value)
 		  })
 	  }
   }
   for (let key in _waitmaps) {
-	  let obj = _waitmaps[key]
-	  const _int = setInterval(function () {
+    let obj = _waitmaps[key]
+    const _int = setInterval(() => {
 		  const _test = document.getElementById(key)
 		  if (_test) {
-			  clearInterval(_int)
-			  setTimeout(function () { obj(key, _test) }, 150)
-			  // obj(key, _test)
+			  console.log('loading in ' + key);
+        obj(key, _test)
+        clearInterval(_int)
 		  }
-	  }, 100)
+	  }, 200)
   }
 }
 
