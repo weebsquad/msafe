@@ -91,7 +91,6 @@ rateLimiting.load = function (safe, nolog = false) {
 	  }
 	  let rl = new RateLimit(obj);
 	  safe.use(key, rl);
-	  // if (!nolog) console.log(`[RL] Loaded ratelimit for ${key}`)
 	  i++;
 	}
 	if (!nolog) console.log(`[RL] Loaded ${i} ratelimits!`);

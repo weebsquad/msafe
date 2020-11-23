@@ -50,7 +50,6 @@ utilsController.authorize = async (req, res) => {
 utilsController.generateThumbs = async function (file, basedomain) {
 	if (config.uploads.generateThumbnails !== true) return;
 	const ext = path.extname(file.name).toLowerCase();
-	console.log(`genning thumb ${file.name}`);
 	await new Promise(async function (resolve) {
 		async function tryS3 (_extension) {
 		  if (s3.enabledCheck()) {
@@ -60,13 +59,9 @@ utilsController.generateThumbs = async function (file, basedomain) {
 		  		extt = '.png'; // Apparently it's always png lol
 		  		let fn = file.name.split('.')[0];
 		  		fn = `${fn}${extt}`;
-		  		// console.log(`waiting for thumb ${fn}`);
 		  		const _thumbs = path.join(__dirname, '..', config.uploads.folder, 'thumbs') + `/${fn}`;
 				if (fs.existsSync(_thumbs)) {
-					console.log(`uploading thumb ${fn}`);
 					await s3.convertFile(s3.options.bucket, _thumbs, `thumbs/${fn}`);
-				} else {
-					console.error('no thumb!!');
 				}
 				resolve();
 			} else {
@@ -85,7 +80,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 							folder: path.join(__dirname, '..', config.uploads.folder, 'thumbs'),
 							size: '200x?'
 			  			})
-			  			.on('error', error => { console.log('Error - ', error.message); return; })
+			  			.on('error', error => { console.log('FFMPEG Error - ', error.message); return; })
 			  			.on('end', async function () {
 							await tryS3(ext);
 			  			});
@@ -100,7 +95,7 @@ utilsController.generateThumbs = async function (file, basedomain) {
 			  			.extent(size.width, size.height)
 			  			.background('transparent')
 			  			.write(thumbname, async function (error) {
-							if (error) { console.log('Error - ', error); return; }
+							if (error) { console.log('GM Error - ', error); return; }
 							await tryS3(ext);
 			  			});
 		 		}

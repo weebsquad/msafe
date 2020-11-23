@@ -71,12 +71,11 @@ s3.getFiles = async function (bucket) {
 
 			contents.forEach(function (vl) {
 				if (vl.Key === optionsS3.uploadsFolder + '/') return;
-				// console.log(vl);
 				flnew.push(vl);
 			});
 		});
 		objects.on('error', function (err) {
-	  console.error(err);
+	  console.error('S3 Get Error', err);
 			reject(err);
 		});
 	});
@@ -100,15 +99,12 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 		};
 
 		if (typeof (expdate) !== 'undefined') params.s3Params.Expires = expdate;
-
-		// console.log(params)
 		let uploader = s3.client.uploadFile(params);
 		uploader.on('error', function (err) {
 		  console.error('unable to upload:', err.stack);
 		  reject(err);
 		});
 		uploader.on('end', async function () {
-		  // console.log('done uploading')
 		  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(s3.options.bucket);
 		  if (!optionsS3.listRequestsOnFileChanges) {
 				let _ex = false;
@@ -118,9 +114,8 @@ s3.uploadFile = async function (bucket, fileName, localPath, dbId = '', adminFil
 		  }
 		  let fl = await db.table('files').where('name', dbId);
 		  if (fl && fl.length > 0) {
-			  await await db.table('files').where('name', dbId).update({ timestampExpire: expdate });
+			  await db.table('files').where('name', dbId).update({ timestampExpire: expdate });
 			  fl = await db.table('files').where('name', dbId).first();
-			  // console.log(fl);
 		  }
 		  resolve(true);
 		});
@@ -143,18 +138,14 @@ s3.fileExists = async function (bucket, fileName, bypassCache = false) {
 	let uploadFolderTextCheck = `${optionsS3.uploadsFolder}/${fileName}`;
 	return new Promise(function (resolve, reject) {
 	  function cachedCheck () {
-		  // console.log('Returning cached answer to fileExists for ' + fileName);
 		  let exists = false;
 		  // Check our full file-store
 		  s3.files.some(function (fl) { if (fl.Key === uploadFolderTextCheck) { exists = true; } });
-		  // console.log(`Checked general ffs for ${fileName}: ${exists}`);
 		  // Check our partial
 	      if (!exists && cacheExistsPartials[uploadFolderTextCheck] && cacheExistsPartials[uploadFolderTextCheck] === true) exists = true;
-		  // console.log(`Checked partials for ${fileName}: ${exists}`);
 		  return exists;
 	  }
 	  let _resolveNoCache = function () {
-		  // console.log(`Resolving ${fileName} file check uncached`);
 			s3.client.s3.headObject({
 		  Bucket: bucket,
 		  Key: uploadFolderTextCheck
@@ -213,7 +204,6 @@ s3.deleteFiles = async function (bucket, files) {
 		  Bucket: bucket
 			};
 
-			// console.log(params);
 			let deleter = s3.client.deleteObjects(params);
 			deleter.on('error', function (err) {
 			  console.error('[S3] unable to delete:', err.stack);
@@ -229,23 +219,8 @@ s3.deleteFiles = async function (bucket, files) {
 			});
 
 			deleter.on('end', async function () {
-			  // console.log('done deleting')
 			  if (optionsS3.listRequestsOnFileChanges === true) await s3.getFiles(bucket);
 			  if (!optionsS3.listRequestsOnFileChanges) {
-				  /*
-				  console.log(s3.files)
-				  for (var i = 0; i < s3.files.length; i++) {
-					  let vl = s3.files[i]
-					  let _del = false;
-					  flnew.forEach(function (vl2) { if (vl['Key'] === vl2['Key']) { _del = true; }})
-					  if (_del === true) {
-						  s3.files.splice(i, 1)
-						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!')}});
-					  }
-				  }
-				  console.log(s3.files)
-				  */
-				  console.log(JSON.stringify(s3.files));
 				  flnew.forEach(function (vl) {
 					  let _del = false;
 					  s3.files.some(function (fl) {
@@ -254,12 +229,9 @@ s3.deleteFiles = async function (bucket, files) {
 						  }
 					  });
 					  if (typeof (_del) === 'number') {
-						  console.log(JSON.stringify(s3.files[_del]));
 						  s3.files.splice(_del, 1);
-						  s3.files.some(function (fl) { if (fl.Key === vl.Key) { console.log('Error removing file from gffs!'); } });
 					  }
 				  });
-				  console.log(JSON.stringify(s3.files));
 			  }
 
 			  resolvef(true);
@@ -356,12 +328,10 @@ s3.proxyPipe = async function (req, res, next, fileId) {
 			break;
 		}
 	}
-	console.log(nextp);
 	ports.push(nextp);
 	setTimeout(function() {
 		ports.slice(1);
 	}, 1000*60*5);
-	console.log(_url);
 	http.createServer(function(req, res) {
 		res.setHeader("content-disposition", `attachment; filename=${fileId}`);
 		request(_url).pipe(res);
