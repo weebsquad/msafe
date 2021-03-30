@@ -34,10 +34,12 @@ fs.existsSync('./' + config.uploads.folder) || fs.mkdirSync('./' + config.upload
 fs.existsSync('./' + config.uploads.folder + '/thumbs') || fs.mkdirSync('./' + config.uploads.folder + '/thumbs');
 fs.existsSync('./' + config.uploads.folder + '/zips') || fs.mkdirSync('./' + config.uploads.folder + '/zips');
 
+
+
 const setupExpress = function (safe, reload = false) {
 	safe.use(helmet.contentSecurityPolicy({
 		directives: {
-			defaultSrc: ['\'unsafe-inline\'', '\'self\'', 'ajax.cloudflare.com', 'cdnjs.cloudflare.com', 'use.fontawesome.com', config.url, 'msafe.i0.tf'],
+			defaultSrc: ['\'unsafe-inline\'', '\'self\'', 'ajax.cloudflare.com', 'cdnjs.cloudflare.com', 'use.fontawesome.com'],
 			upgradeInsecureRequests: []
 		}
 	}));
@@ -83,6 +85,14 @@ const setupExpress = function (safe, reload = false) {
 
 	  function checkHost (req, res, next) {
 			const host = req.get('host');
+			const domcheckip = config.domain.split('.').join('');
+			if(domcheckip.length !== domcheckip.match(/\d+/g).join('').length) {
+				const checkip = host.split('.').join('');
+				if(checkip.match(/\d+/g).join('').length === checkip.length){
+					res.redirect('https://google.com');
+					res.end();
+				}
+			}
 			const dom = config.domain.split('https://').join('').split('http://').join('');
 			let pagered = '';
 			if (page !== 'home') pagered = page;
