@@ -85,12 +85,18 @@ const setupExpress = function (safe, reload = false) {
 
 	  function checkHost (req, res, next) {
 			const host = req.get('host');
+			if(!host) {
+				res.redirect('https://google.com');
+				res.end();
+				return;
+			}
 			const domcheckip = config.domain.split('.').join('');
 			if(domcheckip.length !== domcheckip.match(/\d+/g).join('').length) {
 				const checkip = host.split('.').join('');
 				if(checkip.match(/\d+/g).join('').length === checkip.length){
 					res.redirect('https://google.com');
 					res.end();
+					return;
 				}
 			}
 			const dom = config.domain.split('https://').join('').split('http://').join('');
