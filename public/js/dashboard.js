@@ -856,6 +856,10 @@ panel.updateAdminPage = function (pw = '') {
 		  });
 	  }
 	};
+	document.getElementById('sendNewAccount').addEventListener('click', function () {
+		panel.registerNewUser(document.getElementById('username').value, document.getElementById('password').value, document.getElementById('passwordRoot').value);
+	});
+	
 	setTimeout(() => {
 		for (let key in _waitmaps) {
 			let obj = _waitmaps[key];
@@ -867,7 +871,7 @@ panel.updateAdminPage = function (pw = '') {
 				}
 			}, 200);
 		}
-	}, 200);
+	}, 800);
 };
 
 panel.loadAdminTab = function () {
