@@ -91,11 +91,12 @@ const setupExpress = function (safe, reload = false) {
 				res.end();
 				return;
 			}
-			console.log('host = >', host);
+			//console.log('host = >', host);
 			const domcheckip = config.domain.split('.').join('');
 			if(domcheckip.length !== domcheckip.match(/\d+/g).join('').length) {
 				const checkip = host.split('.').join('');
-				if(checkip.match(/\d+/g).join('').length === checkip.length){
+				const numeralcheck = checkip.match(/\d+/g);
+				if(numeralcheck && numeralcheck.join('').length === checkip.length){
 					res.redirect('https://google.com');
 					res.end();
 					return;
