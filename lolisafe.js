@@ -10,6 +10,7 @@ let rateLimiting = require('./routes/ratelimit.js');
 let obfuscation = require('./routes/obfuscate.js');
 const s3 = require('./routes/s3.js');
 let db = require('knex')(config.database);
+require('dotenv').config();
 
 const exphbs = require('express-handlebars');
 var cloudflare = require('cloudflare-express');
@@ -90,6 +91,7 @@ const setupExpress = function (safe, reload = false) {
 				res.end();
 				return;
 			}
+			console.log('host = >', host);
 			const domcheckip = config.domain.split('.').join('');
 			if(domcheckip.length !== domcheckip.match(/\d+/g).join('').length) {
 				const checkip = host.split('.').join('');
