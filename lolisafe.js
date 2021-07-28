@@ -16,6 +16,7 @@ const exphbs = require('express-handlebars');
 var cloudflare = require('cloudflare-express');
 const express = require('express');
 const cors = require('cors');
+const https = require('https');
 let safeog = express();
 const path = require('path');
 const MimeLookup = require('mime-lookup');
@@ -27,6 +28,7 @@ const CronJob = require('cron').CronJob;
 let encoding;
 if (config.allowEncoding) encoding = require('./controllers/encodingController');
 let serv;
+let servhttps;
 const boot = new Date();
 
 fs.existsSync('./pages/custom') || fs.mkdirSync('./pages/custom');
@@ -212,6 +214,7 @@ const reloadModules = function () {
 const restart = function () {
 	console.log('[CORE] AUTO RESTARTING!');
 	serv.close();
+	if(servhttps) servhttps.close();
 	// delete serv;
 	// delete safeog;
 	setTimeout(function () {
@@ -245,12 +248,25 @@ const init = async function (reload = false) {
 	await s3.initialize(_path, fl);
 	console.log('[CORE] Loaded S3');
 	setupExpress(_safenew, reload);
-	if (reload && serv) serv.close();
+	if (reload && serv) {
+		serv.close();
+		if(servhttps) servhttps.close();
+	}
 	safeog = _safenew;
 	const diffboot = ((new Date() - boot) / 1000).toFixed(2);
+	
 	serv = safeog.listen(config.port, config.listen, () => {
 	  if (!reload) console.log(`[CORE] Started within ${diffboot}s on port ${config.port}`);
 	  if (process.env.GITHUB_TEST) process.exit(0);
 	});
+	if(config.ssl && config.ssl.key && config.ssl.key.length > 3 && config.ssl.port && config.ssl.cert) {
+		const ssl_options = {
+			key: fs.readFileSync(config.ssl.key),
+			cert: fs.readFileSync(config.ssl.cert),
+		};
+		const secureServer = https.createServer(ssl_options, safeog);
+		servhttps = secureServer.listen(config.ssl.port);
+		console.log(`[CORE] Started HTTPS server on port ${config.ssl.port}`);
+	}
 };
 init();

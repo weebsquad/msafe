@@ -13,10 +13,6 @@ yarn.lock
 package-lock.json
 .vscode/
 charmap.js
-start.sh
-restart.sh
-stop.sh
-loop.sh
-update.sh
-loop.sh
-start.sh
+*.sh
+cert.pem
+key.pem
