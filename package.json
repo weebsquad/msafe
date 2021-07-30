@@ -35,7 +35,7 @@
     "http": "0.0.0",
     "https": "^1.0.0",
     "javascript-obfuscator": "^1.11.0",
-    "jszip": "^3.5.0",
+    "jszip": "^3.7.0",
     "knex": "^0.95.8",
     "mime-db": "^1.45.0",
     "mime-lookup": "0.0.2",
