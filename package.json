@@ -41,7 +41,7 @@
     "mime-lookup": "0.0.2",
     "multer": "^1.4.2",
     "path": "^0.12.7",
-    "randomstring": "^1.1.5",
+    "randomstring": "^1.2.1",
     "request": "^2.88.2",
     "require-uncached": "^2.0.0",
     "sqlite3": "^5.0.2"
