@@ -11,7 +11,7 @@
     "node": ">=7.0.0"
   },
   "scripts": {
-    "start": "git reset --hard && git pull --force && npm ci && node lolisafe",
+    "start": "git reset --hard && git pull --force && npm i && node lolisafe",
     "lint": "standard --fix controllers/*.js lolisafe.js routes/*.js public/js/*.js && echo done",
     "update": "git reset --hard && git pull --force"
   },
