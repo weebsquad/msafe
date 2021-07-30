@@ -2,6 +2,7 @@ name: auto-depends-merge
 
 on:
   pull_request_target:
+    types: auto_merge_enabled
 
 jobs:
   auto-merge:
