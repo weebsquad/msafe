@@ -16,3 +16,4 @@ charmap.js
 *.sh
 cert.pem
 key.pem
+cloudflare_ip.json
