@@ -1572,9 +1572,9 @@ jszip@^3.7.0:
     readable-stream "~2.3.6"
     set-immediate-shim "~1.0.1"
 
-knex@^0.95.9:
-  version "0.95.9"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.95.9.tgz#d72acbdbc7aa199a829cca3c53371b80e521adfe"
+knex@^0.95.10:
+  version "0.95.10"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.95.10.tgz#9c41a4f69309bc437f79985cbc0a1e7a3208483e"
   dependencies:
     colorette "1.2.1"
     commander "^7.1.0"
