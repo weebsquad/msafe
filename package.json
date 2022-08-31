@@ -31,7 +31,7 @@
     "express-rate-limit": "^5.5.1",
     "fluent-ffmpeg": "^2.1.2",
     "gm": "^1.23.1",
-    "helmet": "^4.6.0",
+    "helmet": "^6.0.0",
     "http": "0.0.0",
     "https": "^1.0.0",
     "javascript-obfuscator": "^1.11.0",
