@@ -1021,9 +1021,9 @@ express-handlebars@^5.3.4:
     graceful-fs "^4.2.7"
     handlebars "^4.7.7"
 
-express-rate-limit@^5.5.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-5.5.1.tgz#110c23f6a65dfa96ab468eda95e71697bc6987a2"
+express-rate-limit@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-6.7.0.tgz#6aa8a1bd63dfe79702267b3af1161a93afc1d3c2"
 
 express@^4.17.3:
   version "4.17.3"
