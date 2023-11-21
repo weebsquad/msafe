@@ -7,10 +7,10 @@ on: [push, create]
 jobs:
   testrun:
     timeout-minutes: 3
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.20]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
