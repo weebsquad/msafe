@@ -8,7 +8,7 @@
     "url": "https://github.com/weebsquad/lolisafe"
   },
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=16.20.0"
   },
   "scripts": {
     "start": "git reset --hard && git pull --force && npm i && node lolisafe",
