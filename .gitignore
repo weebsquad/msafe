@@ -18,3 +18,4 @@ cert.pem
 key.pem
 cloudflare_ip.json
 /docker-compose.*
+/.env
