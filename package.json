@@ -5,7 +5,7 @@
   "author": "metal0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/weebsquad/lolisafe"
+    "url": "https://github.com/weebsquad/msafe"
   },
   "engines": {
     "node": ">=16.20.0"
