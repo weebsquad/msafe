@@ -2,10 +2,10 @@
   "name": "msafe",
   "version": "3.0.0",
   "description": "Blazing fast file uploader and awesome bunker written in node! 🚀",
-  "author": "MetalRuller",
+  "author": "metal0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetalRuller/lolisafe"
+    "url": "https://github.com/weebsquad/lolisafe"
   },
   "engines": {
     "node": ">=7.0.0"
