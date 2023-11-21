@@ -1,19 +1,20 @@
-FROM node:9
+FROM debian:latest
 
-LABEL name "lolisafe"
-LABEL version "3.0.0"
-LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
+RUN apt update
+RUN apt install curl build-essential git python3 python3-pip imagemagick graphicsmagick -y
 
-WORKDIR /usr/src/lolisafe
+SHELL ["/bin/bash", "--login", "-c"]
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-COPY package.json yarn.lock ./
-
-RUN sh -c 'echo "deb http://www.deb-multimedia.org jessie main" >> /etc/apt/sources.list' \
-&& apt-key adv --keyserver keyring.debian.org --recv-keys 5C808C2B65558117 \
-&& apt-get update \
-&& apt-get install -y ffmpeg graphicsmagick \
-&& yarn install
-
+WORKDIR /app/msafe
 COPY . .
 
-CMD ["node", "lolisafe.js"]
+RUN nvm install
+RUN npm install --global yarn
+RUN yarn install
+
+RUN yarn -v
+RUN node -v
+RUN npm -v
+
+ENTRYPOINT ["/bin/bash", "--login", "-c", "yarn start"]
